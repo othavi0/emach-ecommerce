@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Barlow, Barlow_Condensed } from "next/font/google";
 
 import "../index.css";
 import Header from "@/components/header";
 import Providers from "@/components/providers";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
+const barlow = Barlow({
 	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-barlow",
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const barlowCondensed = Barlow_Condensed({
 	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-barlow-condensed",
 });
 
 export const metadata: Metadata = {
@@ -26,9 +28,9 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="pt-BR">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${barlow.variable} ${barlowCondensed.variable} antialiased`}
 			>
 				<Providers>
 					<div className="grid h-svh grid-rows-[auto_1fr]">
