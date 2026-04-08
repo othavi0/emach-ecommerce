@@ -1,5 +1,6 @@
 import { Button } from "@emach/ui/components/button";
 import { Search, ShoppingBag, User } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
@@ -14,7 +15,12 @@ export function SiteHeader() {
 		<header className="flex h-[52px] items-center justify-between bg-absolute-black px-10">
 			<div className="flex items-center gap-8">
 				<Link className="font-bold text-lg text-white tracking-[2px]" href="/">
-					EMACH
+					<Image
+						alt="EMACH"
+						height={30}
+						src="/images/logos/emach-nome.svg"
+						width={120}
+					/>
 				</Link>
 				<nav className="hidden items-center gap-6 md:flex">
 					{navLinks.map((link) => (

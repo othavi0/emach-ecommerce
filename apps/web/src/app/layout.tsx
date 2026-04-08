@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 
-import "../index.css";
 import Providers from "@/components/providers";
+import "../index.css";
 
 const barlow = Barlow({
 	subsets: ["latin"],

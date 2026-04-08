@@ -1,6 +1,5 @@
 import { Badge } from "@emach/ui/components/badge";
 import { Button } from "@emach/ui/components/button";
-import { Input } from "@emach/ui/components/input";
 import Image from "next/image";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
@@ -41,7 +40,7 @@ export default function HomePage() {
 					{/* Cinematic gradient backdrop */}
 					<div
 						aria-hidden="true"
-						className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30"
+						className="absolute inset-0 bg-linear-to-r from-black via-black/70 to-black/30"
 					/>
 					{/* Subtle red accent stripe at top */}
 					<div
@@ -168,6 +167,7 @@ export default function HomePage() {
 									Comprar Agora
 								</Button>
 								<Button
+									className="text-white"
 									nativeButton={false}
 									render={<Link href={`/product/${featuredProduct.slug}`} />}
 									variant="outline"
@@ -200,30 +200,6 @@ export default function HomePage() {
 						{featuredProducts.map((product) => (
 							<ProductCard key={product.id} product={product} />
 						))}
-					</div>
-				</section>
-
-				{/* 5. Newsletter */}
-				<section className="dark flex flex-col items-center gap-10 bg-dark-surface px-20 py-15 md:flex-row">
-					<div className="flex-1">
-						<SectionLabel>Newsletter</SectionLabel>
-						<h2 className="mt-2 font-medium text-2xl text-foreground">
-							Fique por dentro
-						</h2>
-						<p className="mt-2 max-w-[400px] text-muted-foreground text-sm">
-							Receba em primeira mão lançamentos, promoções exclusivas e dicas
-							de uso das ferramentas EMACH.
-						</p>
-					</div>
-
-					<div className="flex w-full gap-2 md:w-auto">
-						<Input
-							aria-label="Seu e-mail"
-							className="h-11 min-w-[260px] bg-white/5 text-white placeholder:text-muted-foreground"
-							placeholder="seu@email.com"
-							type="email"
-						/>
-						<Button className="h-11 shrink-0">Cadastrar</Button>
 					</div>
 				</section>
 			</main>
