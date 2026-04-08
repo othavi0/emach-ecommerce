@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 
 import "../index.css";
-import Header from "@/components/header";
 import Providers from "@/components/providers";
 
 const barlow = Barlow({
@@ -18,8 +17,9 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-	title: "emach",
-	description: "emach",
+	title: "EMACH — Ferramentas Profissionais",
+	description:
+		"Ferramentas elétricas e manuais de alta performance para profissionais.",
 };
 
 export default function RootLayout({
@@ -32,12 +32,7 @@ export default function RootLayout({
 			<body
 				className={`${barlow.variable} ${barlowCondensed.variable} antialiased`}
 			>
-				<Providers>
-					<div className="grid h-svh grid-rows-[auto_1fr]">
-						<Header />
-						{children}
-					</div>
-				</Providers>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	);

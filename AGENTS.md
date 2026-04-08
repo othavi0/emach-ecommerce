@@ -7,10 +7,15 @@
 
 ## 1. Visão Geral
 
-**emach** é um e-commerce em construção. Scaffoldado com [Better-T-Stack](https://better-t-stack.dev/).
+**EMACH** é um e-commerce de **ferramentas elétricas e manuais** (furadeiras, serras, chaves, alicates, etc.) para o mercado brasileiro. Scaffoldado com [Better-T-Stack](https://better-t-stack.dev/).
 
 | | |
 |---|---|
+| **Produto** | Ferramentas elétricas + manuais |
+| **Marca** | EMACH |
+| **Moeda** | R$ (Real brasileiro) — formato `R$ 899,00` |
+| **Mercado** | Brasil (pt-BR) |
+| **Personalidade** | Precisa, Robusta, Profissional |
 | **Package manager** | Bun 1.3.11 |
 | **Orquestração** | Turborepo 2 |
 | **Frontend** | Next.js 16 + React 19 (App Router) |
@@ -21,6 +26,8 @@
 | **CSS** | Tailwind CSS v4 |
 | **Linting/Format** | Biome via Ultracite |
 | **Forms** | TanStack Form + Zod |
+| **Design** | Ferrari-inspired (chiaroscuro, Barlow, `#DA291C`) |
+| **Design Tool** | Pencil MCP (`~/Work/pencil/emach-ecommerce.pen`) |
 
 ---
 
@@ -88,7 +95,7 @@ emach-ecommerce/
   - `@emach/ui/lib/utils` → função `cn()` (clsx + tailwind-merge)
   - `@emach/ui/globals.css` → CSS com tokens de design Tailwind v4
   - `@emach/ui/hooks/<nome>` → hooks compartilhados (diretório existe, atualmente vazio)
-- **Componentes existentes:** `button`, `card`, `checkbox`, `dropdown-menu`, `input`, `label`, `skeleton`, `sonner`
+- **Componentes existentes (30):** `accordion`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `card`, `carousel`, `checkbox`, `command`, `dialog`, `dropdown-menu`, `input`, `input-group`, `label`, `navigation-menu`, `pagination`, `popover`, `scroll-area`, `select`, `separator`, `sheet`, `skeleton`, `sonner`, `table`, `tabs`, `textarea`, `toggle`, `toggle-group`, `tooltip`
 - **Como adicionar componentes:**
   ```bash
   bunx shadcn@latest add <nome> -c packages/ui
@@ -130,11 +137,9 @@ apps/web/src/
 ├── components/                 ← Componentes de negócio compartilhados entre rotas
 │   ├── header.tsx
 │   ├── loader.tsx
-│   ├── mode-toggle.tsx
 │   ├── providers.tsx
 │   ├── sign-in-form.tsx
 │   ├── sign-up-form.tsx
-│   ├── theme-provider.tsx
 │   └── user-menu.tsx
 └── app/
     ├── layout.tsx              ← Root layout (fontes, Providers, Header)
@@ -282,13 +287,50 @@ Todas as vars são definidas em `apps/web/.env` (gitignored) e validadas em buil
 - **`loading.tsx`, `error.tsx`, `not-found.tsx`** — Nenhuma rota tem esses arquivos.
 - **Route groups** (`(shop)`, `(auth)`, etc.) — Não utilizados ainda.
 - **Schemas de ecommerce** — Apenas tabelas de auth existem. Faltam `products`, `orders`, `categories`, etc.
+- **Páginas do e-commerce** — As páginas (landing, catálogo, produto, carrinho, checkout, login) existem apenas como design no Pencil. Código React ainda não foi implementado.
 - **CI/CD e Docker** — Nenhuma configuração de deploy existe.
+
+## 9.1. O que já existe (referência de design)
+
+- **30 componentes shadcn** instalados em `packages/ui/` (style `base-lyra`, Base UI)
+- **Tokens CSS Ferrari** em `packages/ui/src/styles/globals.css` (cores oklch, fontes Barlow, `--radius: 2px`, chiaroscuro)
+- **Design visual completo** no Pencil MCP (`~/Work/pencil/emach-ecommerce.pen`) com:
+  - 28 componentes reusáveis (Buttons, Inputs, Cards, Nav, Badges, Tabs, etc.)
+  - 34 variáveis de cor/tipografia
+  - 6 páginas: Landing, Catálogo, Produto Detail, Carrinho, Checkout, Login
+  - Imagens AI-generated de ferramentas vermelho/preto
+- **Design context** em `.impeccable.md` na raiz do projeto
+- **Specs** em `docs/superpowers/specs/`
 
 ---
 
 ## 10. Design System — Ferrari-Inspired
 
-O projeto segue uma linguagem visual inspirada no site Ferrari. Referência completa em `design/DESIGN.md`.
+O projeto segue uma linguagem visual inspirada no site Ferrari. A linguagem visual é Ferrari, mas os produtos são **ferramentas**.
+
+**Referências:**
+- `design/DESIGN.md` — Referência visual completa (cores, tipografia, layout, breakpoints)
+- `design/preview.html` / `design/preview-dark.html` — Catálogo visual HTML dos tokens
+- `.impeccable.md` — Contexto de design persistente com princípios e guidelines
+- `~/Work/pencil/emach-ecommerce.pen` — Design System visual no Pencil MCP
+
+### Categorias de Produtos
+
+| Categoria | Exemplos |
+|---|---|
+| **Ferramentas Elétricas** | Furadeira, Serra Circular, Esmerilhadeira, Parafusadeira |
+| **Ferramentas Manuais** | Jogo de Chaves, Alicate, Martelo, Serrote |
+| **Medição** | Nível Laser, Trena Digital, Paquímetro |
+| **Segurança** | Óculos, Luvas, Protetor Auricular |
+| **Acessórios** | Brocas, Discos de Corte, Lâminas, Bits |
+
+### Princípios de Design (da `.impeccable.md`)
+
+1. **Vermelho é verbo, não decoração.** Ferrari Red (`#DA291C`) aparece UMA vez por tela, sempre como CTA de alta prioridade.
+2. **Cada seção é uma vinheta.** O ritmo dark→light→dark é narrativo, não estilístico.
+3. **Cantos retos = precisão.** `border-radius: 0` em todos os componentes interativos.
+4. **Informação técnica é design.** Specs (voltagem, torque, RPM) têm a mesma atenção visual que headlines.
+5. **Menos é mais, exceto quando menos é vazio.** Whitespace generoso, mas cada seção com densidade e propósito.
 
 ### Paleta de Cores
 
@@ -332,14 +374,20 @@ O `@custom-variant dark (&:is(.dark *))` no Tailwind CSS v4 garante que `dark:bg
 ### Do's
 - Ferrari Red (`--primary`) apenas em CTAs de alta prioridade — sua força vem da parcimônia
 - `rounded-none` em todos os componentes — "razor precision"
-- Barlow Condensed apenas para labels/tags em uppercase
+- Barlow Condensed apenas para labels/tags em uppercase + `letter-spacing: 1px`
 - Cada seção da página deve ser uma "vinheta" com um foco claro
+- Specs técnicas (voltagem, torque, RPM, peso) com destaque visual — profissionais compram por dados
+- Preços sempre em formato R$ brasileiro: `R$ 899,00` (vírgula decimal, ponto milhar)
+- Imagens de produto com color scheme vermelho/preto (identidade EMACH)
 
 ### Don'ts
 - Não espalhe Ferrari Red como decoração — é sinal de CTA, não cor de tema
-- Não use border-radius arredondados (exceto modais: até 8px)
+- Não use border-radius arredondados (exceto modais: até 8px, avatares: 50%)
 - Não adicione box-shadows em cards — profundidade vem do contraste de superfícies
 - Não misture Barlow e Barlow Condensed no mesmo bloco de texto
+- Não use uppercase em headings Barlow — uppercase é reservado para Barlow Condensed labels
+- Não use cores vibrantes como fundo de seção — só preto/branco/cinza
+- Não use ferramentas com detalhes amarelos (estilo DeWalt) — sempre vermelho/preto EMACH
 
 ---
 
