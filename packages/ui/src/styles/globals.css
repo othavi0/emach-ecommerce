@@ -434,7 +434,7 @@
 }
 .emach-qty__btn {
 	width: 40px;
-	height: 44px;
+	height: 38px;
 	font-size: 18px;
 	font-weight: 400;
 	color: var(--near-black);
@@ -448,10 +448,10 @@
 }
 .emach-qty__btn--plus {
 	color: #fff;
-	background: var(--accent);
+	background: var(--emach-red);
 }
 .emach-qty__btn--plus:hover {
-	background: var(--accent);
+	background: var(--emach-red);
 	filter: brightness(1.08);
 }
 .emach-qty__val {
@@ -459,7 +459,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 44px;
-	height: 44px;
+	height: 38px;
 	font-family: var(--font-sans);
 	font-size: 14px;
 	font-weight: 600;

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { CartSheet } from "@/components/cart-sheet";
 import { SearchOverlay } from "@/components/search-overlay";
 import { useCart } from "@/lib/cart-context";
 
@@ -24,6 +25,7 @@ export function SiteHeader() {
 	const currentCat = searchParams.get("cat");
 	const { totalCount } = useCart();
 	const [searchOpen, setSearchOpen] = useState(false);
+	const [cartOpen, setCartOpen] = useState(false);
 	const [pulse, setPulse] = useState(false);
 	const prevCount = useRef(totalCount);
 
@@ -82,7 +84,7 @@ export function SiteHeader() {
 				<div className="flex items-center gap-[18px] text-white">
 					<button
 						aria-label="Buscar"
-						className="text-white/80 hover:text-white"
+						className="cursor-pointer text-white/80 hover:text-white"
 						onClick={() => setSearchOpen(true)}
 						type="button"
 					>
@@ -95,10 +97,11 @@ export function SiteHeader() {
 					>
 						<User className="size-[18px]" />
 					</Link>
-					<Link
+					<button
 						aria-label={`Carrinho com ${totalCount} itens`}
-						className="relative text-white/80 hover:text-white"
-						href="/cart"
+						className="relative cursor-pointer text-white/80 hover:text-white"
+						onClick={() => setCartOpen(true)}
+						type="button"
 					>
 						<ShoppingBag className="size-[18px]" />
 						{totalCount > 0 && (
@@ -111,11 +114,12 @@ export function SiteHeader() {
 								{totalCount}
 							</span>
 						)}
-					</Link>
+					</button>
 				</div>
 			</header>
 
 			<SearchOverlay onClose={() => setSearchOpen(false)} open={searchOpen} />
+			<CartSheet onOpenChange={setCartOpen} open={cartOpen} />
 		</>
 	);
 }

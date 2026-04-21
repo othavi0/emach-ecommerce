@@ -218,7 +218,7 @@ export function SearchOverlay({ open, onClose }: SearchOverlayProps) {
 	return (
 		<div
 			aria-modal="true"
-			className="fixed inset-0 z-[100] flex items-start justify-center pt-20"
+			className="fixed inset-0 z-100 flex items-start justify-center pt-20"
 			role="dialog"
 			style={{ background: "rgba(0,0,0,0.6)" }}
 		>
