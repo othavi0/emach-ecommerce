@@ -1,6 +1,7 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	boolean,
+	check,
 	index,
 	integer,
 	numeric,
@@ -53,6 +54,23 @@ export const tool = pgTable(
 		supplierId: text("supplier_id").references(() => supplier.id, {
 			onDelete: "set null",
 		}),
+		model: text("model"),
+		invoiceModel: text("invoice_model"),
+		productType: text("product_type"),
+		status: text("status").notNull().default("draft"),
+		powerWatts: integer("power_watts"),
+		frequencyHz: integer("frequency_hz"),
+		warrantyMonths: integer("warranty_months"),
+		weightKg: numeric("weight_kg", { precision: 10, scale: 3 }),
+		lengthCm: numeric("length_cm", { precision: 10, scale: 2 }),
+		widthCm: numeric("width_cm", { precision: 10, scale: 2 }),
+		heightCm: numeric("height_cm", { precision: 10, scale: 2 }),
+		barcode: text("barcode").unique(),
+		manufacturerName: text("manufacturer_name"),
+		countryOfOrigin: text("country_of_origin"),
+		hsCode: text("hs_code"),
+		ncm: text("ncm"),
+		cest: text("cest"),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at")
 			.defaultNow()
@@ -62,6 +80,39 @@ export const tool = pgTable(
 	(table) => [
 		index("tool_category_id_idx").on(table.categoryId),
 		index("tool_supplier_id_idx").on(table.supplierId),
+		index("tool_model_idx").on(table.model),
+		index("tool_invoice_model_idx").on(table.invoiceModel),
+		index("tool_ncm_idx").on(table.ncm),
+		index("tool_status_idx").on(table.status),
+		index("tool_product_type_idx").on(table.productType),
+		check(
+			"valid_product_type",
+			sql`${table.productType} IS NULL OR ${table.productType} = ANY (ARRAY['machine','equipment','part','accessory'])`
+		),
+		check(
+			"valid_tool_status",
+			sql`${table.status} = ANY (ARRAY['draft','active','discontinued','out_of_stock'])`
+		),
+		check(
+			"power_watts_positive",
+			sql`${table.powerWatts} IS NULL OR ${table.powerWatts} >= 0`
+		),
+		check(
+			"frequency_hz_positive",
+			sql`${table.frequencyHz} IS NULL OR ${table.frequencyHz} >= 0`
+		),
+		check(
+			"warranty_months_positive",
+			sql`${table.warrantyMonths} IS NULL OR ${table.warrantyMonths} >= 0`
+		),
+		check(
+			"weight_positive",
+			sql`${table.weightKg} IS NULL OR ${table.weightKg} >= 0`
+		),
+		check(
+			"dimensions_positive",
+			sql`(${table.lengthCm} IS NULL OR ${table.lengthCm} >= 0) AND (${table.widthCm} IS NULL OR ${table.widthCm} >= 0) AND (${table.heightCm} IS NULL OR ${table.heightCm} >= 0)`
+		),
 	]
 );
 

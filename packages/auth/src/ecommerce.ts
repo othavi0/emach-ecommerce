@@ -5,6 +5,9 @@ import {
 	clientSession,
 	clientVerification,
 } from "@emach/db/schema/client";
+import { sendEmail } from "@emach/email/send";
+import { ResetPasswordEmail } from "@emach/email/templates/reset-password";
+import { VerifyEmailEmail } from "@emach/email/templates/verify-email";
 import { env } from "@emach/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -18,9 +21,28 @@ export const authEcommerce = betterAuth({
 		provider: "pg",
 		schema,
 	}),
-	trustedOrigins: env.ECOMMERCE_ORIGIN ? [env.ECOMMERCE_ORIGIN] : [],
+	trustedOrigins: [env.ECOMMERCE_ORIGIN],
 	emailAndPassword: {
 		enabled: true,
+		requireEmailVerification: true,
+		sendResetPassword: async ({ user, url }) => {
+			await sendEmail({
+				to: user.email,
+				subject: "Redefinir sua senha — EMACH",
+				react: ResetPasswordEmail({ name: user.name, url }),
+			});
+		},
+	},
+	emailVerification: {
+		sendOnSignUp: true,
+		autoSignInAfterVerification: true,
+		sendVerificationEmail: async ({ user, url }) => {
+			await sendEmail({
+				to: user.email,
+				subject: "Confirme seu e-mail — EMACH",
+				react: VerifyEmailEmail({ name: user.name, url }),
+			});
+		},
 	},
 	user: {
 		modelName: "client",
@@ -47,7 +69,7 @@ export const authEcommerce = betterAuth({
 		modelName: "clientVerification",
 	},
 	secret: env.BETTER_AUTH_SECRET,
-	baseURL: env.BETTER_AUTH_URL_ECOMMERCE ?? env.BETTER_AUTH_URL,
+	baseURL: env.BETTER_AUTH_URL_ECOMMERCE,
 	advanced: {
 		cookiePrefix: "ecommerce",
 	},

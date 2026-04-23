@@ -9,12 +9,19 @@ import {
 } from "@emach/ui/components/tabs";
 import { cn } from "@emach/ui/lib/utils";
 import { useForm } from "@tanstack/react-form";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import Loader from "@/components/loader";
 import { authClient } from "@/lib/auth-client";
+import {
+	isValidCpfCnpj,
+	maskCpfCnpj,
+	maskPhone,
+	onlyDigits,
+} from "@/lib/validators/cpf-cnpj";
 
 const TRIGGER_CLASS =
 	"h-auto flex-1 whitespace-nowrap border-none px-0 py-3.5 font-semibold text-[14px] text-gray-50 hover:text-near-black data-active:text-near-black focus-visible:ring-0 focus-visible:border-transparent";
@@ -49,26 +56,56 @@ export default function LoginPage() {
 	});
 
 	const signUpForm = useForm({
-		defaultValues: { name: "", email: "", password: "" },
+		defaultValues: {
+			name: "",
+			email: "",
+			password: "",
+			phone: "",
+			document: "",
+		},
 		onSubmit: async ({ value }) => {
-			await authClient.signUp.email(
-				{ email: value.email, password: value.password, name: value.name },
-				{
-					onSuccess: () => {
-						router.push("/dashboard");
-						toast.success("Conta criada com sucesso");
-					},
-					onError: (error) => {
-						toast.error(error.error.message || error.error.statusText);
-					},
-				}
-			);
+			const payload: {
+				email: string;
+				password: string;
+				name: string;
+				phone?: string;
+				document?: string;
+			} = {
+				email: value.email,
+				password: value.password,
+				name: value.name,
+			};
+			const phoneDigits = onlyDigits(value.phone);
+			const docDigits = onlyDigits(value.document);
+			if (phoneDigits) {
+				payload.phone = phoneDigits;
+			}
+			if (docDigits) {
+				payload.document = docDigits;
+			}
+			await authClient.signUp.email(payload, {
+				onSuccess: () => {
+					toast.success(
+						"Conta criada. Verifique seu e-mail para ativar a conta."
+					);
+					setMode("sign-in");
+				},
+				onError: (error) => {
+					toast.error(error.error.message || error.error.statusText);
+				},
+			});
 		},
 		validators: {
 			onSubmit: z.object({
 				name: z.string().min(2, "O nome deve ter no mínimo 2 caracteres"),
 				email: z.email("E-mail inválido"),
 				password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+				phone: z
+					.string()
+					.refine((v) => !v || onlyDigits(v).length >= 10, "Telefone inválido"),
+				document: z
+					.string()
+					.refine((v) => !v || isValidCpfCnpj(v), "CPF/CNPJ inválido"),
 			}),
 		},
 	});
@@ -191,12 +228,12 @@ export default function LoginPage() {
 										<input className="emach-check" type="checkbox" />
 										Lembrar de mim
 									</label>
-									<button
+									<Link
 										className="emach-ghost-btn font-semibold text-[13px] text-emach-red"
-										type="button"
+										href={{ pathname: "/esqueci-senha" }}
 									>
 										Esqueci a senha
-									</button>
+									</Link>
 								</div>
 
 								<signInForm.Subscribe
@@ -267,6 +304,66 @@ export default function LoginPage() {
 												onChange={(e) => field.handleChange(e.target.value)}
 												placeholder="seu@email.com"
 												type="email"
+												value={field.state.value}
+											/>
+											{field.state.meta.errors.map((error) => (
+												<span
+													className="emach-field__error"
+													key={error?.message}
+												>
+													{error?.message}
+												</span>
+											))}
+										</label>
+									)}
+								</signUpForm.Field>
+
+								<signUpForm.Field name="phone">
+									{(field) => (
+										<label className="emach-field" htmlFor={field.name}>
+											<span className="emach-field__label">
+												Telefone (opcional)
+											</span>
+											<input
+												className="emach-input"
+												id={field.name}
+												inputMode="numeric"
+												name={field.name}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													field.handleChange(maskPhone(e.target.value))
+												}
+												placeholder="(11) 99999-9999"
+												value={field.state.value}
+											/>
+											{field.state.meta.errors.map((error) => (
+												<span
+													className="emach-field__error"
+													key={error?.message}
+												>
+													{error?.message}
+												</span>
+											))}
+										</label>
+									)}
+								</signUpForm.Field>
+
+								<signUpForm.Field name="document">
+									{(field) => (
+										<label className="emach-field" htmlFor={field.name}>
+											<span className="emach-field__label">
+												CPF / CNPJ (opcional)
+											</span>
+											<input
+												className="emach-input"
+												id={field.name}
+												inputMode="numeric"
+												name={field.name}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													field.handleChange(maskCpfCnpj(e.target.value))
+												}
+												placeholder="000.000.000-00"
 												value={field.state.value}
 											/>
 											{field.state.meta.errors.map((error) => (

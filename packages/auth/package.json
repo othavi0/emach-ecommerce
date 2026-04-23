@@ -12,6 +12,7 @@
   "scripts": {},
   "dependencies": {
     "@emach/db": "workspace:*",
+    "@emach/email": "workspace:*",
     "@emach/env": "workspace:*",
     "better-auth": "catalog:"
   },
