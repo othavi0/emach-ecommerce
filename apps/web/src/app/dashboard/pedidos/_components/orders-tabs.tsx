@@ -6,8 +6,8 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@emach/ui/components/tabs";
-import { getOrderCounts, getOrdersByTab } from "../_lib/mock-orders";
-import { ORDER_TAB_LABEL, ORDER_TABS, type OrderTab } from "../_lib/types";
+import { getOrderCounts, getOrdersByTab } from "../../_lib/mock-orders";
+import { ORDER_TAB_LABEL, ORDER_TABS, type OrderTab } from "../../_lib/types";
 import { OrderCard } from "./order-card";
 import { OrdersEmptyState } from "./orders-empty-state";
 

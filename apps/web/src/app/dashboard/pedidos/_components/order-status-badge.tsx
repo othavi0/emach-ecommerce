@@ -1,5 +1,5 @@
 import { cn } from "@emach/ui/lib/utils";
-import { ORDER_STATUS_LABEL, type OrderStatus } from "../_lib/types";
+import { ORDER_STATUS_LABEL, type OrderStatus } from "../../_lib/types";
 
 const VARIANT: Record<OrderStatus, string> = {
 	pending_payment: "text-emach-red border-emach-red",

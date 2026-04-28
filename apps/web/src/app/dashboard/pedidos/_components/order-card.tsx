@@ -5,7 +5,7 @@ import { Disc3, Drill, Ruler, Shield, Wrench } from "lucide-react";
 import { toast } from "sonner";
 import { EmachButton } from "@/components/emach-button";
 import { fmtBRL } from "@/lib/format";
-import type { CategorySlug, Order, OrderStatus } from "../_lib/types";
+import type { CategorySlug, Order, OrderStatus } from "../../_lib/types";
 import { OrderStatusBadge } from "./order-status-badge";
 
 const CATEGORY_ICONS: Record<CategorySlug, React.ElementType> = {

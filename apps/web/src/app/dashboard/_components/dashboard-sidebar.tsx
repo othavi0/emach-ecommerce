@@ -1,18 +1,18 @@
 "use client";
 
-import { signOut } from "@/lib/auth-client";
 import { cn } from "@emach/ui/lib/utils";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { signOut } from "@/lib/auth-client";
 
 type NavItem =
-	| { kind: "link"; label: string; href: "/dashboard" }
+	| { kind: "link"; label: string; href: "/dashboard/pedidos" }
 	| { kind: "soon"; label: string };
 
 const NAV_ITEMS: NavItem[] = [
-	{ kind: "link", label: "Pedidos", href: "/dashboard" },
+	{ kind: "link", label: "Pedidos", href: "/dashboard/pedidos" },
 	{ kind: "soon", label: "Reembolso e devoluções" },
 	{ kind: "soon", label: "Meus dados" },
 	{ kind: "soon", label: "Endereço" },
