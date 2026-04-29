@@ -26,11 +26,11 @@ const defaultAddress: ShippingAddress = {
 };
 
 interface BreakdownInput {
-	subtotalCents: number;
-	shippingCents: number;
-	shippingMethod: string;
 	discountCents?: number;
 	discountLabel?: string;
+	shippingCents: number;
+	shippingMethod: string;
+	subtotalCents: number;
 }
 
 function buildBreakdown(input: BreakdownInput): OrderBreakdown {

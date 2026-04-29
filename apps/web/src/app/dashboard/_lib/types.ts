@@ -60,57 +60,57 @@ export const ORDER_TABS: readonly OrderTab[] = [
 export type PaymentMethodKind = "pix" | "boleto" | "credit_card";
 
 export interface BuyerSnapshot {
-	name: string;
-	email: string;
-	phone: string;
 	document: string;
+	email: string;
+	name: string;
+	phone: string;
 }
 
 export interface ShippingAddress {
-	recipient: string;
-	street: string;
-	complement?: string;
-	neighborhood: string;
 	city: string;
-	state: string;
-	zip: string;
+	complement?: string;
 	country: string;
+	neighborhood: string;
+	recipient: string;
+	state: string;
+	street: string;
+	zip: string;
 }
 
 export interface OrderBreakdown {
-	subtotalCents: number;
-	shippingCents: number;
-	shippingMethod: string;
 	discountCents?: number;
 	discountLabel?: string;
+	shippingCents: number;
+	shippingMethod: string;
+	subtotalCents: number;
 	totalCents: number;
 }
 
 export interface PaymentInfo {
+	cardLast4?: string;
+	detail?: string;
 	kind: PaymentMethodKind;
 	label: string;
-	detail?: string;
-	cardLast4?: string;
 }
 
 export interface OrderTracking {
 	carrier: string;
-	service: string;
 	code: string;
-	url?: string;
+	service: string;
 	updatedAt: Date;
+	url?: string;
 }
 
 export interface OrderDetail extends Order {
-	buyer: BuyerSnapshot;
 	address: ShippingAddress;
 	breakdown: OrderBreakdown;
-	payment: PaymentInfo;
-	tracking?: OrderTracking;
+	buyer: BuyerSnapshot;
 	cancelledAt?: Date;
-	paidAt?: Date;
-	shippedAt?: Date;
 	deliveredAt?: Date;
+	paidAt?: Date;
+	payment: PaymentInfo;
+	shippedAt?: Date;
+	tracking?: OrderTracking;
 }
 
 export const PAYMENT_METHOD_LABEL: Record<PaymentMethodKind, string> = {

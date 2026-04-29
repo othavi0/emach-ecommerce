@@ -1,18 +1,13 @@
 "use client";
 
-import { EmachButton, emachButtonVariants } from "@/components/emach-button";
-import { cn } from "@emach/ui/lib/utils";
-import Link from "next/link";
 import { toast } from "sonner";
+import { EmachButton } from "@/components/emach-button";
 import type { Order } from "../../../_lib/types";
 
-const comingSoon = (label: string) => () =>
-	toast.info(`${label}: em breve`);
+const comingSoon = (label: string) => () => toast.info(`${label}: em breve`);
 
 export function OrderActions({ order }: { order: Order }) {
 	const buttons: React.ReactNode[] = [];
-
-	const trackingHref = `/dashboard/pedidos/${order.id}#rastreio` as const;
 
 	switch (order.status) {
 		case "pending_payment":
@@ -41,7 +36,7 @@ export function OrderActions({ order }: { order: Order }) {
 					key="rebuy"
 					onClick={comingSoon("Comprar novamente")}
 					size="md"
-					variant="outline"
+					variant="primary"
 				>
 					Comprar novamente
 				</EmachButton>
@@ -50,22 +45,14 @@ export function OrderActions({ order }: { order: Order }) {
 		case "shipped":
 			buttons.push(
 				<EmachButton
+					className="border-border"
 					key="rebuy"
 					onClick={comingSoon("Comprar novamente")}
 					size="md"
 					variant="ghost"
 				>
 					Comprar novamente
-				</EmachButton>,
-				<Link
-					className={cn(
-						emachButtonVariants({ variant: "primary", size: "md" })
-					)}
-					href={trackingHref}
-					key="track"
-				>
-					Rastrear envio
-				</Link>
+				</EmachButton>
 			);
 			break;
 		case "completed":
@@ -114,7 +101,5 @@ export function OrderActions({ order }: { order: Order }) {
 		return null;
 	}
 
-	return (
-		<div className="mt-6 flex flex-wrap justify-end gap-2">{buttons}</div>
-	);
+	return <div className="mt-6 flex flex-wrap justify-end gap-2">{buttons}</div>;
 }

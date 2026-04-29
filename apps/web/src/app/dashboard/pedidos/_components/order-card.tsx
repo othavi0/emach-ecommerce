@@ -2,6 +2,7 @@
 
 import { cn } from "@emach/ui/lib/utils";
 import { Disc3, Drill, Ruler, Shield, Wrench } from "lucide-react";
+import type { Route } from "next";
 import Link from "next/link";
 import { toast } from "sonner";
 import { EmachButton, emachButtonVariants } from "@/components/emach-button";
@@ -58,8 +59,11 @@ function ActionButtons({ order }: { order: Order }) {
 }
 
 function renderActions(order: Order): React.ReactNode[] {
-	const detailsHref = `/dashboard/pedidos/${order.id}` as const;
-	const trackingHref = `/dashboard/pedidos/${order.id}#rastreio` as const;
+	const detailsHref = `/dashboard/pedidos/${order.id}` as Route;
+	const trackingHref = {
+		pathname: `/dashboard/pedidos/${order.id}` as Route,
+		hash: "rastreio",
+	};
 	const detailsBtn = (
 		<Link
 			className={cn(emachButtonVariants({ variant: "outline", size: "sm" }))}

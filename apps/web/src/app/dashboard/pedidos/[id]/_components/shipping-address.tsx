@@ -1,11 +1,7 @@
 import type { ShippingAddress as ShippingAddressType } from "../../../_lib/types";
 import { SectionBlock } from "./section-block";
 
-export function ShippingAddress({
-	address,
-}: {
-	address: ShippingAddressType;
-}) {
+export function ShippingAddress({ address }: { address: ShippingAddressType }) {
 	return (
 		<SectionBlock title="Endereço de entrega">
 			<div className="text-[13px] text-near-black leading-[1.6]">

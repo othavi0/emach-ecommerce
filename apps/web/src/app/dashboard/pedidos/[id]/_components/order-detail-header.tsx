@@ -1,6 +1,6 @@
-import { SectionLabel } from "@/components/section-label";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { SectionLabel } from "@/components/section-label";
 import { ORDER_STATUS_LABEL, type OrderStatus } from "../../../_lib/types";
 
 const DATE_FMT = new Intl.DateTimeFormat("pt-BR", {

@@ -65,9 +65,7 @@ function stepDateFor(detail: OrderDetail, step: StepKey): string {
 		case "in_transit":
 			return detail.shippedAt ? DATETIME_FMT.format(detail.shippedAt) : "—";
 		case "delivered":
-			return detail.deliveredAt
-				? DATETIME_FMT.format(detail.deliveredAt)
-				: "—";
+			return detail.deliveredAt ? DATETIME_FMT.format(detail.deliveredAt) : "—";
 		default:
 			return "—";
 	}
@@ -96,9 +94,7 @@ function StepDot({ index, state }: { index: number; state: StepState }) {
 		);
 	}
 	return (
-		<div
-			className={cn(base, "border-border-strong bg-white text-gray-50")}
-		>
+		<div className={cn(base, "border-border-strong bg-white text-gray-50")}>
 			{index + 1}
 		</div>
 	);
@@ -141,7 +137,7 @@ function NormalStepper({ detail }: { detail: OrderDetail }) {
 					>
 						<div className="relative flex w-full items-center justify-center">
 							<StepDot index={idx} state={state} />
-							{!isLast ? (
+							{isLast ? null : (
 								<span
 									aria-hidden="true"
 									className={cn(
@@ -149,7 +145,7 @@ function NormalStepper({ detail }: { detail: OrderDetail }) {
 										state === "done" ? "bg-near-black" : "bg-border-strong"
 									)}
 								/>
-							) : null}
+							)}
 						</div>
 						<div
 							className={cn(
@@ -224,8 +220,7 @@ export function OrderTracking({ detail }: { detail: OrderDetail }) {
 			rightSlot={
 				detail.tracking ? (
 					<span className="font-display font-semibold text-[10px] text-gray-50 uppercase tracking-[0.16em]">
-						Atualizado em{" "}
-						{DATETIME_FMT.format(detail.tracking.updatedAt)}
+						Atualizado em {DATETIME_FMT.format(detail.tracking.updatedAt)}
 					</span>
 				) : null
 			}

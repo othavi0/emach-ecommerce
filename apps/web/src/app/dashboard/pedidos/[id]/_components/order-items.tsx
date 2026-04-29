@@ -1,6 +1,6 @@
-import { fmtBRL } from "@/lib/format";
 import { cn } from "@emach/ui/lib/utils";
 import { Disc3, Drill, Ruler, Shield, Wrench } from "lucide-react";
+import { fmtBRL } from "@/lib/format";
 import type { CategorySlug, OrderItem } from "../../../_lib/types";
 import { SectionBlock } from "./section-block";
 

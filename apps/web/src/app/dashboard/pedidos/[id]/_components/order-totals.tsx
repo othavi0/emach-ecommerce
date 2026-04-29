@@ -29,7 +29,7 @@ function PriceRow({
 function PaymentBadge({ kind }: { kind: PaymentInfo["kind"] }) {
 	const text = kind === "pix" ? "PIX" : kind === "boleto" ? "BOL" : "CRD";
 	return (
-		<div className="flex h-7 w-7 shrink-0 items-center justify-center border border-near-black font-display font-bold text-[10px] tracking-[0.06em]">
+		<div className="flex h-7 w-7 shrink-0 items-center justify-center border border-near-black font-bold font-display text-[10px] tracking-[0.06em]">
 			{text}
 		</div>
 	);
