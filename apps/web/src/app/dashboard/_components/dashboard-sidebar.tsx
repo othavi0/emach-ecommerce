@@ -2,19 +2,24 @@
 
 import { cn } from "@emach/ui/lib/utils";
 import { LogOut } from "lucide-react";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { signOut } from "@/lib/auth-client";
 
 type NavItem =
-	| { kind: "link"; label: string; href: "/dashboard/pedidos" }
+	| {
+			kind: "link";
+			label: string;
+			href: Route;
+	  }
 	| { kind: "soon"; label: string };
 
 const NAV_ITEMS: NavItem[] = [
 	{ kind: "link", label: "Pedidos", href: "/dashboard/pedidos" },
 	{ kind: "soon", label: "Reembolso e devoluções" },
-	{ kind: "soon", label: "Meus dados" },
+	{ kind: "link", label: "Meus dados", href: "/dashboard/dados-pessoais" },
 	{ kind: "soon", label: "Endereço" },
 ];
 
