@@ -8,11 +8,11 @@ import { order, orderItem } from "@emach/db/schema/orders";
 import { promotion, promotionTool } from "@emach/db/schema/promotions";
 import { stockMovement } from "@emach/db/schema/stock-movements";
 import { tool, toolVariant } from "@emach/db/schema/tools";
-import { env } from "@emach/env/server";
 import { and, eq, gt, gte, inArray, isNull, lte, or, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 import { z } from "zod";
 
+import { getDefaultBranchId } from "@/lib/default-branch";
 import { log } from "@/lib/evlog";
 import { requireCurrentClient } from "@/lib/session";
 import { isValidCpfCnpj, onlyDigits } from "@/lib/validators/cpf-cnpj";
@@ -332,7 +332,7 @@ export async function createOrderAction(
 
 	const session = await requireCurrentClient();
 	const clientId = session.user.id;
-	const branchId = env.ECOMMERCE_DEFAULT_BRANCH_ID;
+	const branchId = await getDefaultBranchId();
 
 	const prep = await prepareLines(input);
 	if (!prep.ok) {

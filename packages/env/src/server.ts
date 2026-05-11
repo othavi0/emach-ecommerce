@@ -35,7 +35,6 @@ export const env = createEnv({
 			.default("development"),
 		SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
 		NEXT_PUBLIC_SUPABASE_URL: z.url(),
-		ECOMMERCE_DEFAULT_BRANCH_ID: z.string().min(1),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
