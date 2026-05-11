@@ -28,7 +28,7 @@
 | **CSS** | Tailwind CSS v4 |
 | **Linting/Format** | Biome via Ultracite |
 | **Forms** | TanStack Form + Zod |
-| **Design** | Ferrari-inspired (chiaroscuro, Barlow, `#DA291C`) — ver `DESIGN.md` + `.impeccable.md` |
+| **Design** | Ferrari-inspired (chiaroscuro, Barlow, `#DA291C`) — ver `DESIGN.md` |
 | **Logging** | `evlog` (instrumentation + middleware + `log.error` em server actions) |
 
 IDs em server actions/scripts: **`crypto.randomUUID()`** (sem nanoid).
@@ -356,27 +356,27 @@ bunx shadcn@latest diff -c packages/ui                 # Ver atualizações disp
 
 ## 8. Environment Variables
 
-Todas as vars são definidas em `apps/web/.env` (gitignored) e validadas em build time pelo `@emach/env`.
+Vars definidas em `apps/web/.env` (gitignored) e validadas em build time pelo `@emach/env` (T3 Env + Zod).
 
-| Variável | Tipo | Escopo | Onde é validada |
-|---|---|---|---|
-| `DATABASE_URL` | string (min 1) | server | `@emach/env/server` |
-| `BETTER_AUTH_SECRET` | string (min 32) | server | `@emach/env/server` |
-| `BETTER_AUTH_URL` | URL | server | `@emach/env/server` |
-| `BETTER_AUTH_URL_ECOMMERCE` | URL | server | `@emach/env/server` |
-| `CORS_ORIGIN` | URL | server | `@emach/env/server` |
-| `ECOMMERCE_ORIGIN` | URL | server | `@emach/env/server` |
-| `RESEND_API_KEY` | string (`re_...`) | server | `@emach/env/server` |
-| `EMAIL_FROM` | string (formato `Nome <email>`) | server | `@emach/env/server` |
-| `SUPABASE_SERVICE_ROLE_KEY` | string (`sb_secret_...`) | server | `@emach/env/server` |
-| `NODE_ENV` | `development\|production\|test` | server | `@emach/env/server` |
-| `NEXT_PUBLIC_ECOMMERCE_AUTH_URL` | URL | client | `@emach/env/web` |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL | client | `@emach/env/web` |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` | string (`sb_publishable_...`) | client | `@emach/env/web` |
+**Fonte de verdade (sempre consultar antes de assumir):**
+- `packages/env/src/server.ts` — vars server-only (DB, auth secrets, OAuth, Resend, Supabase service role, branch default).
+- `packages/env/src/web.ts` — vars cliente (prefix `NEXT_PUBLIC_`).
+
+**Template de setup:** `apps/web/.env.example` — copiar pra `apps/web/.env` e preencher.
 
 **Para adicionar nova env var:**
-1. Adicione ao schema Zod em `packages/env/src/server.ts` (server) ou `packages/env/src/web.ts` (client)
-2. Adicione ao `apps/web/.env`
+1. Adicione ao schema Zod em `packages/env/src/server.ts` ou `web.ts` conforme escopo.
+2. Atualize `apps/web/.env` + `.env.example`.
+3. Use via `import { env } from "@emach/env/server"` ou `"@emach/env/web"` — nunca `process.env.*` direto.
+
+**Categorias** (alta granularidade — detalhes nos arquivos):
+- **DB:** `DATABASE_URL`
+- **Better Auth:** `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `BETTER_AUTH_URL_ECOMMERCE`, `CORS_ORIGIN`, `ECOMMERCE_ORIGIN`
+- **OAuth:** `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- **Email:** `RESEND_API_KEY`, `EMAIL_FROM`
+- **Supabase:** `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`
+- **App:** `ECOMMERCE_DEFAULT_BRANCH_ID`, `NODE_ENV`
+- **Client:** `NEXT_PUBLIC_ECOMMERCE_AUTH_URL`
 
 ---
 
@@ -401,7 +401,7 @@ Todas as vars são definidas em `apps/web/.env` (gitignored) e validadas em buil
 - **Schema completo do dashboard** sincronizado: `tool`/`toolVariant`/`category`/`attribute*`/`order*`/`stockMovement`/`review`/`consentLog` etc.
 - **RLS aplicada** em todas as 30 tabelas (catálogo público anon+authenticated; resto deny-all server-side)
 - **Triggers PL/pgSQL** ativos (anti-ciclo categoria, idempotência stock_movement)
-- **Design context** em `.impeccable.md` (princípios) + `DESIGN.md` (tokens completos)
+- **Design context** em `DESIGN.md` (tokens completos + princípios + componentes EMACH custom)
 - **PWA** wired via `manifest.ts` + ícones EMACH em `public/favicon/`
 - **evlog** instrumentation + middleware + `log.error` em `create-order` server action
 
@@ -411,9 +411,7 @@ Todas as vars são definidas em `apps/web/.env` (gitignored) e validadas em buil
 
 O projeto segue uma linguagem visual inspirada no site Ferrari. A linguagem visual é Ferrari, mas os produtos são **ferramentas**.
 
-**Referências:**
-- `DESIGN.md` — Referência visual completa (cores, tipografia, layout, breakpoints, componentes EMACH custom)
-- `.impeccable.md` — Princípios de design + tom de marca (versão curta)
+**Referência:** `DESIGN.md` — tokens, tipografia, componentes EMACH custom, breakpoints.
 
 ### Categorias de Produtos
 
@@ -425,7 +423,7 @@ O projeto segue uma linguagem visual inspirada no site Ferrari. A linguagem visu
 | **Segurança** | Óculos, Luvas, Protetor Auricular |
 | **Acessórios** | Brocas, Discos de Corte, Lâminas, Bits |
 
-### Princípios de Design (da `.impeccable.md`)
+### Princípios de Design
 
 1. **Vermelho é verbo, não decoração.** Ferrari Red (`#DA291C`) aparece UMA vez por tela, sempre como CTA de alta prioridade.
 2. **Cada seção é uma vinheta.** O ritmo dark→light→dark é narrativo, não estilístico.
@@ -510,7 +508,7 @@ O `@custom-variant dark (&:is(.dark *))` no Tailwind CSS v4 garante que `dark:bg
 
 ## 12. Workflow de mudança
 
-1. **Antes de tocar UI:** abrir `DESIGN.md` + `.impeccable.md` na seção relevante; invocar skill `web-design-guidelines` se for review.
+1. **Antes de tocar UI:** abrir `DESIGN.md` na seção relevante; invocar skill `web-design-guidelines` se for review.
 2. **Antes de tocar schema:**
    - Tabela owned-by-ecommerce (`client*`): editar `packages/db/src/schema/client.ts` → dev `bun db:push` → `bun db:apply-triggers` → smoke.
    - Tabela owned-by-dashboard ou compartilhada: **PR no dashboard primeiro**, depois sincronizar a cópia neste repo. Em prod sempre `bun db:generate` + commit migration + `bun db:migrate`.
@@ -564,5 +562,5 @@ Skill `ultracite` carregada via plugin tem o detalhamento completo das regras Bi
 ## 15. Onde se aprofundar
 
 - **Convenções de schema Drizzle:** `packages/db/CLAUDE.md`
-- **Design system completo:** `DESIGN.md` (tokens) + `.impeccable.md` (princípios)
+- **Design system completo:** `DESIGN.md`
 - **Schema do dashboard (fonte de verdade pra tabelas compartilhadas):** repo irmão `emach-dashboard` (sincronização manual via PR cruzado).

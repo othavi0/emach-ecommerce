@@ -79,8 +79,7 @@ bunx shadcn@latest diff -c packages/ui
 
 - **`.claude/CLAUDE.md`** — instruções completas: packages, ownership de tabelas, invariantes P0 auth, anti-patterns, MCP servers, workflow.
 - **`AGENTS.md`** — pointer pra agentes externos (Codex, Amp, Cursor).
-- **`DESIGN.md`** — tokens completos do design Ferrari-inspired (cores, tipografia, componentes EMACH custom).
-- **`.impeccable.md`** — princípios de design e tom de marca (versão curta).
+- **`DESIGN.md`** — tokens completos do design Ferrari-inspired (cores, tipografia, princípios, componentes EMACH custom).
 - **`packages/db/CLAUDE.md`** — convenções de schema Drizzle (FKs, enums, money, triggers, queries compartilhadas).
 
 ## Invariantes críticos

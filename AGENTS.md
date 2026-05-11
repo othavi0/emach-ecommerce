@@ -2,7 +2,7 @@
 
 Fonte canônica: **`.claude/CLAUDE.md`** (arquitetura, packages, invariantes auth, anti-patterns, workflow).
 
-Design system: **`DESIGN.md`** (tokens completos) + **`.impeccable.md`** (princípios).
+Design system: **`DESIGN.md`** (tokens + princípios + componentes EMACH custom).
 
 Convenções DB: **`packages/db/CLAUDE.md`**.
 
