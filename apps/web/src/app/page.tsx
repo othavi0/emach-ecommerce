@@ -4,8 +4,7 @@ import { getActivePromotions, getRecentTools } from "@emach/db/queries/catalog";
 import { category } from "@emach/db/schema/categories";
 import { cn } from "@emach/ui/lib/utils";
 import { and, asc, eq, isNull } from "drizzle-orm";
-import { CreditCard, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { CategoryTile } from "@/components/category-tile";
+import { CategoryGrid } from "@/components/category-grid";
 import { EmachButton } from "@/components/emach-button";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { PageContainer } from "@/components/page-container";
@@ -14,19 +13,9 @@ import { SectionHeader } from "@/components/section-header";
 import { SectionLabel } from "@/components/section-label";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { TrustBar } from "@/components/trust-bar";
 
 export const revalidate = 600;
-
-const TRUST_ITEMS = [
-	{ icon: Truck, title: "Frete grátis", sub: "Acima de R$ 299" },
-	{
-		icon: ShieldCheck,
-		title: "2 anos de garantia",
-		sub: "Toda linha profissional",
-	},
-	{ icon: CreditCard, title: "12× sem juros", sub: "No cartão" },
-	{ icon: RotateCcw, title: "30 dias para troca", sub: "Sem burocracia" },
-];
 
 const STATS = [
 	{ n: "200+", l: "Horas de teste" },
@@ -48,7 +37,7 @@ async function getRootCategories() {
 		.from(category)
 		.where(and(isNull(category.parentId), eq(category.isActive, true)))
 		.orderBy(asc(category.sortOrder))
-		.limit(5);
+		.limit(4);
 }
 
 function flattenPromoTools(
@@ -80,11 +69,6 @@ export default async function HomePage() {
 	]);
 
 	const promoTools = flattenPromoTools(activePromotions, 4);
-	const tile0 = rootCategories[0];
-	const tile1 = rootCategories[1];
-	const tile2 = rootCategories[2];
-	const tile3 = rootCategories[3];
-	const tile4 = rootCategories[4];
 
 	return (
 		<>
@@ -93,42 +77,23 @@ export default async function HomePage() {
 			<main>
 				<HeroCarousel />
 
-				<div className="border-border border-b bg-white">
-					<PageContainer className="grid grid-cols-4 gap-6 py-[22px]">
-						{TRUST_ITEMS.map((f) => (
-							<div className="flex items-center gap-3" key={f.title}>
-								<div className="flex size-9 items-center justify-center bg-gray-10">
-									<f.icon size={18} />
-								</div>
-								<div>
-									<div className="font-semibold text-[13px]">{f.title}</div>
-									<div className="text-[12px] text-gray-60">{f.sub}</div>
-								</div>
-							</div>
-						))}
-					</PageContainer>
-				</div>
+				<TrustBar />
 
 				{rootCategories.length > 0 && (
-					<PageContainer as="section" className="px-[56px] py-[72px]">
-						<SectionHeader
-							label="01 · Categorias"
-							link={{ href: "/catalog", label: "Ver todas" }}
-							title="Explorar por categoria"
-						/>
-
-						<div className="grid grid-cols-[2fr_1fr_1fr] grid-rows-2 gap-6">
-							{tile0 && (
-								<div className="row-span-2">
-									<CategoryTile category={tile0} index={0} size="full" />
-								</div>
-							)}
-							{tile1 && <CategoryTile category={tile1} index={1} />}
-							{tile2 && <CategoryTile category={tile2} index={2} />}
-							{tile3 && <CategoryTile category={tile3} index={3} />}
-							{tile4 && <CategoryTile category={tile4} index={4} />}
-						</div>
-					</PageContainer>
+					<section className="bg-cinema-3 text-white">
+						<PageContainer className="px-[56px] py-[72px]">
+							<SectionHeader
+								label="01 · Categorias"
+								link={{
+									href: "/catalog",
+									label: "Ver todas",
+									variant: "arrow",
+								}}
+								title="Explorar por categoria"
+							/>
+							<CategoryGrid categories={rootCategories} />
+						</PageContainer>
+					</section>
 				)}
 
 				{promoTools.length > 0 && (
