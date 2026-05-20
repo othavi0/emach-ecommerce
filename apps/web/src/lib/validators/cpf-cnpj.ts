@@ -1,4 +1,5 @@
 const RE_DIGITS = /\D/g;
+const RE_NON_LETTERS = /[^\p{L}\s'-]/gu;
 const RE_CPF_A = /^(\d{3})(\d)/;
 const RE_CPF_B = /^(\d{3})\.(\d{3})(\d)/;
 const RE_CPF_C = /\.(\d{3})(\d)/;
@@ -11,6 +12,8 @@ const RE_PHONE_B10 = /(\d{4})(\d)/;
 const RE_PHONE_B11 = /(\d{5})(\d)/;
 
 export const onlyDigits = (v: string): string => v.replace(RE_DIGITS, "");
+
+export const onlyLetters = (v: string): string => v.replace(RE_NON_LETTERS, "");
 
 const allSame = (digits: string): boolean =>
 	digits.length > 0 && digits.split("").every((d) => d === digits[0]);

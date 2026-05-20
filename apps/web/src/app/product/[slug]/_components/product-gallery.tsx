@@ -123,7 +123,7 @@ export function ProductGallery({
 						<InnerImageZoom
 							imgAttributes={{ alt: name }}
 							src={activeSrc}
-							zoomScale={2}
+							zoomScale={1}
 							zoomSrc={activeSrc}
 						/>
 					) : (

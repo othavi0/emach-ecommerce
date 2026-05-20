@@ -16,13 +16,12 @@ interface ProductImageProps {
 	priority?: boolean;
 	sizes?: string;
 	src?: string;
-	/** Ativar zoom no hover do ancestral `.group` */
 	zoom?: boolean;
 }
 
 const WRAPPER_BASE =
 	"absolute inset-0 overflow-hidden transition-transform duration-[400ms] ease-[cubic-bezier(.2,.6,.2,1)]";
-const ZOOM_ON_HOVER = "group-hover:scale-[1.06]";
+const ZOOM_ON_HOVER = "group-hover:scale-[0.95]";
 
 export function ProductImage({
 	alt,

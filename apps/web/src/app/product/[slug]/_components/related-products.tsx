@@ -1,30 +1,64 @@
 import { db } from "@emach/db";
-import { getTools } from "@emach/db/queries/catalog";
+import {
+	getCategoryBySlug,
+	getTools,
+	type ToolListItem,
+} from "@emach/db/queries/catalog";
 import { Separator } from "@emach/ui/components/separator";
 import { ProductCard } from "@/components/product-card";
 
 interface RelatedProductsProps {
-	categoryId: string | null;
+	categoryPath: string | null;
 	toolId: string;
 }
 
+const RELATED_LIMIT = 5;
+
 export async function RelatedProducts({
 	toolId,
-	categoryId,
+	categoryPath,
 }: RelatedProductsProps) {
-	if (!categoryId) {
-		return null;
+	const picked: ToolListItem[] = [];
+	const seen = new Set<string>([toolId]);
+
+	function collect(tools: ToolListItem[]) {
+		for (const tool of tools) {
+			if (picked.length >= RELATED_LIMIT) {
+				break;
+			}
+			if (!seen.has(tool.id)) {
+				picked.push(tool);
+				seen.add(tool.id);
+			}
+		}
 	}
 
-	const { tools } = await getTools(db, {
-		categoryId,
-		excludeToolId: toolId,
-		limit: 5,
-		offset: 0,
-		sort: "newest",
-	});
+	const rootSlug = categoryPath?.split("/").filter(Boolean)[0];
+	if (rootSlug) {
+		const root = await getCategoryBySlug(db, rootSlug);
+		if (root) {
+			const { tools } = await getTools(db, {
+				categoryId: root.id,
+				excludeToolId: toolId,
+				limit: RELATED_LIMIT,
+				offset: 0,
+				sort: "newest",
+			});
+			collect(tools);
+		}
+	}
 
-	if (tools.length === 0) {
+	if (picked.length < RELATED_LIMIT) {
+		const { tools } = await getTools(db, {
+			excludeToolId: toolId,
+			limit: RELATED_LIMIT + picked.length,
+			offset: 0,
+			sort: "newest",
+		});
+		collect(tools);
+	}
+
+	if (picked.length === 0) {
 		return null;
 	}
 
@@ -36,7 +70,7 @@ export async function RelatedProducts({
 					Você também pode gostar
 				</h2>
 				<div className="grid grid-cols-5 gap-6">
-					{tools.map((tool) => (
+					{picked.map((tool) => (
 						<ProductCard key={tool.id} tool={tool} />
 					))}
 				</div>

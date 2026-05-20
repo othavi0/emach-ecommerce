@@ -14,10 +14,6 @@ const navLinks: {
 	{ href: "/sobre#filiais", label: "Filiais" },
 ];
 
-/**
- * Nav do header. Isolada do SiteHeader porque usa `useSearchParams()` —
- * que exige um `<Suspense>` acima durante prerender estático (Next.js).
- */
 export function HeaderNav() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -58,7 +54,7 @@ export function HeaderNav() {
 				return (
 					<Link
 						className={cn(
-							"relative inline-block pb-1 font-semibold text-[12px] tracking-[0.04em] transition-colors",
+							"relative inline-block pb-1 font-display font-semibold text-ms uppercase tracking-[0.04em] transition-colors",
 							"after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-emach-red after:transition-transform after:duration-300 after:ease-out after:content-['']",
 							"hover:after:scale-x-100",
 							active

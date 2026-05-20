@@ -1,7 +1,10 @@
 import type { Review } from "@emach/db/schema/reviews";
+import { cn } from "@emach/ui/lib/utils";
 import { StarRating } from "./star-rating";
 
 interface ReviewCardProps {
+	isLast: boolean;
+	isPenultimateOnEven: boolean;
 	review: Review & { clientName: string };
 }
 
@@ -16,9 +19,19 @@ function formatReviewDate(date: Date): string {
 	return DATE_FORMATTER.format(date).replace(TRAILING_DOT, "").toUpperCase();
 }
 
-export function ReviewCard({ review }: ReviewCardProps) {
+export function ReviewCard({
+	review,
+	isLast,
+	isPenultimateOnEven,
+}: ReviewCardProps) {
 	return (
-		<article className="border-gray-20 border-b py-7 md:even:pl-8 md:odd:pr-8">
+		<article
+			className={cn(
+				"py-7 md:even:pl-8 md:odd:pr-8",
+				!isLast && "border-gray-20 border-b",
+				isPenultimateOnEven && "md:border-b-0"
+			)}
+		>
 			<header className="mb-2.5 flex items-center justify-between gap-3">
 				<div className="flex items-center gap-2.5">
 					<StarRating rating={review.rating} />

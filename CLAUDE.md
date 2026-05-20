@@ -95,12 +95,12 @@ emach-ecommerce/
 - **Owned-by-ecommerce (autoritativo):** tabelas `client*` (5).
 - **Escrita compartilhada:** `order`, `orderItem`, `stockMovement` (`actorType='user'` no dashboard, `actorType='system'` no ecommerce), `review`, `consentLog`, `toolAttributeValue` em fluxos cliente.
 - **Cópia de schema:** `packages/db/src/schema/*` é re-sincronizado manualmente. Não editar em isolamento — coordenar via PR no dashboard.
-- **Drops/renames em prod:** começam no repo irmão `emach-dashboard` (fonte de verdade da DB) com migration versionada lá; este repo só ressincroniza o espelho em `packages/db/src/schema/*`. **Nunca** `db:push --force` em prod.
+- **Drops/renames em prod:** sempre `bun db:generate` + migration versionada. **Nunca** `db:push --force` em prod.
 
 **Money:** `numeric(10,2)` em `tool_variant.priceAmount`/`costAmount`; `numeric(12,2)` em `order.totalAmount`. Nunca `real`/`double`.
 
-**Triggers PL/pgSQL — `triggers.sql`:**
-- `packages/db/src/sql/triggers.sql` (owned-by-dashboard, cópia versionada aqui) tem 4 triggers que Drizzle Kit não gera: anti-ciclo de categoria + `path`/`depth` materializados, cascade de path, `client.last_seen`, derivação de `client.type`. Aplicar via `bun db:apply-triggers` (idempotente) após qualquer `db:push` local ou ressincronização relevante.
+**Triggers PL/pgSQL — `_triggers.sql`:**
+- `packages/db/src/migrations/_triggers.sql` (owned-by-dashboard, cópia versionada aqui) tem 4 triggers que Drizzle Kit não gera: anti-ciclo de categoria + `path`/`depth` materializados, cascade de path, `client.last_seen`, derivação de `client.type`. Aplicar via `bun db:apply-triggers` (idempotente) após qualquer `db:push`/`db:migrate`.
 - A idempotência de débito de venda em `stockMovement` **não** é trigger — é um partial unique index no schema.
 - **RLS** é gerenciada direto no Supabase (não há arquivo `_rls.sql`): catálogo com SELECT público (anon+authenticated), demais tabelas deny-all (acesso server-side via service role / Better Auth).
 
@@ -257,12 +257,12 @@ bun run check-types  # tsc em todo o monorepo
 
 # Banco de dados (raiz)
 bun run db:push      # sync schema → DB sem migration (apenas dev local)
-bun run db:generate  # não é fluxo autoritativo deste repo; migrations pertencem ao dashboard
-bun run db:migrate   # não usar para prod neste repo; ver ADR-0002
+bun run db:generate  # gera migration versionada (staging/prod)
+bun run db:migrate   # aplica migrations pendentes
 bun run db:studio    # Drizzle Studio
 
 # Banco de dados — utilitários (packages/db)
-bun --cwd packages/db db:apply-triggers       # aplica src/sql/triggers.sql (idempotente)
+bun --cwd packages/db db:apply-triggers       # aplica _triggers.sql (idempotente)
 bun --cwd packages/db db:seed-categories      # bootstrap categorias raiz
 bun --cwd packages/db db:seed-attributes      # bootstrap attribute_definitions
 bun --cwd packages/db db:anonymize-client <id># LGPD direito ao esquecimento
@@ -278,7 +278,7 @@ bunx shadcn@latest add <nome> -c packages/ui   # adicionar componente(s)
 bunx shadcn@latest diff -c packages/ui          # ver atualizações
 ```
 
-> ⚠️ Após `db:push` local ou ressincronização relevante, rodar `db:apply-triggers` (Drizzle Kit não gera triggers PL/pgSQL).
+> ⚠️ Após `db:push`/`db:migrate`, rodar `db:apply-triggers` (Drizzle Kit não gera triggers PL/pgSQL).
 > ℹ️ `.claude/settings.json` tem um hook PostToolUse que roda `bun fix` após cada Write/Edit — não precisa rodar `fix` manualmente após editar via agente.
 
 ---
@@ -363,8 +363,8 @@ Linting zero-config via **Ultracite** (preset Biome). A skill `ultracite` tem o 
 
 1. **Antes de tocar UI:** abrir `DESIGN.md`; skill `web-design-guidelines` para review.
 2. **Antes de tocar schema:**
-   - Tabela owned-by-ecommerce (`client*`): editar o espelho em `schema/client.ts` só quando a DB real permitir → dev `bun db:push` se aplicável → `db:apply-triggers` → `db:check-drift` → smoke.
-   - Tabela owned-by-dashboard ou compartilhada: **PR no dashboard primeiro**, com migration versionada lá; depois sincronizar a cópia aqui e rodar `bun --cwd packages/db db:check-drift`.
+   - Tabela owned-by-ecommerce (`client*`): editar `schema/client.ts` → dev `bun db:push` → `db:apply-triggers` → smoke.
+   - Tabela owned-by-dashboard ou compartilhada: **PR no dashboard primeiro**, depois sincronizar a cópia aqui. Em prod sempre `db:generate` + commit migration + `db:migrate`.
 3. **Escrita em tabelas dashboard-owned:** usar `actorType='system'` em `stockMovement` e similares (nunca `actorType='user'` — `user` é staff).
 4. **Imagens em forms:** ao integrar uploads, extrair helper genérico `lib/storage.ts` (`{ bucket, prefix, formData }`). Service role key em `SUPABASE_SERVICE_ROLE_KEY` (server-only).
 5. **Validação:** `bun check-types` no workspace alterado, `bun fix` no escopo. Suite inteira só se necessário.

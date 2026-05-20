@@ -1,20 +1,22 @@
 "use client";
 
-import { Search, ShoppingBag, User } from "lucide-react";
+import { Search, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense, useEffect, useRef, useState } from "react";
 
+import { AccountMenu } from "@/components/account-menu";
 import { CartSheet } from "@/components/cart-sheet";
 import { HeaderNav } from "@/components/header-nav";
 import { SearchOverlay } from "@/components/search-overlay";
 import { useCart } from "@/lib/cart-context";
 
-export function SiteHeader() {
+export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 	const { totalCount } = useCart();
 	const [searchOpen, setSearchOpen] = useState(false);
 	const [cartOpen, setCartOpen] = useState(false);
 	const [pulse, setPulse] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
 	const prevCount = useRef(totalCount);
 
 	useEffect(() => {
@@ -27,17 +29,40 @@ export function SiteHeader() {
 		return;
 	}, [totalCount]);
 
+	useEffect(() => {
+		if (!overlay) {
+			return;
+		}
+		const onScroll = () => {
+			setScrolled(window.scrollY > 0);
+		};
+		onScroll();
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => window.removeEventListener("scroll", onScroll);
+	}, [overlay]);
+
+	const headerClass = overlay
+		? `fixed top-0 right-0 left-0 z-30 flex h-14 items-center justify-between px-10 transition-colors duration-200 ${
+				scrolled ? "bg-black" : "bg-transparent"
+			}`
+		: "sticky top-0 z-30 flex h-14 items-center justify-between bg-black px-10";
+
 	return (
 		<>
-			<header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-black px-10">
+			<header className={headerClass}>
 				<div className="flex items-center gap-8">
 					<Link href="/">
 						<Image
 							alt="EMACH"
-							height={16}
+							className={
+								overlay && !scrolled
+									? "h-[37px] w-[200px] transition-all duration-300"
+									: "h-[26px] w-[140px] transition-all duration-300"
+							}
+							height={37}
 							priority
 							src="/emach-logo.svg"
-							width={87}
+							width={200}
 						/>
 					</Link>
 					<Suspense fallback={<nav className="flex items-center gap-[22px]" />}>
@@ -52,22 +77,15 @@ export function SiteHeader() {
 						onClick={() => setSearchOpen(true)}
 						type="button"
 					>
-						<Search className="size-[18px]" />
+						<Search className="size-6" />
 					</button>
-					<Link
-						aria-label="Conta"
-						className="text-white/80 hover:text-white"
-						href="/login"
-					>
-						<User className="size-[18px]" />
-					</Link>
 					<button
 						aria-label={`Carrinho com ${totalCount} itens`}
 						className="relative cursor-pointer text-white/80 hover:text-white"
 						onClick={() => setCartOpen(true)}
 						type="button"
 					>
-						<ShoppingBag className="size-[18px]" />
+						<ShoppingBag className="size-6" />
 						{totalCount > 0 && (
 							<span
 								aria-hidden="true"
@@ -78,6 +96,7 @@ export function SiteHeader() {
 							</span>
 						)}
 					</button>
+					<AccountMenu />
 				</div>
 			</header>
 

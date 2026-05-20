@@ -5,10 +5,9 @@ import { category } from "@emach/db/schema/categories";
 import { cn } from "@emach/ui/lib/utils";
 import { and, asc, eq, isNull } from "drizzle-orm";
 import { CreditCard, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { CategoryTile } from "@/components/category-tile";
 import { EmachButton } from "@/components/emach-button";
+import { HeroCarousel } from "@/components/hero-carousel";
 import { PageContainer } from "@/components/page-container";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeader } from "@/components/section-header";
@@ -89,74 +88,10 @@ export default async function HomePage() {
 
 	return (
 		<>
-			<SiteHeader />
+			<SiteHeader overlay />
 
 			<main>
-				<section className="relative h-[640px] overflow-hidden bg-black text-white">
-					<div
-						aria-hidden="true"
-						className="emach-bg-cinema absolute inset-0"
-					/>
-					<div
-						aria-hidden="true"
-						className="emach-bg-diagonal absolute inset-0"
-					/>
-					<div
-						aria-hidden="true"
-						className="emach-mask-vignette absolute top-1/2 right-[-4%] aspect-square w-[56%] max-w-[720px] -translate-y-1/2 opacity-[0.72]"
-					>
-						<Image
-							alt=""
-							className="object-contain"
-							fill
-							priority
-							sizes="720px"
-							src="/images/hero-tools.png"
-						/>
-					</div>
-
-					<PageContainer className="relative flex h-full flex-col justify-center gap-6 px-20">
-						<div className="flex items-center gap-3.5">
-							<div className="h-0.5 w-12 bg-emach-red" />
-							<SectionLabel tone="light">
-								Coleção 2026 · Linha Profissional
-							</SectionLabel>
-						</div>
-
-						<h1 className="max-w-[780px] text-balance font-display font-medium text-[clamp(44px,6vw,84px)] leading-[0.95] tracking-[-0.01em]">
-							Ferramentas
-							<br />
-							feitas para <span className="text-emach-red">trabalhar</span>.
-						</h1>
-
-						<p className="max-w-[520px] text-[17px] text-white/75 leading-relaxed">
-							Desempenho industrial para obras, oficinas e profissionais que não
-							negociam com qualidade.
-						</p>
-
-						<div className="mt-2 flex gap-3">
-							<Link href="/catalog">
-								<EmachButton size="lg" variant="primary">
-									Ver Catálogo
-								</EmachButton>
-							</Link>
-							{tile0 && (
-								<Link href={`/catalog?cat=${tile0.slug}`}>
-									<EmachButton size="lg" variant="outline-light">
-										{tile0.name}
-									</EmachButton>
-								</Link>
-							)}
-						</div>
-					</PageContainer>
-
-					<div className="absolute right-0 bottom-0 left-0 flex justify-between border-white/10 border-t px-10 py-4 font-display text-[11px] text-white/55 tracking-[0.2em]">
-						<div>ENTREGA EM TODO BRASIL</div>
-						<div>12× SEM JUROS</div>
-						<div>GARANTIA 2 ANOS</div>
-						<div>SUPORTE 24/7</div>
-					</div>
-				</section>
+				<HeroCarousel />
 
 				<div className="border-border border-b bg-white">
 					<PageContainer className="grid grid-cols-4 gap-6 py-[22px]">

@@ -31,9 +31,13 @@ import {
 	maskCpfCnpj,
 	maskPhone,
 	onlyDigits,
+	onlyLetters,
 } from "@/lib/validators/cpf-cnpj";
 
 const NEW_ADDRESS_ID = "__new__";
+
+const formatUf = (raw: string): string =>
+	onlyLetters(raw).toUpperCase().slice(0, 2);
 const FREE_SHIPPING_CENTS = 29_900;
 const STANDARD_SHIPPING_CENTS = 2990;
 
@@ -217,6 +221,7 @@ export function CheckoutContent({
 								label="Nome completo"
 								name="name"
 								placeholder="Maria da Silva"
+								transform={onlyLetters}
 							/>
 							<TextField
 								form={form}
@@ -291,7 +296,15 @@ export function CheckoutContent({
 											className="mt-2 h-11 w-full rounded-none"
 											id="addressId"
 										>
-											<SelectValue placeholder="Selecione um endereço" />
+											<SelectValue placeholder="Selecione um endereço">
+												{(value) => {
+													if (value === NEW_ADDRESS_ID) {
+														return "+ Novo endereço";
+													}
+													const addr = addresses.find((a) => a.id === value);
+													return addr ? formatAddressLabel(addr) : "";
+												}}
+											</SelectValue>
 										</SelectTrigger>
 										<SelectContent>
 											{addresses.map((addr) => (
@@ -350,6 +363,7 @@ export function CheckoutContent({
 												label="Número"
 												name="newAddress.number"
 												placeholder="123"
+												transform={onlyDigits}
 											/>
 											<TextField
 												form={form}
@@ -370,12 +384,14 @@ export function CheckoutContent({
 												label="Cidade"
 												name="newAddress.city"
 												placeholder="São Paulo"
+												transform={onlyLetters}
 											/>
 											<TextField
 												form={form}
 												label="Estado"
 												name="newAddress.state"
 												placeholder="SP"
+												transform={formatUf}
 											/>
 										</div>
 									</div>
@@ -471,7 +487,7 @@ export function CheckoutContent({
 											src={item.imageUrl}
 										/>
 									) : (
-										<div className="absolute inset-0 bg-(--gray-10)" />
+										<div className="absolute inset-0 bg-gray-10" />
 									)}
 								</div>
 								<div className="flex-1 text-sm">
@@ -516,9 +532,9 @@ function formatAddressLabel(addr: ClientAddress): string {
 		addr.neighborhood,
 		`${addr.city}/${addr.state}`,
 	];
-	const label = addr.label ? `${addr.label} — ` : "";
+	const label = addr.label ? ` — ${addr.label}` : "";
 	const def = addr.isDefault ? " ★" : "";
-	return `${label}${parts.join(" · ")}${def}`;
+	return `${parts.join(" · ")}${label}${def}`;
 }
 
 interface FieldShellProps {
@@ -558,10 +574,19 @@ interface TextFieldProps {
 	label: string;
 	name: string;
 	placeholder?: string;
+	/** Sanitiza o valor digitado a cada tecla (ex.: só letras, só dígitos). */
+	transform?: (raw: string) => string;
 	type?: string;
 }
 
-function TextField({ form, label, name, placeholder, type }: TextFieldProps) {
+function TextField({
+	form,
+	label,
+	name,
+	placeholder,
+	type,
+	transform,
+}: TextFieldProps) {
 	return (
 		<form.Field name={name}>
 			{(field: {
@@ -583,7 +608,11 @@ function TextField({ form, label, name, placeholder, type }: TextFieldProps) {
 						className="mt-2 h-11 rounded-none"
 						id={name}
 						onBlur={field.handleBlur}
-						onChange={(e) => field.handleChange(e.target.value)}
+						onChange={(e) =>
+							field.handleChange(
+								transform ? transform(e.target.value) : e.target.value
+							)
+						}
 						placeholder={placeholder}
 						type={type}
 						value={field.state.value}

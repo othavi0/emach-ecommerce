@@ -5,20 +5,19 @@ Drizzle 0.45 + node-postgres + Supabase Postgres. Regras gerais ver `CLAUDE.md` 
 ## Migrations
 
 - **Dev:** `bun db:push` (sync schema → DB sem migration). Livre em branch local. `--force` só em dev quando rename ambíguo.
-- **Staging/Prod:** migrations são autoradas no repo irmão `emach-dashboard`. Este repo espelha `packages/db/src/schema/*` depois que a DB real muda.
+- **Staging/Prod:** `bun db:generate` (SQL versionado em `src/migrations/`) → revisar SQL → `bun db:migrate`.
 - **Nunca** `--force` fora de dev.
-- Aditivas preferidas. Drops/renames: PR explícito no dashboard + sincronização posterior neste repo.
-- Após sincronizar schema, rode `bun db:check-drift` para comparar o espelho Drizzle com a DB real.
+- Aditivas preferidas. Drops: PR explícito + avisar app ecomerce (DB compartilhada — coordenar via PR no repo dashboard).
 
 ## Triggers PL/pgSQL
 
-`src/sql/triggers.sql` (cópia versionada do dashboard) tem 4 triggers que Drizzle Kit **não gera**: anti-ciclo de categoria com `path`/`depth` materializados, cascade de path, `client.last_seen`, derivação de `client.type`. Após qualquer `bun db:push` dev ou ressincronização relevante:
+`src/migrations/_triggers.sql` (cópia versionada do dashboard) tem 4 triggers que Drizzle Kit **não gera**: anti-ciclo de categoria com `path`/`depth` materializados, cascade de path, `client.last_seen`, derivação de `client.type`. Após qualquer `bun db:push` dev ou `bun db:migrate` prod:
 
 ```bash
 bun db:apply-triggers   # idempotente (CREATE OR REPLACE FUNCTION + DROP TRIGGER IF EXISTS)
 ```
 
-A idempotência de débito de venda em `stock_movement` **não** é trigger — é um partial unique index no schema. RLS é aplicada direto no Supabase (sem arquivo `_rls.sql`). `src/sql/triggers.sql` é owned-by-dashboard — mudanças começam lá e re-sincronizam aqui.
+A idempotência de débito de venda em `stock_movement` **não** é trigger — é um partial unique index no schema. RLS é aplicada direto no Supabase (sem arquivo `_rls.sql`). `_triggers.sql` é owned-by-dashboard — mudanças começam lá e re-sincronizam aqui.
 
 ## Convenções de schema
 
@@ -48,11 +47,11 @@ Import preferido em consumidores: `import { category } from "@emach/db/schema/ca
 
 ```bash
 bun db:push                # dev: sync schema → DB
-bun db:generate            # não é fluxo autoritativo deste repo; migrations pertencem ao dashboard
-bun db:migrate             # não usar para prod neste repo; ver docs/adr/0002
+bun db:generate            # gera nova migration versionada
+bun db:migrate             # aplica migrations pendentes
 bun db:studio              # UI inspetora
 
-bun db:apply-triggers      # aplica src/sql/triggers.sql
+bun db:apply-triggers      # aplica src/migrations/_triggers.sql
 bun db:seed-categories     # bootstrap 5 categorias raiz idempotente
 bun db:seed-attributes     # attribute_definitions iniciais (RPM, mandril, percussão, etc) por categoria raiz
 bun db:anonymize-client <id>  # LGPD direito ao esquecimento
@@ -62,11 +61,13 @@ bun db:anonymize-client <id>  # LGPD direito ao esquecimento
 
 ```ts
 // snippet via pg client direto
-await client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres, public;");
+await client.query(
+  "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres, public;",
+);
 // depois: bunx drizzle-kit push && bun db:apply-triggers && bun db:seed-categories && bun db:seed-attributes
 ```
 
-⚠️ Só dev. Staging/prod sempre via migration versionada no `emach-dashboard`, seguida de sincronização do espelho aqui.
+⚠️ Só dev. Staging/prod sempre via migration versionada.
 
 ## Schema compartilhado com app ecomerce
 
@@ -86,6 +87,7 @@ Site ecomerce escreve em `order`, `orderItem`, `stockMovement`, `client*`, `revi
 ## Queries compartilhadas com dashboard
 
 `packages/db/src/queries/*.ts` é **owned-by-dashboard**: ferramentas de leitura/regra de negócio que este storefront consome. Lista atual:
+
 - `reviews.ts` — `canCreateReview`
 - `catalog.ts` — funções de catálogo (`getTools`, `getToolBySlug`, `getCategoryTree`, `getCategoryBySlug`, `getActivePromotions`, `getRecentTools`, `searchTools`, `getReviews`, `getReviewStats`, `getAllToolSlugs`, `getAllCategorySlugs`)
 
@@ -98,6 +100,7 @@ Padrão de assinatura: `db: NodePgDatabase<Record<string, unknown>>` parametriza
 ## Testes
 
 Vitest tem scripts configurados em `packages/db`, mas **ainda não há testes escritos** (diretório `test/` não existe):
+
 ```bash
 bun test                        # roda suite vitest (vazia hoje)
 bun test:watch                  # watch mode
