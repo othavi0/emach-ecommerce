@@ -8,10 +8,29 @@ interface ProductCardProps {
 	tool: ToolListItem;
 }
 
+function discountPercent(
+	price: string,
+	discounted: string | null
+): number | null {
+	if (discounted == null) {
+		return null;
+	}
+	const p = Number(price);
+	const d = Number(discounted);
+	if (!(p > 0 && d >= 0) || d >= p) {
+		return null;
+	}
+	return Math.round((1 - d / p) * 100);
+}
+
 export function ProductCard({ tool }: ProductCardProps) {
 	const categorySlug = tool.primaryCategory?.slug ?? "";
 	const categoryName = tool.primaryCategory?.name ?? "";
 	const hasDiscount = tool.defaultVariant.discountedAmount != null;
+	const discount = discountPercent(
+		tool.defaultVariant.priceAmount,
+		tool.defaultVariant.discountedAmount
+	);
 
 	return (
 		<Link
@@ -26,6 +45,12 @@ export function ProductCard({ tool }: ProductCardProps) {
 						src={tool.primaryImage?.url}
 						zoom
 					/>
+
+					{discount != null && (
+						<span className="absolute top-0 right-0 z-10 inline-flex items-center bg-emach-red px-2.5 py-1 font-bold font-display text-lg text-white uppercase tracking-[0.06em]">
+							-{discount}%
+						</span>
+					)}
 
 					{!tool.inStock && (
 						<div className="absolute inset-0 z-10 flex items-center justify-center bg-near-black/60">

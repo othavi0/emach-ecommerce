@@ -3,30 +3,20 @@ import type { ToolListItem } from "@emach/db/queries/catalog";
 import { getActivePromotions, getRecentTools } from "@emach/db/queries/catalog";
 import { category } from "@emach/db/schema/categories";
 import { cn } from "@emach/ui/lib/utils";
-import { and, asc, eq, isNull } from "drizzle-orm";
-import { CreditCard, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { CategoryTile } from "@/components/category-tile";
+import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { CategoryGrid } from "@/components/category-grid";
 import { EmachButton } from "@/components/emach-button";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { PageContainer } from "@/components/page-container";
 import { ProductCard } from "@/components/product-card";
+import { ProductGrid } from "@/components/product-grid";
 import { SectionHeader } from "@/components/section-header";
 import { SectionLabel } from "@/components/section-label";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { TrustBar } from "@/components/trust-bar";
 
 export const revalidate = 600;
-
-const TRUST_ITEMS = [
-	{ icon: Truck, title: "Frete grátis", sub: "Acima de R$ 299" },
-	{
-		icon: ShieldCheck,
-		title: "2 anos de garantia",
-		sub: "Toda linha profissional",
-	},
-	{ icon: CreditCard, title: "12× sem juros", sub: "No cartão" },
-	{ icon: RotateCcw, title: "30 dias para troca", sub: "Sem burocracia" },
-];
 
 const STATS = [
 	{ n: "200+", l: "Horas de teste" },
@@ -48,7 +38,73 @@ async function getRootCategories() {
 		.from(category)
 		.where(and(isNull(category.parentId), eq(category.isActive, true)))
 		.orderBy(asc(category.sortOrder))
-		.limit(5);
+		.limit(4);
+}
+
+// Postgres ARRAY[$1, $2, ...]::T[] — drizzle-orm interpola arrays como tupla
+// `($1, $2)`, que Postgres recusa em ANY()/= ANY().
+function arrayLiteral<T>(values: T[], castType: string) {
+	return sql`ARRAY[${sql.join(
+		values.map((v) => sql`${v}`),
+		sql`, `
+	)}]::${sql.raw(castType)}`;
+}
+
+async function getCategoryImages(
+	slugs: string[]
+): Promise<Map<string, string>> {
+	if (slugs.length === 0) {
+		return new Map();
+	}
+
+	const owned = await db.execute<{ slug: string; url: string }>(sql`
+		WITH roots AS (
+			SELECT id, slug FROM category WHERE slug = ANY(${arrayLiteral(slugs, "text[]")})
+		),
+		candidates AS (
+			SELECT r.slug, ti.url,
+			       ROW_NUMBER() OVER (
+			         PARTITION BY r.slug
+			         ORDER BY ti.sort_order ASC, ti.created_at DESC
+			       ) AS rn
+			FROM roots r
+			JOIN category c
+			  ON c.path = '/' || r.slug
+			  OR c.path LIKE '/' || r.slug || '/%'
+			JOIN tool_category tc ON tc.category_id = c.id
+			JOIN tool_image ti ON ti.tool_id = tc.tool_id
+		)
+		SELECT slug, url FROM candidates WHERE rn = 1
+	`);
+
+	const map = new Map<string, string>();
+	for (const row of owned.rows) {
+		map.set(row.slug, row.url);
+	}
+
+	const missing = slugs.filter((s) => !map.has(s));
+	if (missing.length > 0) {
+		const usedUrls = Array.from(map.values());
+		const exclusion =
+			usedUrls.length > 0
+				? sql`WHERE url <> ALL(${arrayLiteral(usedUrls, "text[]")})`
+				: sql``;
+		const fallbacks = await db.execute<{ url: string }>(sql`
+			SELECT DISTINCT ON (url) url
+			FROM tool_image
+			${exclusion}
+			ORDER BY url, created_at DESC
+			LIMIT ${missing.length}
+		`);
+		for (const [i, slug] of missing.entries()) {
+			const fallback = fallbacks.rows[i]?.url;
+			if (fallback) {
+				map.set(slug, fallback);
+			}
+		}
+	}
+
+	return map;
 }
 
 function flattenPromoTools(
@@ -79,12 +135,15 @@ export default async function HomePage() {
 		getRecentTools(db, 4),
 	]);
 
+	const categoryImages = await getCategoryImages(
+		rootCategories.map((c) => c.slug)
+	);
+	const rootCategoriesWithImages = rootCategories.map((c) => ({
+		...c,
+		imageUrl: categoryImages.get(c.slug) ?? null,
+	}));
+
 	const promoTools = flattenPromoTools(activePromotions, 4);
-	const tile0 = rootCategories[0];
-	const tile1 = rootCategories[1];
-	const tile2 = rootCategories[2];
-	const tile3 = rootCategories[3];
-	const tile4 = rootCategories[4];
 
 	return (
 		<>
@@ -93,57 +152,38 @@ export default async function HomePage() {
 			<main>
 				<HeroCarousel />
 
-				<div className="border-border border-b bg-white">
-					<PageContainer className="grid grid-cols-4 gap-6 py-[22px]">
-						{TRUST_ITEMS.map((f) => (
-							<div className="flex items-center gap-3" key={f.title}>
-								<div className="flex size-9 items-center justify-center bg-gray-10">
-									<f.icon size={18} />
-								</div>
-								<div>
-									<div className="font-semibold text-[13px]">{f.title}</div>
-									<div className="text-[12px] text-gray-60">{f.sub}</div>
-								</div>
-							</div>
-						))}
-					</PageContainer>
-				</div>
+				<TrustBar />
 
 				{rootCategories.length > 0 && (
-					<PageContainer as="section" className="px-[56px] py-[72px]">
-						<SectionHeader
-							label="01 · Categorias"
-							link={{ href: "/catalog", label: "Ver todas" }}
-							title="Explorar por categoria"
-						/>
-
-						<div className="grid grid-cols-[2fr_1fr_1fr] grid-rows-2 gap-6">
-							{tile0 && (
-								<div className="row-span-2">
-									<CategoryTile category={tile0} index={0} size="full" />
-								</div>
-							)}
-							{tile1 && <CategoryTile category={tile1} index={1} />}
-							{tile2 && <CategoryTile category={tile2} index={2} />}
-							{tile3 && <CategoryTile category={tile3} index={3} />}
-							{tile4 && <CategoryTile category={tile4} index={4} />}
-						</div>
-					</PageContainer>
+					<section className="bg-gray-10">
+						<PageContainer className="px-[56px] py-[72px]">
+							<SectionHeader
+								label="01 · Categorias"
+								link={{
+									href: "/catalog",
+									label: "Ver todas",
+									variant: "arrow",
+								}}
+								title="Explorar por categoria"
+							/>
+							<CategoryGrid categories={rootCategoriesWithImages} />
+						</PageContainer>
+					</section>
 				)}
 
 				{promoTools.length > 0 && (
-					<section className="bg-gray-10 px-[56px] py-[72px]">
-						<PageContainer>
+					<section className="bg-white">
+						<PageContainer className="px-[56px] py-[72px]">
 							<SectionHeader
 								label="02 · Ofertas"
-								link={{ href: "/catalog?promo=1", label: "Ver todas" }}
+								link={{
+									href: "/catalog?promo=1",
+									label: "Ver todas",
+									variant: "arrow",
+								}}
 								title="Promoções ativas"
 							/>
-							<div className="grid grid-cols-4 gap-6">
-								{promoTools.map((tool) => (
-									<ProductCard key={tool.id} tool={tool} />
-								))}
-							</div>
+							<ProductGrid tools={promoTools} />
 						</PageContainer>
 					</section>
 				)}

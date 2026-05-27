@@ -1,10 +1,12 @@
-import { cn } from "@emach/ui/lib/utils";
+"use client";
+
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { SectionLabel } from "@/components/section-label";
 
 interface CategoryTileCategory {
 	description: string | null;
+	imageUrl: string | null;
 	name: string;
 	slug: string;
 }
@@ -12,81 +14,58 @@ interface CategoryTileCategory {
 interface CategoryTileProps {
 	category: CategoryTileCategory;
 	index: number;
-	size?: "sm" | "md" | "lg" | "full";
 }
 
-const SIZE_CLASS: Record<NonNullable<CategoryTileProps["size"]>, string> = {
-	sm: "h-[240px]",
-	md: "h-[320px]",
-	lg: "h-[400px]",
-	full: "h-full min-h-[664px]",
-};
-
-export function CategoryTile({
-	category,
-	index,
-	size = "md",
-}: CategoryTileProps) {
+export function CategoryTile({ category, index }: CategoryTileProps) {
 	const indexLabel = String(index + 1).padStart(2, "0");
 
 	return (
 		<Link
-			className={cn(
-				"group relative block overflow-hidden rounded-[2px] bg-near-black",
-				SIZE_CLASS[size]
-			)}
+			className="group relative block aspect-3/4 overflow-hidden border border-transparent bg-image-bg shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:scale-[1.015] hover:border-emach-red hover:shadow-[0_10px_28px_rgba(0,0,0,0.1)] motion-reduce:transition-none motion-reduce:hover:scale-100"
 			href={`/catalog?cat=${category.slug}`}
 		>
-			{/* Gradient fallback */}
+			{category.imageUrl ? (
+				<Image
+					alt=""
+					aria-hidden="true"
+					className="object-cover transition-transform duration-400 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+					fill
+					sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+					src={category.imageUrl}
+				/>
+			) : (
+				<div aria-hidden="true" className="absolute inset-0 bg-image-bg" />
+			)}
+
+			{/* Gradient bottom→top sobre a imagem pra legibilidade do texto */}
 			<div
 				aria-hidden="true"
-				className="emach-bg-category-fallback pointer-events-none absolute inset-0"
+				className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/42 to-transparent"
 			/>
 
-			{/* Texture overlay */}
-			<div
-				aria-hidden="true"
-				className="emach-bg-diagonal-2 pointer-events-none absolute inset-0"
-			/>
-
-			{/* Bottom vignette */}
-			<div
-				aria-hidden="true"
-				className="emach-bg-vignette-bottom pointer-events-none absolute inset-0"
-			/>
-
-			{/* Ghost index number */}
+			{/* Outline gigante "01" — sai parcialmente do card */}
 			<span
 				aria-hidden="true"
-				className={cn(
-					"pointer-events-none absolute -top-[0.14em] -right-[0.02em] font-display text-white/[0.05] leading-none",
-					size === "full" ? "text-[200px]" : "text-[120px]"
-				)}
+				className="pointer-events-none absolute right-[-24px] bottom-[-48px] font-display font-medium text-[200px] text-transparent leading-none transition-[color] duration-300 ease-out [-webkit-text-stroke:2px_rgba(255,255,255,0.35)] group-hover:[-webkit-text-stroke:2px_#da291c]"
 			>
 				{indexLabel}
 			</span>
 
-			{/* Red accent bar on hover */}
-			<div
-				aria-hidden="true"
-				className="absolute bottom-0 left-0 h-[3px] w-0 bg-emach-red transition-[width] duration-300 ease-out group-hover:w-full"
-			/>
-
-			{/* Content */}
-			<div className="absolute right-6 bottom-6 left-6 flex flex-col gap-1.5 text-white">
-				<SectionLabel tone="light">{`${indexLabel} · ${category.slug}`}</SectionLabel>
-				<div className="font-medium text-[24px]">{category.name}</div>
-				<div className="max-w-[320px] text-[13px] text-white/70 leading-relaxed">
-					{category.description}
-				</div>
-				<div className="mt-2.5 flex items-end gap-2 font-semibold text-white text-xs">
-					<span>Explorar</span>
+			{/* Bloco de texto + CTA */}
+			<div className="absolute right-5 bottom-5 left-5 flex flex-col gap-3 text-white">
+				<h3 className="font-display font-medium text-[42px] leading-[0.95] tracking-[0.005em] [text-shadow:0_2px_12px_rgba(0,0,0,0.95)] lg:text-[48px]">
+					{category.name}
+				</h3>
+				<span aria-hidden="true" className="h-[2px] w-12 bg-emach-red" />
+				<span className="inline-flex items-center gap-2 font-bold font-display text-[13px] uppercase tracking-[0.14em]">
+					Explorar
 					<ArrowRight
-						className="text-white transition-[color,transform] duration-200 ease-out group-hover:translate-x-1 group-hover:text-emach-red"
-						size={14}
+						aria-hidden="true"
+						className="transition-transform duration-250 ease-out group-hover:translate-x-2 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+						size={16}
 						strokeWidth={2}
 					/>
-				</div>
+				</span>
 			</div>
 		</Link>
 	);
