@@ -12,7 +12,6 @@ import { ProductCard } from "@/components/product-card";
 import { ProductGrid } from "@/components/product-grid";
 import { SectionHeader } from "@/components/section-header";
 import { SectionLabel } from "@/components/section-label";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export const revalidate = 600;
@@ -248,8 +247,6 @@ export default async function HomePage() {
 					</section>
 				)}
 			</main>
-
-			<SiteFooter />
 		</>
 	);
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { CartContent } from "./_components/cart-content";
 
@@ -14,7 +13,6 @@ export default function CartPage() {
 		<>
 			<SiteHeader />
 			<CartContent />
-			<SiteFooter />
 		</>
 	);
 }

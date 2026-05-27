@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PageContainer } from "@/components/page-container";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { fmtNumericBRL } from "@/lib/format";
 import { requireCurrentClient } from "@/lib/session";
@@ -188,7 +187,6 @@ export default async function OrderConfirmationPage({
 					</div>
 				</PageContainer>
 			</main>
-			<SiteFooter />
 		</>
 	);
 }

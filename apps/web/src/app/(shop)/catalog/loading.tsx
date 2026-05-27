@@ -1,6 +1,5 @@
 import { PageContainer } from "@/components/page-container";
 import { ProductCardSkeleton } from "@/components/product-card-skeleton";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export default function Loading() {
@@ -29,7 +28,6 @@ export default function Loading() {
 					</div>
 				</div>
 			</PageContainer>
-			<SiteFooter />
 		</>
 	);
 }

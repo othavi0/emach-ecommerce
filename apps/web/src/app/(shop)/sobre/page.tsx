@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { PageContainer } from "@/components/page-container";
 import { SectionLabel } from "@/components/section-label";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
@@ -208,8 +207,6 @@ export default function AboutPage() {
 					</PageContainer>
 				</section>
 			</main>
-
-			<SiteFooter />
 		</>
 	);
 }
