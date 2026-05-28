@@ -11,7 +11,7 @@ function maskDocument(doc: string | null): string {
 	if (d.length === 14) {
 		return `**.***.***/${d.slice(8, 12)}-${d.slice(12)}`;
 	}
-	return doc;
+	return "—";
 }
 
 interface Buyer {

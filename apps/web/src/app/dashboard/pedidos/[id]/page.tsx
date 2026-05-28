@@ -23,6 +23,8 @@ export default async function OrderDetailPage({ params }: PageProps) {
 	const { order, items } = detail;
 	const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
+	// phone/document são additionalFields do Better Auth, não inferidos no tipo
+	// da sessão — cast necessário (mesmo padrão de dashboard/dados-pessoais).
 	const u = session.user as { phone?: string | null; document?: string | null };
 	const buyer = {
 		name: session.user.name,
