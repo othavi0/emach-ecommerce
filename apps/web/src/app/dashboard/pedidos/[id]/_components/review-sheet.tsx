@@ -27,11 +27,16 @@ function StarInput({
 	const [hover, setHover] = useState(0);
 	const clearHover = () => setHover(0);
 	return (
-		// biome-ignore lint/a11y/noNoninteractiveElementInteractions: onMouseLeave limpa estado visual de hover; sem semântica de interação
-		<fieldset className="flex gap-1" onMouseLeave={clearHover}>
+		<div
+			aria-label="Nota do produto"
+			className="flex gap-1"
+			onMouseLeave={clearHover}
+			role="group"
+		>
 			{STARS.map((n) => (
 				<button
 					aria-label={`${n} estrela${n > 1 ? "s" : ""}`}
+					aria-pressed={value === n}
 					className="p-0.5"
 					key={n}
 					onClick={() => onChange(n)}
@@ -49,7 +54,7 @@ function StarInput({
 					/>
 				</button>
 			))}
-		</fieldset>
+		</div>
 	);
 }
 
@@ -71,6 +76,20 @@ export function ReviewSheet({
 	const [body, setBody] = useState("");
 	const [pending, startTransition] = useTransition();
 
+	function reset() {
+		setRating(0);
+		setTitle("");
+		setBody("");
+	}
+
+	// Sempre começa em branco ao reabrir (descarta rascunho ao fechar).
+	function handleOpenChange(next: boolean) {
+		if (!next) {
+			reset();
+		}
+		onOpenChange(next);
+	}
+
 	function submit() {
 		if (rating < 1) {
 			toast.error("Escolha uma nota");
@@ -86,10 +105,7 @@ export function ReviewSheet({
 			});
 			if (res.ok) {
 				toast.success("Avaliação enviada para moderação");
-				onOpenChange(false);
-				setRating(0);
-				setTitle("");
-				setBody("");
+				handleOpenChange(false);
 			} else {
 				toast.error(res.error);
 			}
@@ -97,7 +113,7 @@ export function ReviewSheet({
 	}
 
 	return (
-		<Sheet onOpenChange={onOpenChange} open={open}>
+		<Sheet onOpenChange={handleOpenChange} open={open}>
 			<SheetContent className="flex flex-col gap-0" side="right">
 				<SheetHeader>
 					<SheetTitle className="font-display">Avaliar produto</SheetTitle>
@@ -137,7 +153,7 @@ export function ReviewSheet({
 				</div>
 				<SheetFooter className="flex-row gap-2">
 					<EmachButton
-						onClick={() => onOpenChange(false)}
+						onClick={() => handleOpenChange(false)}
 						size="md"
 						variant="ghost"
 					>

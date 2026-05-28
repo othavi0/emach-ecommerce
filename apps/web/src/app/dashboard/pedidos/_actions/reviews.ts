@@ -64,6 +64,12 @@ export async function createReviewAction(raw: {
 		revalidatePath(`/dashboard/pedidos/${orderId}`);
 		return { ok: true };
 	} catch (err) {
+		// Race de duplo-submit: o unique (toolId,clientId,orderId) é o backstop
+		// quando duas requisições passam por canCreateReview ao mesmo tempo.
+		const code = (err as { cause?: { code?: string } })?.cause?.code;
+		if (code === "23505") {
+			return { ok: false, error: "Você já avaliou este produto" };
+		}
 		const message = err instanceof Error ? err.message : "Erro inesperado";
 		log.error({
 			action: "create_review_failed",
