@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { EmachButton } from "@/components/emach-button";
 import { PageContainer } from "@/components/page-container";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
@@ -59,7 +58,6 @@ export default async function CheckoutSuccessPage({
 					</Link>
 				</div>
 			</PageContainer>
-			<SiteFooter />
 		</>
 	);
 }

@@ -12,7 +12,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 import { ProductGallery } from "./_components/product-gallery";
@@ -170,7 +169,6 @@ export default async function ProductPage({
 				categoryPath={detail.primaryCategory?.path ?? null}
 				toolId={detail.tool.id}
 			/>
-			<SiteFooter />
 		</>
 	);
 }

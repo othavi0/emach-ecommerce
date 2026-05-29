@@ -1,5 +1,4 @@
 import { PageContainer } from "@/components/page-container";
-import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 export default function Loading() {
@@ -34,7 +33,6 @@ export default function Loading() {
 					</div>
 				</div>
 			</PageContainer>
-			<SiteFooter />
 		</>
 	);
 }
