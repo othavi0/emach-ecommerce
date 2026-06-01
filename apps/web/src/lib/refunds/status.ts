@@ -1,3 +1,4 @@
+import { ACTIVE_REFUND_STATUSES } from "@emach/db/schema/orders";
 import type { RefundReason, RefundStatus } from "@emach/db/schema/orders";
 
 export type RefundBadgeTone =
@@ -77,11 +78,8 @@ export function countRefundsByTab(
 }
 
 // Status que contam como "solicitação ativa" — bloqueiam nova solicitação.
-export const ACTIVE_REFUND_STATUSES = [
-	"requested",
-	"under_review",
-	"approved",
-] as const satisfies readonly RefundStatus[];
+// Fonte única em @emach/db (issue #96); sincronizado por CI.
+export { ACTIVE_REFUND_STATUSES };
 
 export function isActiveRefund(status: RefundStatus): boolean {
 	return (ACTIVE_REFUND_STATUSES as readonly RefundStatus[]).includes(status);
