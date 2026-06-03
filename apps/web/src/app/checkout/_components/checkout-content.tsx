@@ -13,7 +13,7 @@ import {
 	SelectValue,
 } from "@emach/ui/components/select";
 import { Separator } from "@emach/ui/components/separator";
-import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { revalidateLogic, useForm, useStore } from "@tanstack/react-form";
 import type { Route } from "next";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -214,8 +214,11 @@ export function CheckoutContent({
 		},
 	});
 
-	const watchedAddressId = form.state.values.addressId;
-	const watchedNewCep = form.state.values.newAddress.zipCode;
+	const watchedAddressId = useStore(form.store, (s) => s.values.addressId);
+	const watchedNewCep = useStore(
+		form.store,
+		(s) => s.values.newAddress.zipCode
+	);
 	useEffect(() => {
 		const saved = addresses.find((a) => a.id === watchedAddressId);
 		const cepRaw =
