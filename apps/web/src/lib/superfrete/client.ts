@@ -12,6 +12,7 @@ export class SuperFreteError extends Error {
 	}
 }
 
+
 export interface SuperFreteQuoteBody {
 	from: { postal_code: string };
 	options: {
@@ -46,10 +47,19 @@ export async function fetchSuperFreteQuote(
 			body: JSON.stringify(body),
 			signal: controller.signal,
 		});
+		const data: unknown = await res.json().catch(() => null);
 		if (!res.ok) {
+			// 400 = o SuperFrete entendeu a requisição mas o pacote/rota não rende
+			// frete: sem transportadora (`freight.calculator.no_result`), peso/dimensão
+			// acima do limite (`correios.weight`/`correios.dimensions`), ou CEP sem
+			// cobertura. É ausência de opções (negócio), não falha técnica → [].
+			// 401/403/5xx/timeout continuam virando SuperFreteError.
+			if (res.status === 400) {
+				return [];
+			}
 			throw new SuperFreteError(`SuperFrete respondeu ${res.status}`);
 		}
-		return (await res.json()) as SuperFreteServiceRaw[];
+		return data as SuperFreteServiceRaw[];
 	} catch (err) {
 		if (err instanceof SuperFreteError) {
 			throw err;

@@ -51,4 +51,43 @@ describe("fetchSuperFreteQuote", () => {
 			})
 		).rejects.toBeInstanceOf(SuperFreteError);
 	});
+
+	const noOptionBodies = [
+		{
+			label: "no_result (sem transportadora p/ o pacote)",
+			body: {
+				errors: {
+					"freight.calculator.no_result": [
+						"Nenhum frete válido encontrado para esse serviço.",
+					],
+				},
+				message: "Ocorreu um ou mais erros.",
+			},
+		},
+		{
+			label: "peso acima do limite dos Correios",
+			body: {
+				errors: {
+					"correios.weight": ["(correios.weight) não pode ser maior que 30 kg."],
+				},
+				message: "Ocorreu um ou mais erros.",
+			},
+		},
+	];
+
+	for (const { label, body } of noOptionBodies) {
+		it(`retorna [] em 400 — ${label}`, async () => {
+			vi.spyOn(globalThis, "fetch").mockResolvedValue(
+				new Response(JSON.stringify(body), { status: 400 })
+			);
+			const result = await fetchSuperFreteQuote({
+				from: { postal_code: "80010000" },
+				to: { postal_code: "01310100" },
+				services: "3",
+				options: { insurance_value: 0, use_insurance_value: false },
+				products: [{ height: 1, width: 1, length: 1, weight: 1, quantity: 1 }],
+			});
+			expect(result).toEqual([]);
+		});
+	}
 });
