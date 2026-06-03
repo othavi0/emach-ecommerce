@@ -350,8 +350,15 @@ export async function assertShippingQuoted(params: {
 			items: params.items,
 		});
 	} catch (err) {
-		log.warn({
+		// Trade-off consciente (decisão de produto): indisponibilidade da API de
+		// frete NÃO bloqueia a venda. Risco: atacante força a queda da API e passa
+		// frete adulterado. Mitigação atual = log.error com contexto para detecção.
+		// Endurecimento futuro: persistir `shippingUnverified` no pedido p/ revisão
+		// manual (exige coluna nova no schema dashboard — ADR-0009).
+		log.error({
 			action: "shipping_revalidation_skipped",
+			destinationCep: params.destinationCep,
+			shippingCents: params.shippingCents,
 			error: err instanceof Error ? err.message : "erro inesperado",
 		});
 		return;
