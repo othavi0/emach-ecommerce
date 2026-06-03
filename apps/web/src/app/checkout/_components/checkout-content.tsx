@@ -586,7 +586,9 @@ export function CheckoutContent({
 
 						<div className="flex justify-between font-bold text-base">
 							<span>Total</span>
-							<span>{fmtBRL(total)}</span>
+							<span>
+								{selectedShippingCents === null ? "A calcular" : fmtBRL(total)}
+							</span>
 						</div>
 					</div>
 				</div>
