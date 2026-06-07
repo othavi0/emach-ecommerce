@@ -13,6 +13,7 @@ import {
 	type CartItem,
 	type CartItemSnapshot,
 	loadCart,
+	reconcilePrices,
 	removeFromCart,
 	saveCart,
 	updateQty,
@@ -22,6 +23,7 @@ interface CartCtx {
 	add: (item: CartItemSnapshot, qty?: number) => void;
 	clear: () => void;
 	items: CartItem[];
+	reconcile: (priceByVariantId: Map<string, string>) => void;
 	remove: (variantId: string) => void;
 	setQty: (variantId: string, qty: number) => void;
 	totalCount: number;
@@ -34,6 +36,7 @@ const CartContext = createContext<CartCtx>({
 	setQty: () => undefined,
 	remove: () => undefined,
 	clear: () => undefined,
+	reconcile: () => undefined,
 });
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
@@ -60,11 +63,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 		saveCart([]);
 	}, []);
 
+	const reconcile = useCallback((priceByVariantId: Map<string, string>) => {
+		setItems((prev) => reconcilePrices(prev, priceByVariantId));
+	}, []);
+
 	const totalCount = items.reduce((acc, i) => acc + i.quantity, 0);
 
 	return (
 		<CartContext.Provider
-			value={{ items, totalCount, add, setQty, remove, clear }}
+			value={{ items, totalCount, add, setQty, remove, clear, reconcile }}
 		>
 			{children}
 		</CartContext.Provider>
