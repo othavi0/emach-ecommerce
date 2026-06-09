@@ -1,14 +1,22 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
-import { geoCentroid, geoMercator, geoPath } from "d3-geo";
+import { geoMercator, geoPath } from "d3-geo";
+
+// Gera os assets estáticos do mapa de filiais:
+//   - apps/web/src/lib/branch-map/brazil-states.ts  (paths SVG dos 27 estados + viewBox)
+//   - apps/web/src/lib/branch-map/municipios.json    (cidade|UF -> [x,y] já projetado + fallback _uf|UF)
+// Projeção fixada pelo bbox PLANAR do Brasil — não usa fitSize/geoBounds, que são esféricos
+// e quebram com o winding-order invertido deste GeoJSON (geoBounds retornaria o mundo inteiro,
+// comprimindo o Brasil numa bolha de ~60px).
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const DATA = `${ROOT}scripts/.mapdata`;
 const OUT = `${ROOT}apps/web/src/lib/branch-map`;
-const W = 560,
-	H = 580;
+const W = 560;
+const H = 580;
+const PAD = 18;
 
-// UF sigla -> codigo_uf (IBGE) para casar municipios.csv
+// UF sigla -> codigo_uf (IBGE) para casar com municipios.csv
 const UF_CODE = {
 	RO: 11,
 	AC: 12,
@@ -51,17 +59,56 @@ execSync(
 );
 const geo = JSON.parse(fs.readFileSync(SIMPL, "utf8"));
 
-// 2) projeção única (estados + pontos usam a MESMA)
-const proj = geoMercator().fitSize([W, H], geo);
+// 2) projeção fixa pelo bbox planar conhecido do Brasil (imune ao winding-order bug)
+const LNG0 = -74;
+const LAT0 = 6;
+const LNG1 = -34.6;
+const LAT1 = -34;
+const unit = geoMercator().scale(1).translate([0, 0]);
+const tl = unit([LNG0, LAT0]);
+const brc = unit([LNG1, LAT1]);
+const bw = brc[0] - tl[0];
+const bh = brc[1] - tl[1];
+const scale = Math.min((W - 2 * PAD) / bw, (H - 2 * PAD) / bh);
+const sUnit = geoMercator().scale(scale).translate([0, 0]);
+const tl2 = sUnit([LNG0, LAT0]);
+const usedW = bw * scale;
+const usedH = bh * scale;
+const tx = PAD + (W - 2 * PAD - usedW) / 2 - tl2[0];
+const ty = PAD + (H - 2 * PAD - usedH) / 2 - tl2[1];
+const proj = geoMercator().scale(scale).translate([tx, ty]);
 const pathGen = geoPath(proj);
 const r1 = (d) => (d || "").replace(/-?\d+\.?\d*/g, (n) => (+n).toFixed(1));
 
+// centro do bbox PROJETADO de cada feature (fallback robusto; geoCentroid é esférico e
+// também sofreria com o winding invertido)
+function projectedCenter(feature) {
+	const b = [1e9, 1e9, -1e9, -1e9];
+	const walk = (c) => {
+		if (typeof c[0] === "number") {
+			const p = proj(c);
+			if (p) {
+				b[0] = Math.min(b[0], p[0]);
+				b[1] = Math.min(b[1], p[1]);
+				b[2] = Math.max(b[2], p[0]);
+				b[3] = Math.max(b[3], p[1]);
+			}
+		} else {
+			for (const x of c) {
+				walk(x);
+			}
+		}
+	};
+	walk(feature.geometry.coordinates);
+	return [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2];
+}
+
 // 3) paths dos estados
 const states = geo.features
-	.map((f) => {
-		const uf = (f.properties.sigla || f.properties.SIGLA || "").toUpperCase();
-		return { uf, path: r1(pathGen(f)) };
-	})
+	.map((f) => ({
+		uf: (f.properties.sigla || f.properties.SIGLA || "").toUpperCase(),
+		path: r1(pathGen(f)),
+	}))
 	.filter((s) => s.uf);
 
 fs.writeFileSync(
@@ -86,13 +133,13 @@ for (const row of fs
 	const [x, y] = proj([Number.parseFloat(lng), Number.parseFloat(lat)]);
 	out[`${norm(nome)}|${uf}`] = [+x.toFixed(1), +y.toFixed(1)];
 }
-// 5) fallback: centroide de cada estado
+// 5) fallback: centro projetado de cada estado
 for (const f of geo.features) {
 	const uf = (f.properties.sigla || f.properties.SIGLA || "").toUpperCase();
 	if (!uf) {
 		continue;
 	}
-	const [x, y] = proj(geoCentroid(f));
+	const [x, y] = projectedCenter(f);
 	out[`_uf|${uf}`] = [+x.toFixed(1), +y.toFixed(1)];
 }
 fs.writeFileSync(`${OUT}/municipios.json`, JSON.stringify(out));
