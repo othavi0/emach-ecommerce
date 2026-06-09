@@ -19,14 +19,6 @@ export const REFUND_STATUS_BADGE: Record<
 	rejected: { label: "Recusado", tone: "muted" },
 };
 
-export const REFUND_BADGE_TONE_CLASS: Record<RefundBadgeTone, string> = {
-	info: "text-link-hover border-link-hover",
-	warning: "text-[#B45309] border-[#B45309]",
-	progress: "text-near-black border-near-black",
-	success: "text-success border-success",
-	muted: "text-gray-50 border-border bg-gray-10",
-};
-
 export const REFUND_REASON_LABEL: Record<RefundReason, string> = {
 	defeito: "Produto com defeito",
 	item_errado: "Item errado / diferente do pedido",

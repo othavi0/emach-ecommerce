@@ -43,9 +43,9 @@ export function PersonalDataForm({ initialData }: PersonalDataFormProps) {
 
 	return (
 		<section>
-			<div className="mb-6 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
+			<h2 className="mb-6 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
 				Seus dados
-			</div>
+			</h2>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<NameCard
@@ -251,18 +251,21 @@ function EmailCard({ email, verified }: { email: string; verified: boolean }) {
 
 	const handleVerify = async () => {
 		setSending(true);
-		await authClient.sendVerificationEmail(
-			{ email, callbackURL: "/dashboard/dados-pessoais" },
-			{
-				onSuccess: () => {
-					toast.success("E-mail de verificação enviado");
-				},
-				onError: (err) => {
-					toast.error(err.error.message || "Não foi possível enviar.");
-				},
-			}
-		);
-		setSending(false);
+		try {
+			await authClient.sendVerificationEmail(
+				{ email, callbackURL: "/dashboard/dados-pessoais" },
+				{
+					onSuccess: () => {
+						toast.success("E-mail de verificação enviado");
+					},
+					onError: (err) => {
+						toast.error(err.error.message || "Não foi possível enviar.");
+					},
+				}
+			);
+		} finally {
+			setSending(false);
+		}
 	};
 
 	return (

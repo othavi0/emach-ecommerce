@@ -14,7 +14,9 @@ const TONE_TO_FAMILY: Record<BadgeTone, BadgeFamily> = {
 	transit: "blue",
 	success: "green",
 	muted: "gray",
-	warning: "amber",
+	// refunded/returned são terminais (encerrados), não "atenção" — cinza os
+	// distingue do âmbar de pending_payment.
+	warning: "gray",
 };
 
 export function OrderStatusBadge({
@@ -26,7 +28,11 @@ export function OrderStatusBadge({
 }) {
 	const { label, tone: badgeTone } = ORDER_STATUS_BADGE[status];
 	return (
-		<AccountBadge family={TONE_TO_FAMILY[badgeTone]} tone={tone}>
+		<AccountBadge
+			className={badgeTone === "muted" ? "line-through" : undefined}
+			family={TONE_TO_FAMILY[badgeTone]}
+			tone={tone}
+		>
 			{label}
 		</AccountBadge>
 	);

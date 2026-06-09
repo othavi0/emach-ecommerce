@@ -141,18 +141,3 @@ export function orderStepDisplayState(
 	}
 	return stepStateFor(status, phase);
 }
-
-// Paleta de status por família semântica (fill suave + cor). `bg-*/N` e
-// `text-amber-text` exigem os tokens registrados em globals.css (--amber/--info/
-// --success/--emach-red). Famílias: âmbar=atenção, azul=processamento,
-// verde=concluído, vermelho=problema, cinza=encerrado.
-export const BADGE_TONE_CLASS: Record<BadgeTone, string> = {
-	neutral: "text-amber-text border-amber/45 bg-amber/10",
-	danger: "text-emach-red border-emach-red/50 bg-emach-red/8",
-	info: "text-info border-info/45 bg-info/10",
-	progress: "text-info border-info/45 bg-info/10",
-	transit: "text-info border-info/45 bg-info/10",
-	success: "text-success border-success/45 bg-success/10",
-	muted: "text-gray-60 border-border bg-white",
-	warning: "text-amber-text border-amber/45 bg-amber/10",
-};

@@ -40,9 +40,9 @@ export function AddressesSection({ addresses }: AddressesSectionProps) {
 
 	return (
 		<section>
-			<div className="mb-6 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
+			<h2 className="mb-6 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
 				Endereço de entrega
-			</div>
+			</h2>
 
 			{primary === null ? (
 				<EmptyState

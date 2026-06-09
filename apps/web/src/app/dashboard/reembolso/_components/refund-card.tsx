@@ -24,7 +24,11 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 	const isRefunded = refund.status === "refunded";
 	const isRejected = refund.status === "rejected";
 
-	const totalLabel = isRejected ? "Valor solicitado" : "A reembolsar";
+	const totalLabel = isRejected
+		? "Valor solicitado"
+		: isRefunded
+			? "Reembolsado"
+			: "A reembolsar";
 	const reasonText =
 		refund.reasonText || REFUND_REASON_LABEL[refund.reasonCategory];
 
