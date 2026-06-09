@@ -7,7 +7,7 @@ import { StatusStepper } from "@/app/dashboard/_components/status-stepper";
 import { emachButtonVariants } from "@/components/emach-button";
 import { fmtNumericBRL } from "@/lib/format";
 import type { RefundListItem } from "@/lib/refunds/queries";
-import { isActiveRefund, REFUND_REASON_LABEL } from "@/lib/refunds/status";
+import { REFUND_REASON_LABEL } from "@/lib/refunds/status";
 import { OrderRefundBlock } from "../../pedidos/[id]/_components/order-refund-block";
 import { RefundStatusBadge } from "./refund-status-badge";
 import { buildRefundSteps } from "./refund-steps";
@@ -20,9 +20,11 @@ const DATE_FMT = new Intl.DateTimeFormat("pt-BR", {
 
 export function RefundCard({ refund }: { refund: RefundListItem }) {
 	const detailsHref = `/dashboard/pedidos/${refund.orderId}` as Route;
-	const dark = isActiveRefund(refund.status);
 	const isRefunded = refund.status === "refunded";
 	const isRejected = refund.status === "rejected";
+	// Todos os cards escuros, menos o recusado — que fica claro por causa do
+	// bloco de recusa (OrderRefundBlock) em fundo claro.
+	const dark = !isRejected;
 
 	const totalLabel = isRejected
 		? "Valor solicitado"

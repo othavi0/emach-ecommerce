@@ -26,129 +26,72 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 		order.status === "pending_payment" || order.status === "payment_failed";
 	const terminalNeg = isTerminalNegative(order.status);
 	const canRebuy = order.status === "delivered" || terminalNeg;
-	const dark = isPending;
 
 	return (
 		<article
 			className={cn(
-				"mb-3.5 border",
-				dark
-					? "border-black bg-near-black text-white"
-					: "border-border bg-gray-10",
+				"mb-3.5 border border-black bg-near-black text-white",
 				terminalNeg && "opacity-80"
 			)}
 		>
-			<header
-				className={cn(
-					"flex flex-wrap items-center gap-x-3.5 gap-y-2 border-b px-[18px] py-3.5",
-					dark ? "border-white/12" : "border-border"
-				)}
-			>
-				<MetaPair dark={dark} label="Pedido" value={`#${order.number}`} />
+			<header className="flex flex-wrap items-center gap-x-3.5 gap-y-2 border-white/12 border-b px-[18px] py-3.5">
+				<MetaPair label="Pedido" value={`#${order.number}`} />
 				<MetaPair
-					dark={dark}
 					label="Realizado em"
 					value={DATE_FMT.format(order.createdAt)}
 				/>
 				<div className="flex-1" />
-				<OrderStatusBadge
-					status={order.status}
-					tone={dark ? "dark" : "light"}
-				/>
+				<OrderStatusBadge status={order.status} tone="dark" />
 			</header>
 
 			{order.preview.map((item, idx) => (
 				<div
 					className={cn(
 						"flex items-center gap-3.5 px-[18px] py-3.5",
-						idx > 0 &&
-							(dark ? "border-white/10 border-t" : "border-border/50 border-t")
+						idx > 0 && "border-white/10 border-t"
 					)}
 					key={item.id}
 				>
 					<ItemThumb alt={item.name} url={item.imageUrl} />
 					<div className="min-w-0 flex-1">
-						<div
-							className={cn(
-								"truncate font-semibold text-[15px]",
-								dark ? "text-white" : "text-near-black"
-							)}
-						>
+						<div className="truncate font-semibold text-[15px] text-white">
 							{item.name}
 						</div>
-						<div
-							className={cn(
-								"mt-1 text-[13px]",
-								dark ? "text-white/55" : "text-gray-50"
-							)}
-						>
+						<div className="mt-1 text-[13px] text-white/55">
 							{[item.voltage, `Qtd: ${item.quantity}`]
 								.filter(Boolean)
 								.join(" · ")}
 						</div>
 					</div>
-					<div
-						className={cn(
-							"min-w-[90px] text-right font-semibold text-[15px]",
-							dark ? "text-white" : "text-near-black"
-						)}
-					>
+					<div className="min-w-[90px] text-right font-semibold text-[15px] text-white">
 						{fmtNumericBRL(item.unitPrice)}
 					</div>
 				</div>
 			))}
 
 			{terminalNeg ? null : (
-				<StatusStepper
-					steps={buildOrderSteps(order.status)}
-					tone={dark ? "dark" : "light"}
-				/>
+				<StatusStepper steps={buildOrderSteps(order.status)} tone="dark" />
 			)}
 
-			<div
-				className={cn(
-					"flex items-center justify-between border-t px-[18px] py-3.5",
-					dark ? "border-white/12" : "border-border"
-				)}
-			>
-				<span
-					className={cn(
-						"font-display font-semibold text-[12px] uppercase tracking-[0.12em]",
-						dark ? "text-white/55" : "text-gray-60"
-					)}
-				>
+			<div className="flex items-center justify-between border-white/12 border-t px-[18px] py-3.5">
+				<span className="font-display font-semibold text-[12px] text-white/55 uppercase tracking-[0.12em]">
 					{order.itemCount} {order.itemCount === 1 ? "item" : "itens"}
 				</span>
 				<div className="flex items-baseline gap-2">
-					<span
-						className={cn(
-							"font-display font-semibold text-[12px] uppercase tracking-[0.12em]",
-							dark ? "text-white/55" : "text-gray-60"
-						)}
-					>
+					<span className="font-display font-semibold text-[12px] text-white/55 uppercase tracking-[0.12em]">
 						Total
 					</span>
-					<span
-						className={cn(
-							"font-bold text-[20px]",
-							dark ? "text-white" : "text-near-black"
-						)}
-					>
+					<span className="font-bold text-[20px] text-white">
 						{fmtNumericBRL(order.totalAmount)}
 					</span>
 				</div>
 			</div>
 
-			<footer
-				className={cn(
-					"flex flex-wrap justify-end gap-2 border-t px-[18px] py-2.5",
-					dark ? "border-white/12" : "border-border"
-				)}
-			>
+			<footer className="flex flex-wrap justify-end gap-2 border-white/12 border-t px-[18px] py-2.5">
 				{isPending ? <CancelOrderButton orderId={order.id} /> : null}
 				<Link
 					className={emachButtonVariants({
-						variant: dark ? "outline-light" : "outline",
+						variant: "outline-light",
 						size: "sm",
 					})}
 					href={detailsHref}
@@ -169,33 +112,13 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 	);
 }
 
-function MetaPair({
-	dark,
-	label,
-	value,
-}: {
-	dark: boolean;
-	label: string;
-	value: string;
-}) {
+function MetaPair({ label, value }: { label: string; value: string }) {
 	return (
 		<>
-			<span
-				className={cn(
-					"font-display font-semibold text-[12px] uppercase tracking-[0.12em]",
-					dark ? "text-gray-50" : "text-gray-60"
-				)}
-			>
+			<span className="font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.12em]">
 				{label}
 			</span>
-			<span
-				className={cn(
-					"font-semibold text-[13px]",
-					dark ? "text-white" : "text-near-black"
-				)}
-			>
-				{value}
-			</span>
+			<span className="font-semibold text-[13px] text-white">{value}</span>
 		</>
 	);
 }
