@@ -5,9 +5,9 @@ import { cn } from "@emach/ui/lib/utils";
 import { ChevronDown, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AccountSection } from "@/app/dashboard/_components/account-section";
 import type { OrderDetailData } from "@/lib/orders/queries";
 import { isTerminalNegative, ORDER_STATUS_BADGE } from "@/lib/orders/status";
-import { SectionBlock } from "./section-block";
 
 const DATETIME_FMT = new Intl.DateTimeFormat("pt-BR", {
 	day: "2-digit",
@@ -125,7 +125,7 @@ export function OrderTracking({
 	const negative = isTerminalNegative(order.status);
 
 	return (
-		<SectionBlock id="rastreio" title="Rastreio do envio">
+		<AccountSection id="rastreio" title="Rastreio do envio">
 			<TrackingBody
 				method={order.shippingMethod}
 				negative={negative}
@@ -154,6 +154,6 @@ export function OrderTracking({
 					<HistoryTimeline history={history} />
 				</div>
 			) : null}
-		</SectionBlock>
+		</AccountSection>
 	);
 }

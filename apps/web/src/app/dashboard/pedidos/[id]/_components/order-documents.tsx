@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { Download, FileText, Receipt } from "lucide-react";
-import { SectionBlock } from "./section-block";
+import { AccountSection } from "@/app/dashboard/_components/account-section";
 
 interface OrderDocumentsProps {
 	nfeNumber: string | null;
@@ -23,7 +23,7 @@ export function OrderDocuments({
 	}
 
 	return (
-		<SectionBlock title="Documentos">
+		<AccountSection title="Documentos">
 			<div className="flex flex-col gap-2.5">
 				{hasNfe ? (
 					<DocRow
@@ -43,7 +43,7 @@ export function OrderDocuments({
 					</DocRow>
 				) : null}
 			</div>
-		</SectionBlock>
+		</AccountSection>
 	);
 }
 

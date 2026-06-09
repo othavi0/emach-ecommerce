@@ -1,5 +1,5 @@
+import { AccountSection } from "@/app/dashboard/_components/account-section";
 import { fmtNumericBRL } from "@/lib/format";
-import { SectionBlock } from "./section-block";
 
 interface OrderTotalsProps {
 	couponApplied?: boolean;
@@ -55,7 +55,7 @@ export function OrderTotals({
 	const hasDiscount = Number(discountAmount) > 0;
 	const shippingFree = Number(shippingAmount) === 0;
 	return (
-		<SectionBlock title="Valores">
+		<AccountSection title="Valores">
 			<PriceRow
 				label={`Subtotal (${itemCount} ${itemCount === 1 ? "item" : "itens"})`}
 				value={fmtNumericBRL(subtotalAmount)}
@@ -91,6 +91,6 @@ export function OrderTotals({
 					</div>
 				</div>
 			) : null}
-		</SectionBlock>
+		</AccountSection>
 	);
 }
