@@ -28,7 +28,12 @@ export function getRedis(): Redis | null {
 		return cached;
 	}
 
-	cached = new Redis({ url, token });
+	// `retry` enxuto de propósito: os dois consumidores (rate limit do auth e do
+	// checkout) são fail-open e ficam no hot-path da request. O default do SDK
+	// (3 retries com backoff exponencial ≈ 1,5s no pior caso) seguraria o
+	// login/checkout antes de cair no fallback. 1 retry cobre blip transitório
+	// sem penalizar latência quando o Redis está realmente indisponível.
+	cached = new Redis({ url, token, retry: { retries: 1 } });
 	return cached;
 }
 
