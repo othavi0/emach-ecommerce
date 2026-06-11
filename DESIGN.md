@@ -450,6 +450,17 @@ New DRY helpers. Prefer composing these over raw markup when the pattern applies
 
 Use the size scale from §3 "Hierarchy (EMACH — actual implementation)" via Tailwind arbitrary values (`text-[14px]`, etc.) combined with `font-sans` (Barlow) or `font-display` (Barlow Condensed). The legacy `.h1/.h2/.h3/.subheading/.body/.label/.micro-label/.price` utility classes have been removed from `globals.css` — never reintroduce them.
 
+### Página de produto (`product/[slug]`) — ficha + avaliações (redesign)
+
+`ProductSpecs` e `ProductReviews` saíram do padrão **dark full-bleed** (`emach-bg-cinema`, `px-20` borda-a-borda, esticando o conteúdo) para uma **seção de dados contida**, alinhada ao resto da PDP. Padrão a reusar em novas seções de dados de produto — **não** voltar ao full-bleed dark aqui (o all-dark full-bleed continua válido só na **conta**, ver abaixo):
+
+- **Container:** `section` clara (herda `--background` = `gray-10`) com `px-20 py-14` e conteúdo em `mx-auto max-w-[1080px]` — a coluna do buy box. A página é fluida (`px-20`, sem `max-w` global), mas o conteúdo da seção é contido e centrado.
+- **Header de seção:** `SectionLabel tone="accent"` (vermelho) à esquerda + **meta** à direita (`font-display` uppercase, `text-gray-50`). Ficha usa a categoria (`primaryCategoryName`, passada do `page.tsx`); avaliações usam `{recommend}% recomendam`. Badges de contagem de specs/reviews foram **removidos** (eram ruído).
+- **Destaque = card(s) `bg-near-black`** que flutuam no claro (não faixa full-bleed). Ficha: 3 hero-cards (specs-herói, número grande Barlow Condensed + unidade menor via regex top-level `HERO_VALUE`) + painel preto da lista. Avaliações: 1 card-resumo preto (nota 56px + estrelas + barras de distribuição, grid `[300px_1fr]` com divisória vertical edge-to-edge).
+- **Linhas edge-to-edge:** dentro de painéis/listas as divisórias correm de borda a borda — padding vai nas **células**, não no container. Última linha do grid 2-col zera a border inferior: `lastRowStart = n%2===0 ? n-2 : n-1`; `i>=lastRowStart` → `sm:`/`md:border-b-0`; e o último item (`i===n-1`) → `max-sm:`/`max-md:border-b-0` (mobile vira 1 coluna; só o último perde a linha, senão some o separador entre os dois últimos).
+- **Conteúdo editorial fica claro:** a **lista de avaliações** é clara (`border-border` hairline, texto `foreground`, estrelas vermelhas), porque review tem parágrafo longo e o sistema pede superfície clara pra texto (§5 / Surface Standard). **Só o resumo** é o card preto; não transformar reviews em cards pretos.
+- `review-list`/`review-card` perderam o antigo dual mode dark/light (o branch light nunca era usado) — agora só o padrão claro. **SKU não entra na meta da ficha**: é por-variante (`selected.sku`, muda com a voltagem, client-side) e brigaria com o buy box reativo num Server Component.
+
 ### Conta do cliente (`/dashboard/**`) — sistema visual
 
 Redesign que trouxe o chiaroscuro da home às telas da conta (Overview, Pedidos, Reembolso, Dados Pessoais). **Ao refatorar o detalhe do pedido (`pedidos/[id]`) ou qualquer tela nova da conta, reusar estes componentes e padrões — não reinventar.**

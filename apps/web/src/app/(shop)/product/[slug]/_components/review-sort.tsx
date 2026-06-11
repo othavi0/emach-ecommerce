@@ -44,10 +44,7 @@ export function ReviewSort({ current }: ReviewSortProps) {
 	}
 
 	return (
-		<div
-			aria-busy={isPending}
-			className="flex items-center justify-end gap-2 py-4"
-		>
+		<div aria-busy={isPending} className="flex items-center gap-2">
 			<span className="font-display text-[10px] text-gray-50 uppercase tracking-[0.14em]">
 				Ordenar
 			</span>
