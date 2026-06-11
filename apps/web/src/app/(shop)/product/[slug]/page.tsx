@@ -18,7 +18,7 @@ import { ProductGallery } from "./_components/product-gallery";
 import { ProductInfo } from "./_components/product-info";
 import { ProductJsonLd } from "./_components/product-json-ld";
 import { ProductReviews } from "./_components/product-reviews";
-import { ProductTabs } from "./_components/product-tabs";
+import { ProductSpecs } from "./_components/product-specs";
 import { RelatedProducts } from "./_components/related-products";
 import type { ReviewSortKey } from "./_components/review-sort";
 
@@ -157,7 +157,7 @@ export default async function ProductPage({
 				/>
 			</div>
 
-			<ProductTabs attributes={detail.attributes} tool={detail.tool} />
+			<ProductSpecs attributes={detail.attributes} tool={detail.tool} />
 			{reviewsResult.total > 0 && (
 				<ProductReviews
 					currentSearchParams={sp}
