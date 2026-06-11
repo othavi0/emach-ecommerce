@@ -1,8 +1,11 @@
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
 
+import { getClientIp } from "@/lib/client-ip";
 import { log } from "@/lib/evlog";
+import { RATE_LIMIT_MESSAGE, shippingLimiter } from "@/lib/rate-limit";
 import { quoteShipping } from "@/lib/superfrete/quote";
 import type { ShippingOption } from "@/lib/superfrete/types";
 
@@ -33,6 +36,15 @@ export async function quoteShippingAction(
 	if (!parsed.success) {
 		return { ok: false, error: "Dados inválidos para cotação" };
 	}
+
+	// Action pública (usada no freight-calculator da página de produto) → sem
+	// sessão; rate limit por IP confiável. IP ausente cai no bucket "anon".
+	const ip = getClientIp(await headers()) ?? "anon";
+	const { success } = await shippingLimiter.limit(`shipping:${ip}`);
+	if (!success) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE };
+	}
+
 	try {
 		const { options, negotiate } = await quoteShipping(parsed.data);
 		return { ok: true, options, negotiate };
