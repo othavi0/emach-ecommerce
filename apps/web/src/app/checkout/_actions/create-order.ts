@@ -61,7 +61,11 @@ export async function createOrderAction(
 		// Anti-fraude do frete roda FORA da transação (chamada externa não pode
 		// segurar a transação aberta). Mismatch lança OrderError; API fora não
 		// bloqueia, mas marca o pedido como `shippingUnverified` p/ revisão (#97).
-		let shippingUnverified = false;
+		// Default `true` = "não verificado até prova em contrário": só vira false
+		// quando assertShippingQuoted confirma o match. Assim, qualquer caminho que
+		// chegue ao placeOrder sem revalidar o frete (ex.: destino sem CEP) fica
+		// marcado p/ revisão, em vez de aceito às cegas (defesa em profundidade).
+		let shippingUnverified = true;
 		const destinationCep = await resolveDestinationCep(db, input);
 		if (destinationCep) {
 			// Valor declarado p/ o seguro de frete = subtotal dos itens submetidos

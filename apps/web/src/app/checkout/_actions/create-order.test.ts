@@ -83,6 +83,10 @@ describe("createOrderAction — gate de verificação de e-mail (#93)", () => {
 		orderLimit.mockClear();
 		placeOrder.mockReset();
 		placeOrder.mockResolvedValue({ orderId: "o1", orderNumber: "2026-000001" });
+		// Defesa: se um teste futuro fizer resolveDestinationCep retornar um CEP,
+		// assertShippingQuoted precisa resolver para o shape esperado — senão a
+		// desestruturação `shippingCheck.shippingUnverified` lança TypeError.
+		assertShippingQuoted.mockResolvedValue({ shippingUnverified: false });
 	});
 
 	it("rejeita pedido de cliente não-verificado sem consumir rate limit nem tocar placeOrder", async () => {

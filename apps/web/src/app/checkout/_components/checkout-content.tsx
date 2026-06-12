@@ -298,24 +298,26 @@ export function CheckoutContent({
 	}, [destinationCep, items, quoteNonce]);
 
 	// Reenvia o e-mail de verificação (#93). Replica o fluxo do cadastro; o
-	// callbackURL traz o cliente de volta ao checkout após confirmar.
+	// callbackURL traz o cliente de volta ao checkout após confirmar. O botão é
+	// `disabled` durante o envio (sem guard manual); try/finally garante que o
+	// estado de loading se solta mesmo se sendVerificationEmail lançar.
 	const handleResendVerification = async () => {
-		if (resendingVerification) {
-			return;
-		}
 		setResendingVerification(true);
-		const { error } = await authClient.sendVerificationEmail({
-			email: clientEmail,
-			callbackURL: "/checkout",
-		});
-		setResendingVerification(false);
-		if (error) {
-			toast.error("Não foi possível reenviar agora. Tente novamente.");
-			return;
+		try {
+			const { error } = await authClient.sendVerificationEmail({
+				email: clientEmail,
+				callbackURL: "/checkout",
+			});
+			if (error) {
+				toast.error("Não foi possível reenviar agora. Tente novamente.");
+				return;
+			}
+			toast.success(
+				"E-mail de confirmação reenviado. Verifique sua caixa de entrada."
+			);
+		} finally {
+			setResendingVerification(false);
 		}
-		toast.success(
-			"E-mail de confirmação reenviado. Verifique sua caixa de entrada."
-		);
 	};
 
 	return (
