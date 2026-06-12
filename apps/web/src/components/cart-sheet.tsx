@@ -125,7 +125,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 								</EmachButton>
 							</Link>
 							<Link className="block" href="/cart" onClick={close}>
-								<EmachButton full size="md" variant="outline-light">
+								<EmachButton full size="md" variant="ghost-light">
 									Ver carrinho
 								</EmachButton>
 							</Link>

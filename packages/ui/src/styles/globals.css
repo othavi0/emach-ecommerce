@@ -715,3 +715,14 @@
 		@apply font-sans;
 	}
 }
+
+/* O Base UI seta `scrollbar-gutter: stable` INLINE no <html> durante o
+   scroll-lock de dialogs/sheets (evita layout-shift ao sumir a scrollbar). Mas
+   o gutter reservado deixa ~15px à direita que elementos `position: fixed`
+   (backdrop, drawer do carrinho) não cobrem — aparecia como faixa clara colada
+   à drawer. Anula o gutter enquanto o lock está ativo (`body` recebe
+   `overflow: hidden` inline) p/ overlay e drawer encostarem na borda real.
+   `!important` é necessário pra vencer o style inline aplicado pela lib. */
+html:has(body[style*="overflow: hidden"]) {
+	scrollbar-gutter: auto !important;
+}
