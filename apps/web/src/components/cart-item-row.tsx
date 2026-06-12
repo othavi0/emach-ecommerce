@@ -27,13 +27,17 @@ export function CartItemRow({
 }: CartItemRowProps) {
 	const isCompact = variant === "compact";
 	const lineTotalCents = numericToCents(item.priceAmount) * item.quantity;
-	const labelText =
-		item.categoryName ?? (item.voltage ? item.voltage : `SKU ${item.sku}`);
+	// Label: categoria, ou a voltagem como fallback p/ produtos sem categoria.
+	// A voltagem só aparece na linha meta quando NÃO é o próprio label (evita
+	// duplicar quando o produto não tem categoria).
+	const labelText = item.categoryName ?? item.voltage ?? "";
+	const showVoltageMeta = item.categoryName != null && item.voltage != null;
+	const priceLabel = fmtNumericBRL((lineTotalCents / 100).toFixed(2));
 
 	return (
 		<div
 			className={cn(
-				"emach-cart-item border-gray-10 border-b",
+				"emach-cart-item border-border border-b last:border-b-0",
 				isCompact
 					? "grid grid-cols-[80px_1fr_auto] items-start gap-3.5 py-4"
 					: "grid grid-cols-[120px_1fr_auto] items-center gap-5 py-5"
@@ -55,7 +59,11 @@ export function CartItemRow({
 			</div>
 
 			<div className="min-w-0">
-				<SectionLabel>{labelText}</SectionLabel>
+				{labelText && (
+					<SectionLabel className={isCompact ? "block truncate" : undefined}>
+						{labelText}
+					</SectionLabel>
+				)}
 				{isCompact ? (
 					<Link
 						className="mt-0.5 block overflow-hidden text-ellipsis whitespace-nowrap font-medium text-[14px] hover:underline"
@@ -68,42 +76,43 @@ export function CartItemRow({
 				) : (
 					<div className="mt-1 font-medium text-[16px]">{item.name}</div>
 				)}
-				<div
-					className={cn(
-						"text-gray-60",
-						isCompact ? "mt-0.5 text-[11px]" : "mt-1 text-[12px]"
-					)}
-				>
-					SKU {item.sku}
-					{item.voltage && ` · ${item.voltage}`}
-				</div>
-				<div
-					className={cn(
-						"flex",
-						isCompact
-							? "mt-2 flex-col items-start gap-1"
-							: "mt-3 flex-wrap items-center gap-4"
-					)}
-				>
-					<QuantityPicker onChange={onQuantityChange} value={item.quantity} />
-					<button
-						className="cursor-pointer border-none bg-transparent text-[12px] text-gray-60 underline hover:text-near-black"
-						onClick={onRemove}
-						type="button"
+				{showVoltageMeta && (
+					<div
+						className={cn(
+							"text-gray-60",
+							isCompact ? "mt-0.5 text-[11px]" : "mt-1 text-[12px]"
+						)}
 					>
-						Remover
-					</button>
-				</div>
+						{item.voltage}
+					</div>
+				)}
+				{!isCompact && (
+					<div className="mt-3 flex flex-wrap items-center gap-4">
+						<QuantityPicker onChange={onQuantityChange} value={item.quantity} />
+						<button
+							className="cursor-pointer border-none bg-transparent text-[12px] text-gray-60 underline hover:text-near-black"
+							onClick={onRemove}
+							type="button"
+						>
+							Remover
+						</button>
+					</div>
+				)}
 			</div>
 
-			<div
-				className={cn(
-					"font-bold tabular-nums",
-					isCompact ? "pt-0.5 text-[14px]" : "text-[16px]"
-				)}
-			>
-				{fmtNumericBRL((lineTotalCents / 100).toFixed(2))}
-			</div>
+			{isCompact ? (
+				<div className="flex flex-col items-end gap-2.5">
+					<div className="font-bold text-[14px] tabular-nums">{priceLabel}</div>
+					<QuantityPicker
+						min={0}
+						onChange={onQuantityChange}
+						size="sm"
+						value={item.quantity}
+					/>
+				</div>
+			) : (
+				<div className="font-bold text-[16px] tabular-nums">{priceLabel}</div>
+			)}
 		</div>
 	);
 }

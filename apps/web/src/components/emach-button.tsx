@@ -12,6 +12,7 @@ const emachButtonVariants = cva(
 				"outline-light":
 					"border-white/70 bg-transparent text-white hover:border-white hover:bg-white hover:text-near-black",
 				ghost: "bg-transparent text-near-black hover:bg-gray-10",
+				"ghost-light": "bg-transparent text-white hover:bg-white/10",
 				dark: "bg-near-black text-white hover:bg-black",
 			},
 			size: {
