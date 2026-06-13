@@ -56,7 +56,9 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 			<header className={headerClass}>
 				<div className="flex items-center gap-2 md:gap-8">
 					<button
+						aria-controls="mobile-menu"
 						aria-expanded={menuOpen}
+						aria-haspopup="dialog"
 						aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
 						className="-ml-2 flex size-11 cursor-pointer items-center justify-center text-white md:hidden"
 						onClick={() => setMenuOpen((v) => !v)}

@@ -88,7 +88,7 @@ export function ProductSpecs({
 										hero.length % 2 === 1 && i === hero.length - 1;
 									return (
 										<div
-											className={`bg-near-black px-4 py-4 text-white sm:px-6 sm:py-5${
+											className={`bg-near-black px-4 py-4 text-white sm:px-6 sm:py-5 ${
 												spanLast ? "col-span-2 sm:col-span-1" : ""
 											}`}
 											key={attr.definition.id}

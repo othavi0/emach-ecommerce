@@ -191,6 +191,9 @@ export function CatalogContent({
 					/>
 					<div className="mb-5 flex flex-wrap items-center gap-3 border-border border-b pb-3">
 						<button
+							aria-controls="filter-drawer"
+							aria-expanded={filterOpen}
+							aria-haspopup="dialog"
 							className="flex h-9 cursor-pointer items-center gap-2 border border-border bg-white px-3 font-display font-semibold text-[12px] text-near-black uppercase tracking-[0.08em] lg:hidden"
 							onClick={() => setFilterOpen(true)}
 							type="button"
