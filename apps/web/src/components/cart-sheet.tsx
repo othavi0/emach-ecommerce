@@ -10,6 +10,7 @@ import {
 import { ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { CartItemRow } from "@/components/cart-item-row";
 import { EmachButton } from "@/components/emach-button";
@@ -22,14 +23,24 @@ interface CartSheetProps {
 }
 
 export function CartSheet({ open, onOpenChange }: CartSheetProps) {
-	const { items, setQty, remove } = useCart();
+	const { items, setQty, remove, add } = useCart();
 	const [removing, setRemoving] = useState<string | null>(null);
 
 	function handleRemove(id: string) {
+		const item = items.find((i) => i.variantId === id);
 		setRemoving(id);
 		window.setTimeout(() => {
 			remove(id);
 			setRemoving(null);
+			if (item) {
+				const { quantity, ...snapshot } = item;
+				toast("Item removido do carrinho", {
+					action: {
+						label: "Desfazer",
+						onClick: () => add(snapshot, quantity),
+					},
+				});
+			}
 		}, 220);
 	}
 

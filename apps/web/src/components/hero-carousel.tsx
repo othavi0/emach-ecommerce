@@ -209,7 +209,7 @@ export function HeroCarousel() {
 		// biome-ignore lint/a11y/noStaticElementInteractions: parallax decorativo (mouse-only), sem semântica interativa
 		// biome-ignore lint/a11y/noNoninteractiveElementInteractions: idem — efeito visual, teclado/toque não dependem disto
 		<section
-			className="relative h-svh w-full overflow-hidden bg-black"
+			className="relative h-[88svh] w-full overflow-hidden bg-black lg:h-svh"
 			onMouseLeave={handleMouseLeave}
 			onMouseMove={handleMouseMove}
 		>
@@ -218,9 +218,12 @@ export function HeroCarousel() {
 				opts={{ loop: true, align: "start" }}
 				setApi={setApi}
 			>
-				<CarouselContent className="ml-0 h-svh">
+				<CarouselContent className="ml-0 h-[88svh] lg:h-svh">
 					{HERO_SLIDES.map((slide, index) => (
-						<CarouselItem className="relative h-svh pl-0" key={slide.bg}>
+						<CarouselItem
+							className="relative h-[88svh] pl-0 lg:h-svh"
+							key={slide.bg}
+						>
 							<HeroSlideContent
 								isActive={index === selectedIndex}
 								parallaxX={parallaxX}
