@@ -21,15 +21,12 @@ import { toast } from "sonner";
 import z from "zod";
 import Loader from "@/components/loader";
 import { authClient } from "@/lib/auth-client";
+import { LoginBrandPanel } from "./login-brand-panel";
 import { PasswordInput } from "./password-input";
 
 const TRIGGER_CLASS =
 	"h-auto flex-1 whitespace-nowrap border-none px-0 py-3.5 font-semibold text-[14px] text-gray-50 hover:text-near-black data-active:text-near-black focus-visible:ring-0 focus-visible:border-transparent";
 
-/**
- * Sanitiza o destino pós-login lido de `?redirect=`. Guarda anti-open-redirect:
- * só aceita caminho interno. Rejeita externo/protocol-relative → fallback `/dashboard`.
- */
 function sanitizeRedirect(raw: string | null): string {
 	if (!raw?.startsWith("/") || raw.startsWith("//") || raw.startsWith("/\\")) {
 		return "/dashboard";
@@ -145,63 +142,23 @@ export function LoginForm() {
 		);
 	}
 
-	const isSignIn = mode === "sign-in";
-
 	return (
 		<main className="grid min-h-svh grid-cols-1 lg:grid-cols-[6fr_4fr]">
-			{/* Left — cinematic dark panel (oculto no mobile; só decorativo) */}
-			<div className="relative isolate hidden flex-col justify-between overflow-hidden bg-[#0d0d0d] px-[80px] py-20 text-white lg:flex">
-				{/* Key light — Ferrari Red, bottom-left */}
-				<div
-					aria-hidden="true"
-					className="emach-bg-login-key pointer-events-none absolute bottom-[-30%] left-[-20%] z-0 h-[90%] w-[90%]"
-				/>
-				{/* Rim light — Deep Red, top-right */}
-				<div
-					aria-hidden="true"
-					className="emach-bg-login-rim pointer-events-none absolute top-[-20%] right-[-15%] z-0 h-[60%] w-[60%]"
-				/>
-				{/* Atmospheric vignette */}
-				<div
-					aria-hidden="true"
-					className="emach-bg-login-vignette pointer-events-none absolute inset-0 z-1"
-				/>
+			<LoginBrandPanel />
 
-				<span className="relative z-2 font-display font-semibold text-[12px] text-white/65 uppercase tracking-[0.2em]">
-					EMACH Profissional
-				</span>
-
-				<div className="relative z-2 max-w-[580px]">
-					{isSignIn ? (
-						<h2 className="font-display font-medium text-[clamp(48px,5.5vw,78px)] leading-[0.98] tracking-[-0.02em]">
-							Acesse sua
-							<br />
-							<span className="text-emach-red">conta</span>.
-						</h2>
-					) : (
-						<h2 className="font-display font-medium text-[clamp(48px,5.5vw,78px)] leading-[0.98] tracking-[-0.02em]">
-							Crie sua
-							<br />
-							conta <span className="text-emach-red">EMACH</span>.
-						</h2>
-					)}
-					<p className="mt-6 max-w-[440px] text-[15px] text-white/70 leading-relaxed">
-						{isSignIn
-							? "Acompanhe pedidos, gerencie endereços e desbloqueie descontos exclusivos para profissionais cadastrados."
-							: "Cadastre-se para acompanhar pedidos, gerenciar endereços e acessar descontos exclusivos para profissionais."}
-					</p>
-				</div>
-
-				<div className="relative z-2 font-display font-semibold text-[11px] text-white/40 uppercase tracking-[0.2em]">
-					© 2026 EMACH FERRAMENTAS
-				</div>
-			</div>
-
-			{/* Right — form panel (gray-10, padrão de superfície do sistema) */}
-			<div className="flex items-center justify-center bg-gray-10 px-6 py-12 sm:px-10 sm:py-16 lg:px-[60px] lg:py-20">
-				<div className="w-full max-w-[400px]">
+			<div className="flex items-center justify-center bg-gray-10 px-6 py-12 sm:px-10 sm:py-16 lg:py-20">
+				<div className="flex w-full flex-col items-center justify-center md:w-2/3">
+					{/* Logo vermelho acima do form — só no mobile (no desktop o logo vive no painel esquerdo) */}
+					<Image
+						alt="EMACH"
+						className="mb-8 h-9 w-auto lg:hidden"
+						height={377}
+						priority
+						src="/emach-logo-red.svg"
+						width={2041}
+					/>
 					<Tabs
-						className="mb-8 gap-0"
+						className="w-full gap-0"
 						onValueChange={(v) => setMode(v as "sign-in" | "sign-up")}
 						value={mode}
 					>
@@ -449,14 +406,14 @@ export function LoginForm() {
 					</Tabs>
 
 					{/* Divider */}
-					<div className="my-7 flex items-center gap-3 text-[12px] text-gray-50">
+					<div className="my-5 flex items-center gap-3 text-[12px] text-gray-50">
 						<Separator className="flex-1" />
 						ou
 						<Separator className="flex-1" />
 					</div>
 
 					{/* Social login */}
-					<div className="flex flex-col gap-2">
+					<div className="flex w-full flex-col gap-2">
 						<Button
 							className="h-12 w-full"
 							disabled={isGooglePending}

@@ -28,8 +28,6 @@ export function BranchMap({
 	const [hovered, setHovered] = useState<string | null>(null);
 	const [paused, setPaused] = useState(false);
 
-	// Auto-cycle: destaca cada filial em rotação (efeito hover automático),
-	// pausando enquanto o usuário interage. Respeita prefers-reduced-motion.
 	useEffect(() => {
 		if (REDUCE_MOTION || paused || pins.length < 2) {
 			return;
@@ -43,7 +41,6 @@ export function BranchMap({
 		return () => clearInterval(timer);
 	}, [paused, pins]);
 
-	// Scroll a filial ativa pra dentro do carrossel da lista (sem mover a página).
 	useEffect(() => {
 		if (!hovered) {
 			return;
@@ -75,7 +72,7 @@ export function BranchMap({
 			{/* MAPA — base como <img> (imune ao force-dark), pins como overlay HTML */}
 			<div className="flex flex-none items-center justify-center p-6 md:flex-[0_0_50%]">
 				<div
-					className="relative w-full max-w-[420px]"
+					className="relative w-full max-w-105"
 					style={{ aspectRatio: `${mapWidth} / ${mapHeight}` }}
 				>
 					{/* biome-ignore lint/performance/noImgElement: data-URI inline, sem otimização de CDN */}
