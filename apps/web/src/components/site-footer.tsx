@@ -4,6 +4,7 @@ import {
 	type SocialNetwork,
 } from "@emach/db/queries/store-settings";
 import type { Route } from "next";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentProps } from "react";
@@ -67,6 +68,8 @@ function SocialIcon({
 }
 
 export async function SiteFooter() {
+	"use cache";
+	cacheLife({ revalidate: 3600 });
 	const socialLinks = await getStoreSocialLinks(db);
 
 	return (

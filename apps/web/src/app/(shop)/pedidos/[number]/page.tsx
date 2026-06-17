@@ -12,23 +12,14 @@ import { SiteHeader } from "@/components/site-header";
 import { fmtNumericBRL } from "@/lib/format";
 import { requireCurrentClient } from "@/lib/session";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ number: string }>;
-}): Promise<Metadata> {
-	const { number } = await params;
-	return {
-		title: `Pedido #${number}`,
-		robots: { index: false, follow: false },
-	};
-}
-
-// cacheComponents exige ≥1 param para a rota dinâmica validar no build; números
-// reais resolvem on-demand (o conteúdo é dinâmico, sob Suspense).
-export function generateStaticParams() {
-	return [{ number: "0" }];
-}
+// Rota autenticada e sempre dinâmica (lê sessão): não há prerender. `params` e
+// `headers` são acessados só dentro do Suspense (OrderConfirmationContent), o que
+// satisfaz o cacheComponents sem generateStaticParams. Metadata é estática
+// porque generateMetadata não pode acessar params dinâmicos fora de um boundary.
+export const metadata: Metadata = {
+	title: "Detalhes do pedido",
+	robots: { index: false, follow: false },
+};
 
 interface AddressSnapshot {
 	city?: string;
