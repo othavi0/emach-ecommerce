@@ -6,6 +6,7 @@ import {
 import { banner } from "@emach/db/schema/banner";
 import { category } from "@emach/db/schema/categories";
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { cacheLife } from "next/cache";
 import { BranchMapSection } from "@/components/branch-map-section";
 import { CategoryGrid } from "@/components/category-grid";
 import { HeroCarousel } from "@/components/hero-carousel";
@@ -15,8 +16,6 @@ import { PromoHighlight } from "@/components/promo-highlight";
 import { SectionHeader } from "@/components/section-header";
 import { SiteHeader } from "@/components/site-header";
 import { getVoltagesByTool } from "@/lib/variant-voltages";
-
-export const revalidate = 600;
 
 // Banners ativos do hero. Query inline (não owned-by-dashboard): leitura trivial,
 // decisão registrada no #122 (ADR-0009 dispensa virar query sincronizada).
@@ -88,7 +87,13 @@ async function getCategoryImages(
 	return map;
 }
 
-export default async function HomePage() {
+// Dados da home cacheados (ISR 10min, igual ao card de produto na home antes).
+// Reads independentes em paralelo: categoryImages e voltagesByTool dependem só
+// da 1ª wave, então rodam juntos (corte de uma ida sequencial ao banco).
+async function loadHome() {
+	"use cache";
+	cacheLife({ revalidate: 600 });
+
 	const [rootCategories, featuredPromotion, recentTools, banners] =
 		await Promise.all([
 			getRootCategories(),
@@ -97,18 +102,38 @@ export default async function HomePage() {
 			getActiveBanners(),
 		]);
 
-	const categoryImages = await getCategoryImages(
-		rootCategories.map((c) => c.slug)
-	);
+	const [categoryImages, voltagesByTool] = await Promise.all([
+		getCategoryImages(rootCategories.map((c) => c.slug)),
+		getVoltagesByTool([
+			...recentTools.map((t) => t.id),
+			...(featuredPromotion?.tools.map((t) => t.id) ?? []),
+		]),
+	]);
+
+	return {
+		banners,
+		categoryImages,
+		featuredPromotion,
+		recentTools,
+		rootCategories,
+		voltagesByTool,
+	};
+}
+
+export default async function HomePage() {
+	const {
+		banners,
+		categoryImages,
+		featuredPromotion,
+		recentTools,
+		rootCategories,
+		voltagesByTool,
+	} = await loadHome();
+
 	const rootCategoriesWithImages = rootCategories.map((c) => ({
 		...c,
 		imageUrl: categoryImages.get(c.slug) ?? null,
 	}));
-
-	const voltagesByTool = await getVoltagesByTool([
-		...recentTools.map((t) => t.id),
-		...(featuredPromotion?.tools.map((t) => t.id) ?? []),
-	]);
 
 	return (
 		<>

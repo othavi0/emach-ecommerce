@@ -5,23 +5,21 @@ import { Separator } from "@emach/ui/components/separator";
 import { and, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { PageContainer } from "@/components/page-container";
 import { SiteHeader } from "@/components/site-header";
 import { fmtNumericBRL } from "@/lib/format";
 import { requireCurrentClient } from "@/lib/session";
 
-export async function generateMetadata({
-	params,
-}: {
-	params: Promise<{ number: string }>;
-}): Promise<Metadata> {
-	const { number } = await params;
-	return {
-		title: `Pedido #${number}`,
-		robots: { index: false, follow: false },
-	};
-}
+// Rota autenticada e sempre dinâmica (lê sessão): não há prerender. `params` e
+// `headers` são acessados só dentro do Suspense (OrderConfirmationContent), o que
+// satisfaz o cacheComponents sem generateStaticParams. Metadata é estática
+// porque generateMetadata não pode acessar params dinâmicos fora de um boundary.
+export const metadata: Metadata = {
+	title: "Detalhes do pedido",
+	robots: { index: false, follow: false },
+};
 
 interface AddressSnapshot {
 	city?: string;
@@ -47,7 +45,34 @@ const STATUS_LABEL: Record<OrderStatus, string> = {
 	returned: "Devolvido",
 };
 
-export default async function OrderConfirmationPage({
+export default function OrderConfirmationPage({
+	params,
+}: {
+	params: Promise<{ number: string }>;
+}) {
+	return (
+		<>
+			<SiteHeader />
+			<Suspense fallback={<OrderConfirmationSkeleton />}>
+				<OrderConfirmationContent params={params} />
+			</Suspense>
+		</>
+	);
+}
+
+function OrderConfirmationSkeleton() {
+	return (
+		<main>
+			<PageContainer className="py-12">
+				<div className="h-[60vh] w-full animate-pulse bg-gray-20/40" />
+			</PageContainer>
+		</main>
+	);
+}
+
+// Lê params + sessão (headers) — sob Suspense por exigência do cacheComponents.
+// Guarda P0 (requireCurrentClient) antes de qualquer dado do pedido.
+async function OrderConfirmationContent({
 	params,
 }: {
 	params: Promise<{ number: string }>;
@@ -73,129 +98,126 @@ export default async function OrderConfirmationPage({
 	const address = (orderRow.shippingAddress ?? {}) as AddressSnapshot;
 
 	return (
-		<>
-			<SiteHeader />
-			<main>
-				<PageContainer className="py-12">
-					<div className="mb-8">
-						<div className="font-display font-semibold text-[11px] text-emach-red uppercase tracking-[0.14em]">
-							Pedido confirmado
-						</div>
-						<h1 className="mt-2 font-display font-medium text-[40px] tracking-[-0.01em]">
-							{orderRow.number}
-						</h1>
-						<div className="mt-2 flex flex-wrap gap-3 text-[13px] text-gray-60">
-							<span>
-								Status: <strong>{STATUS_LABEL[orderRow.status]}</strong>
-							</span>
-							<span>·</span>
-							<span>
-								Criado em{" "}
-								{orderRow.createdAt.toLocaleString("pt-BR", {
-									timeZone: "America/Sao_Paulo",
-									dateStyle: "short",
-									timeStyle: "short",
-								})}
-							</span>
-						</div>
+		<main>
+			<PageContainer className="py-12">
+				<div className="mb-8">
+					<div className="font-display font-semibold text-[11px] text-emach-red uppercase tracking-[0.14em]">
+						Pedido confirmado
 					</div>
+					<h1 className="mt-2 font-display font-medium text-[40px] tracking-[-0.01em]">
+						{orderRow.number}
+					</h1>
+					<div className="mt-2 flex flex-wrap gap-3 text-[13px] text-gray-60">
+						<span>
+							Status: <strong>{STATUS_LABEL[orderRow.status]}</strong>
+						</span>
+						<span>·</span>
+						<span>
+							Criado em{" "}
+							{orderRow.createdAt.toLocaleString("pt-BR", {
+								timeZone: "America/Sao_Paulo",
+								dateStyle: "short",
+								timeStyle: "short",
+							})}
+						</span>
+					</div>
+				</div>
 
-					<div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_360px]">
-						<section>
+				<div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_360px]">
+					<section>
+						<h2 className="font-display font-semibold text-xs uppercase tracking-wider">
+							Itens
+						</h2>
+						<Separator className="mt-3" />
+						<ul className="divide-y">
+							{items.map((it) => (
+								<li
+									className="grid grid-cols-[1fr_auto] gap-4 py-4"
+									key={it.id}
+								>
+									<div>
+										<div className="font-medium text-[15px]">{it.name}</div>
+										<div className="mt-0.5 text-[12px] text-gray-60">
+											SKU {it.sku}
+											{it.voltage && ` · ${it.voltage}`}
+										</div>
+										<div className="mt-1 text-[13px] text-gray-60">
+											Qtd {it.quantity} × {fmtNumericBRL(it.unitPrice)}
+										</div>
+									</div>
+									<div className="self-start font-bold tabular-nums">
+										{fmtNumericBRL(it.lineTotal)}
+									</div>
+								</li>
+							))}
+						</ul>
+					</section>
+
+					<aside className="space-y-6">
+						<div className="border border-border p-5">
 							<h2 className="font-display font-semibold text-xs uppercase tracking-wider">
-								Itens
+								Resumo
 							</h2>
 							<Separator className="mt-3" />
-							<ul className="divide-y">
-								{items.map((it) => (
-									<li
-										className="grid grid-cols-[1fr_auto] gap-4 py-4"
-										key={it.id}
-									>
-										<div>
-											<div className="font-medium text-[15px]">{it.name}</div>
-											<div className="mt-0.5 text-[12px] text-gray-60">
-												SKU {it.sku}
-												{it.voltage && ` · ${it.voltage}`}
-											</div>
-											<div className="mt-1 text-[13px] text-gray-60">
-												Qtd {it.quantity} × {fmtNumericBRL(it.unitPrice)}
-											</div>
-										</div>
-										<div className="self-start font-bold tabular-nums">
-											{fmtNumericBRL(it.lineTotal)}
-										</div>
-									</li>
-								))}
-							</ul>
-						</section>
-
-						<aside className="space-y-6">
-							<div className="border border-border p-5">
-								<h2 className="font-display font-semibold text-xs uppercase tracking-wider">
-									Resumo
-								</h2>
-								<Separator className="mt-3" />
-								<div className="mt-3 space-y-2 text-sm">
-									<div className="flex justify-between">
-										<span className="text-gray-60">Subtotal</span>
+							<div className="mt-3 space-y-2 text-sm">
+								<div className="flex justify-between">
+									<span className="text-gray-60">Subtotal</span>
+									<span className="tabular-nums">
+										{fmtNumericBRL(orderRow.subtotalAmount)}
+									</span>
+								</div>
+								{Number(orderRow.discountAmount) > 0 && (
+									<div className="flex justify-between text-success">
+										<span>Desconto</span>
 										<span className="tabular-nums">
-											{fmtNumericBRL(orderRow.subtotalAmount)}
+											−{fmtNumericBRL(orderRow.discountAmount)}
 										</span>
 									</div>
-									{Number(orderRow.discountAmount) > 0 && (
-										<div className="flex justify-between text-success">
-											<span>Desconto</span>
-											<span className="tabular-nums">
-												−{fmtNumericBRL(orderRow.discountAmount)}
-											</span>
-										</div>
-									)}
-									<div className="flex justify-between">
-										<span className="text-gray-60">Frete</span>
-										<span className="tabular-nums">
-											{Number(orderRow.shippingAmount) === 0
-												? "Grátis"
-												: fmtNumericBRL(orderRow.shippingAmount)}
-										</span>
-									</div>
-									<Separator />
-									<div className="flex justify-between font-bold">
-										<span>Total</span>
-										<span className="tabular-nums">
-											{fmtNumericBRL(orderRow.totalAmount)}
-										</span>
-									</div>
+								)}
+								<div className="flex justify-between">
+									<span className="text-gray-60">Frete</span>
+									<span className="tabular-nums">
+										{Number(orderRow.shippingAmount) === 0
+											? "Grátis"
+											: fmtNumericBRL(orderRow.shippingAmount)}
+									</span>
+								</div>
+								<Separator />
+								<div className="flex justify-between font-bold">
+									<span>Total</span>
+									<span className="tabular-nums">
+										{fmtNumericBRL(orderRow.totalAmount)}
+									</span>
 								</div>
 							</div>
+						</div>
 
-							<div className="border border-border p-5">
-								<h2 className="font-display font-semibold text-xs uppercase tracking-wider">
-									Entrega
-								</h2>
-								<Separator className="mt-3" />
-								<address className="mt-3 space-y-0.5 text-[13px] not-italic">
-									{address.recipient && (
-										<div className="font-medium">{address.recipient}</div>
-									)}
-									{address.street && (
-										<div>
-											{address.street}, {address.number}
-											{address.complement && ` — ${address.complement}`}
-										</div>
-									)}
-									{address.neighborhood && <div>{address.neighborhood}</div>}
-									{address.city && (
-										<div>
-											{address.city} / {address.state} · {address.zipCode}
-										</div>
-									)}
-								</address>
-							</div>
-						</aside>
-					</div>
-				</PageContainer>
-			</main>
-		</>
+						<div className="border border-border p-5">
+							<h2 className="font-display font-semibold text-xs uppercase tracking-wider">
+								Entrega
+							</h2>
+							<Separator className="mt-3" />
+							<address className="mt-3 space-y-0.5 text-[13px] not-italic">
+								{address.recipient && (
+									<div className="font-medium">{address.recipient}</div>
+								)}
+								{address.street && (
+									<div>
+										{address.street}, {address.number}
+										{address.complement && ` — ${address.complement}`}
+									</div>
+								)}
+								{address.neighborhood && <div>{address.neighborhood}</div>}
+								{address.city && (
+									<div>
+										{address.city} / {address.state} · {address.zipCode}
+									</div>
+								)}
+							</address>
+						</div>
+					</aside>
+				</div>
+			</PageContainer>
+		</main>
 	);
 }

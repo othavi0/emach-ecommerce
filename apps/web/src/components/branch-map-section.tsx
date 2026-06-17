@@ -1,5 +1,6 @@
+import { cacheLife } from "next/cache";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { BranchMap } from "@/components/branch-map";
 import { EmachButton } from "@/components/emach-button";
 import { PageContainer } from "@/components/page-container";
 import { SectionLabel } from "@/components/section-label";
@@ -18,7 +19,13 @@ import {
 } from "@/lib/branches";
 import { log } from "@/lib/evlog";
 
+const BranchMap = dynamic(() =>
+	import("@/components/branch-map").then((m) => m.BranchMap)
+);
+
 export async function BranchMapSection() {
+	"use cache";
+	cacheLife({ revalidate: 600 });
 	const branches = await getActiveBranches();
 
 	const pins: BranchPin[] = [];

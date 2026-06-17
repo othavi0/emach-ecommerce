@@ -129,14 +129,21 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 						</span>
 					</button>
 					<div className="hidden md:block">
-						<AccountMenu />
+						<Suspense fallback={null}>
+							<AccountMenu />
+						</Suspense>
 					</div>
 				</div>
 			</header>
 
-			<MobileMenu onClose={() => setMenuOpen(false)} open={menuOpen} />
-			<SearchOverlay onClose={() => setSearchOpen(false)} open={searchOpen} />
-			<CartSheet onOpenChange={setCartOpen} open={cartOpen} />
+			{/* Overlays usam hooks de navegação/sessão (usePathname etc.); sob
+			    cacheComponents precisam de Suspense para o shell prerenderizar em
+			    rotas dinâmicas ([param] sem generateStaticParams). */}
+			<Suspense fallback={null}>
+				<MobileMenu onClose={() => setMenuOpen(false)} open={menuOpen} />
+				<SearchOverlay onClose={() => setSearchOpen(false)} open={searchOpen} />
+				<CartSheet onOpenChange={setCartOpen} open={cartOpen} />
+			</Suspense>
 		</>
 	);
 }

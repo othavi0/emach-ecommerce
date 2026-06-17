@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 
 import { PageContainer } from "@/components/page-container";
 import { SiteHeader } from "@/components/site-header";
@@ -88,6 +89,8 @@ function buildMapsEmbedUrl(query: string) {
 }
 
 async function getBranches(): Promise<BranchCardData[]> {
+	"use cache";
+	cacheLife({ revalidate: 600 });
 	const rows = await getActiveBranches();
 
 	return rows.map((row) => {
