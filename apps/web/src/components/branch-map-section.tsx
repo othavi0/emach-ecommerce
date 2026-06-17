@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { BranchMap } from "@/components/branch-map";
 import { EmachButton } from "@/components/emach-button";
@@ -19,6 +20,8 @@ import {
 import { log } from "@/lib/evlog";
 
 export async function BranchMapSection() {
+	"use cache";
+	cacheLife({ revalidate: 600 });
 	const branches = await getActiveBranches();
 
 	const pins: BranchPin[] = [];
