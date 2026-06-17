@@ -1,14 +1,23 @@
 import { evlogMiddleware } from "evlog/next";
 import { type NextRequest, NextResponse } from "next/server";
 
-const PROTECTED = ["/dashboard"];
+const PROTECTED = ["/dashboard", "/pedidos"];
 
 const runEvlog = evlogMiddleware({
 	exclude: ["/api/auth/**", "/_next/**", "/favicon/**"],
 });
 
 export async function proxy(req: NextRequest) {
-	const isProtected = PROTECTED.some((p) => req.nextUrl.pathname.startsWith(p));
+	const { pathname } = req.nextUrl;
+	// 1ª camada (edge, só existência do cookie); a validação real da sessão fica
+	// no content sob Suspense (requireCurrentClient). Com cacheComponents o shell
+	// é servido com 200, então sem o edge-redirect o cliente deslogado veria o
+	// shell piscar antes de cair no /login. `/checkout/success` é confirmação
+	// pública (não lê sessão) — fica de fora.
+	const isProtected =
+		PROTECTED.some((p) => pathname.startsWith(p)) ||
+		(pathname.startsWith("/checkout") &&
+			!pathname.startsWith("/checkout/success"));
 
 	if (isProtected) {
 		// Better Auth prefixa o cookie com `__Secure-` quando roda sob HTTPS
