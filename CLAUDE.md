@@ -79,7 +79,13 @@ Schema TS aqui é **cópia versionada** do dashboard, sincronizada via **CI PR a
 - **Hardening — pendente (roadmap #5, após o pagamento):**
   - **Frete fail-open:** queda da API SuperFrete não bloqueia a venda (só `log.error` em `place-order.ts > assertShippingQuoted`) → frete adulterável. Endurecer (persistir `shippingUnverified` p/ revisão) exige **coluna nova no schema** — nasce no dashboard (ADR-0009).
   - evlog sem drain externo (Axiom/Datadog/Sentry) — output só em console.
-- Sem Docker config. CI mínimo: `.github/workflows/ci.yml` roda só `check-types` em PR/push na `main` (sem testes nem deploy).
+- Sem Docker config.
+
+## Deploy e CI (ADR-0004)
+
+- **Repo canônico ≠ repo de deploy.** Trabalha-se em `othavioquiliao/emach-ecommerce` (onde o CI roda); a Vercel está conectada a `emach-ferramentas/emach-ecommerce` (org, Actions OFF). `mirror.yml` espelha a `main` pro repo da org a cada push → **deploy = `git push origin main`**, sem push manual. Detalhe e gotchas (mirror exige `persist-credentials: false`; secret via `gh secret set --body`, nunca pipe) em ADR-0004.
+- **CI (`ci.yml`) tem 3 gates:** `check-types` + `test:ci` (`bun run --filter=web test:ci`, unit-only) + `check-env`. **`bun check:env`** (`scripts/check-vercel-env.ts`) cruza as env vars obrigatórias (derivadas do Zod em `packages/env/src/schemas.ts`) com a Vercel — **env obrigatória nova precisa ser cadastrada na Vercel** (`vercel env add`) senão o CI falha e o build quebraria no deploy.
+- **`test:ci` é unit-only.** Teste que usa `withRollback`/`db.transaction`/dados do DB é **integração** → adicionar à lista `INTEGRATION` em `apps/web/vitest.config.ts` (senão quebra no CI, que não tem `.env`/DB). `apps/web/vitest.setup.ts` injeta env dummy nas obrigatórias ausentes p/ a validação do `@emach/env` não abortar a suíte.
 
 ## Design — Ferrari-inspired (resumo)
 
