@@ -20,6 +20,10 @@
 	--gray-90: #303030;
 	--warning: #f13a2c;
 	--success: #16a34a;
+	/* --success (#16a34a) = 3.0:1 sobre gray-10, reprova em TEXTO. --success-text
+	   (#0f7a33 = 4.95:1) é o verde p/ texto em superfície clara; --success segue
+	   p/ ícones/fills/badges (3:1 basta). Espelha o par --amber / --amber-text. */
+	--success-text: #0f7a33;
 	--info: #4c98b9;
 	--amber: #d97706;
 	--amber-text: #b45309;
@@ -650,6 +654,7 @@
 	--color-teal-hover: #1eaedb;
 	--color-dark-red: #b01e0a;
 	--color-success: var(--success);
+	--color-success-text: var(--success-text);
 	--color-warning: var(--warning);
 	--color-info: var(--info);
 	--color-amber: var(--amber);
