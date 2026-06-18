@@ -143,7 +143,7 @@ export function CatalogContent({
 	);
 
 	return (
-		<div className="bg-gray-10">
+		<main className="bg-gray-10" id="main-content">
 			<section className="bg-near-black py-12 text-white">
 				<PageContainer>
 					<div className="mb-3 text-[12px] text-white/55 uppercase tracking-widest">
@@ -327,7 +327,7 @@ export function CatalogContent({
 													)}
 												</div>
 												{t.defaultVariant.discountedAmount && (
-													<div className="text-[12px] text-gray-50 tabular-nums line-through">
+													<div className="text-[12px] text-gray-60 tabular-nums line-through">
 														{fmtNumericBRL(t.defaultVariant.priceAmount)}
 													</div>
 												)}
@@ -399,6 +399,6 @@ export function CatalogContent({
 					voltages={voltages}
 				/>
 			</FilterDrawer>
-		</div>
+		</main>
 	);
 }

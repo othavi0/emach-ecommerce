@@ -18,7 +18,7 @@ import {
 	useReducedMotion,
 	useSpring,
 } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -542,6 +542,7 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
 	const slides = banners.length > 0 ? banners : FALLBACK_BANNERS;
 	const [api, setApi] = useState<CarouselApi>();
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [paused, setPaused] = useState(false);
 	const reduceMotion = useReducedMotion() ?? false;
 
 	const mouseX = useMotionValue(0);
@@ -567,14 +568,14 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
 	}, [api]);
 
 	useEffect(() => {
-		if (!api || slides.length < 2 || reduceMotion) {
+		if (!api || slides.length < 2 || reduceMotion || paused) {
 			return;
 		}
 		const id = window.setInterval(() => {
 			api.scrollNext();
 		}, AUTOPLAY_INTERVAL);
 		return () => window.clearInterval(id);
-	}, [api, slides.length, reduceMotion]);
+	}, [api, slides.length, reduceMotion, paused]);
 
 	const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
 		if (reduceMotion) {
@@ -634,9 +635,10 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
 					<div className="absolute bottom-24 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 lg:bottom-10">
 						{slides.map((banner, index) => (
 							<button
-								aria-label={`Ir para slide ${index + 1}`}
+								aria-current={index === selectedIndex ? "true" : undefined}
+								aria-label={`Slide ${index + 1} de ${slides.length}`}
 								className={cn(
-									"relative h-[4px] w-8 cursor-pointer transition-colors duration-200 after:absolute after:-inset-y-5 after:right-0 after:left-0 after:content-[''] sm:w-10",
+									"relative h-[4px] w-8 cursor-pointer transition-colors duration-200 after:absolute after:-inset-y-5 after:right-0 after:left-0 after:content-[''] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 sm:w-10",
 									index === selectedIndex ? "bg-emach-red" : "bg-white/30"
 								)}
 								key={banner.id}
@@ -644,6 +646,25 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
 								type="button"
 							/>
 						))}
+						{!reduceMotion && (
+							<button
+								aria-label={
+									paused
+										? "Retomar troca automática de slides"
+										: "Pausar troca automática de slides"
+								}
+								aria-pressed={paused}
+								className="relative ml-2 flex size-11 items-center justify-center text-white/70 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+								onClick={() => setPaused((p) => !p)}
+								type="button"
+							>
+								{paused ? (
+									<Play className="size-4" />
+								) : (
+									<Pause className="size-4" />
+								)}
+							</button>
+						)}
 					</div>
 				)}
 			</section>

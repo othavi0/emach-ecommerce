@@ -73,7 +73,7 @@ export function ProductSpecs({
 				)}
 
 				{attributes.length === 0 ? (
-					<p className="text-[15px] text-gray-50">
+					<p className="text-[15px] text-gray-60">
 						Nenhuma especificação cadastrada.
 					</p>
 				) : (

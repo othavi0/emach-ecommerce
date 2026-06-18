@@ -34,7 +34,10 @@ export function HeaderNav() {
 	}, [pathname]);
 
 	return (
-		<nav className="flex items-center gap-[22px]">
+		<nav
+			aria-label="Navegação principal"
+			className="flex items-center gap-[22px]"
+		>
 			{navLinks.map((link) => {
 				const [linkPath, linkHash] = link.href.split("#");
 				const linkHashFull = linkHash ? `#${linkHash}` : "";
@@ -52,6 +55,7 @@ export function HeaderNav() {
 							"relative inline-block pb-1 font-display font-semibold text-ms uppercase tracking-[0.04em] transition-colors",
 							"after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-emach-red after:transition-transform after:duration-300 after:ease-out after:content-['']",
 							"hover:after:scale-x-100",
+							"focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2",
 							active
 								? "text-white after:scale-x-100"
 								: "text-white/75 hover:text-white"

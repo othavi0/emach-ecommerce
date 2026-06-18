@@ -270,8 +270,10 @@ export function ProductInfo({
 											{v.voltage ?? "Padrão"}
 										</span>
 										{!variantStock && (
-											<span className="border border-emach-red/60 px-1.5 font-display text-[9px] text-emach-red uppercase tracking-[0.08em]">
-												Esgotado
+											<span className="opacity-100">
+												<span className="border border-emach-red/60 px-1.5 font-display text-[9px] text-emach-red-hover uppercase tracking-[0.08em]">
+													Esgotado
+												</span>
 											</span>
 										)}
 									</span>

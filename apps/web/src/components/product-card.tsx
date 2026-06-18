@@ -120,7 +120,7 @@ export function ProductCard({
 							)}
 						</span>
 						{hasDiscount && (
-							<span className="text-[11px] text-white/40 tabular-nums line-through">
+							<span className="text-[11px] text-white/60 tabular-nums line-through">
 								{fmtNumericBRL(tool.defaultVariant.priceAmount)}
 							</span>
 						)}

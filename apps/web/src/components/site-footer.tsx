@@ -12,7 +12,7 @@ import type { ComponentProps } from "react";
 import { PageContainer } from "@/components/page-container";
 
 const navLinkClassName =
-	"rounded-[2px] font-display font-medium text-[14px] text-gray-20 uppercase tracking-[0.06em] no-underline transition-colors duration-150 ease-out hover:text-emach-red focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emach-red focus-visible:ring-offset-2 focus-visible:ring-offset-cinema-3";
+	"rounded-[2px] font-display font-medium text-[14px] text-gray-20 uppercase tracking-[0.06em] no-underline transition-colors duration-150 ease-out hover:text-emach-red-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emach-red focus-visible:ring-offset-2 focus-visible:ring-offset-cinema-3";
 
 const navLinks: { href: Route; label: string }[] = [
 	{ href: "/catalog", label: "Catálogo" },

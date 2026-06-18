@@ -33,7 +33,11 @@ export function VerifyEmailContent() {
 
 	return (
 		<main className="flex min-h-svh items-center justify-center bg-gray-10 px-6 py-20">
-			<div className="w-full max-w-[400px] text-center">
+			<div
+				aria-atomic="true"
+				aria-live="polite"
+				className="w-full max-w-[400px] text-center"
+			>
 				{status === "loading" && (
 					<>
 						<h1 className="font-display font-medium text-[28px] text-near-black">

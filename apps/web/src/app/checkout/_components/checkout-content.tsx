@@ -15,7 +15,7 @@ import type { Route } from "next";
 import NextImage from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { createOrderAction } from "@/app/checkout/_actions/create-order";
@@ -715,15 +715,30 @@ interface FieldShellProps {
 }
 
 function FieldShell({ children, errors, htmlFor, label }: FieldShellProps) {
+	const errorId = `${htmlFor}-error`;
+	const hasError = errors.some((e) => e?.message);
 	return (
 		<div className="emach-field">
 			<label className="emach-field__label" htmlFor={htmlFor}>
 				{label}
 			</label>
-			{children}
+			{hasError
+				? React.cloneElement(
+						children as React.ReactElement<React.HTMLAttributes<HTMLElement>>,
+						{
+							"aria-describedby": errorId,
+						}
+					)
+				: children}
 			{errors.map((error, idx) =>
 				error?.message ? (
-					<span className="emach-field__error" key={`${error.message}-${idx}`}>
+					<span
+						aria-live="polite"
+						className="emach-field__error"
+						id={idx === 0 ? errorId : undefined}
+						key={`${error.message}-${idx}`}
+						role="alert"
+					>
 						{error.message}
 					</span>
 				) : null
@@ -827,7 +842,7 @@ function ConsentField({
 					{required && (
 						<span
 							aria-label="obrigatório"
-							className="ml-1 text-warning"
+							className="ml-1 text-emach-red-hover"
 							role="img"
 						>
 							*
@@ -839,7 +854,7 @@ function ConsentField({
 				errors.map((error, idx) =>
 					error?.message ? (
 						<p
-							className="mt-1 text-warning text-xs"
+							className="mt-1 text-emach-red-hover text-xs"
 							key={`${error.message}-${idx}`}
 						>
 							{error.message}
