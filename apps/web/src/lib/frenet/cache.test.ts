@@ -8,7 +8,12 @@ vi.mock("@/lib/evlog", () => ({ log: { error: vi.fn(), warn: vi.fn() } }));
 import type { Redis } from "@emach/redis";
 import { getRedis } from "@emach/redis";
 import { log } from "@/lib/evlog";
-import { buildQuoteCacheKey, getCachedQuote, setCachedQuote } from "./cache";
+import {
+	buildQuoteCacheKey,
+	getCachedQuote,
+	setCachedQuote,
+	TTL_SECONDS,
+} from "./cache";
 
 const QUOTE = {
 	negotiate: false,
@@ -105,7 +110,7 @@ describe("cache com Redis (Upstash mockado)", () => {
 		const fake = fakeRedis({});
 		await setCachedQuote("frenet:quote:k2", QUOTE);
 		expect(fake.set).toHaveBeenCalledWith("frenet:quote:k2", QUOTE, {
-			ex: 30 * 60,
+			ex: TTL_SECONDS,
 		});
 	});
 

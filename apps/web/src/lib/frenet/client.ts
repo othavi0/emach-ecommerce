@@ -20,16 +20,19 @@ export async function fetchFrenetQuote(
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 	try {
-		const res = await fetch(`${env.FRENET_BASE_URL}/shipping/quote`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-				token: env.FRENET_TOKEN,
-			},
-			body: JSON.stringify(body),
-			signal: controller.signal,
-		});
+		const res = await fetch(
+			`${env.FRENET_BASE_URL.replace(/\/$/, "")}/shipping/quote`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json",
+					token: env.FRENET_TOKEN,
+				},
+				body: JSON.stringify(body),
+				signal: controller.signal,
+			}
+		);
 		if (!res.ok) {
 			throw new FrenetError(`Frenet respondeu HTTP ${res.status}`);
 		}

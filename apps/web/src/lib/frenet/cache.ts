@@ -13,7 +13,7 @@ export interface CachedQuote {
 // TTL curto: cobre a janela "cliente vê opções → submete → re-quote do
 // assertShippingQuoted", que assim reutiliza EXATAMENTE a cotação exibida
 // (anti-fraude determinístico + 1 chamada Frenet por checkout).
-const TTL_SECONDS = 30 * 60;
+export const TTL_SECONDS = 30 * 60;
 const MEMORY_MAX_KEYS = 500;
 
 const memory = new Map<string, { expiresAt: number; value: CachedQuote }>();
