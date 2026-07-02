@@ -2,9 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // getRedis → null força o caminho in-memory, determinístico mesmo se o .env
 // local tiver Upstash configurado (nunca tocar Redis real em teste).
-vi.mock("@emach/redis", () => ({ getRedis: () => null }));
+vi.mock("@emach/redis", () => ({ getRedis: vi.fn(() => null) }));
 vi.mock("@/lib/evlog", () => ({ log: { error: vi.fn(), warn: vi.fn() } }));
 
+import type { Redis } from "@emach/redis";
+import { getRedis } from "@emach/redis";
+import { log } from "@/lib/evlog";
 import { buildQuoteCacheKey, getCachedQuote, setCachedQuote } from "./cache";
 
 const QUOTE = {
@@ -18,6 +21,11 @@ const QUOTE = {
 		},
 	],
 };
+
+beforeEach(() => {
+	vi.mocked(getRedis).mockReturnValue(null);
+	vi.mocked(log.error).mockClear();
+});
 
 describe("buildQuoteCacheKey", () => {
 	const base = {
@@ -71,5 +79,51 @@ describe("cache in-memory (sem Upstash)", () => {
 		await expect(
 			getCachedQuote("frenet:quote:inexistente")
 		).resolves.toBeNull();
+	});
+});
+
+describe("cache com Redis (Upstash mockado)", () => {
+	function fakeRedis(overrides: {
+		get?: ReturnType<typeof vi.fn>;
+		set?: ReturnType<typeof vi.fn>;
+	}) {
+		const fake = {
+			get: overrides.get ?? vi.fn().mockResolvedValue(null),
+			set: overrides.set ?? vi.fn().mockResolvedValue("OK"),
+		};
+		vi.mocked(getRedis).mockReturnValue(fake as unknown as Redis);
+		return fake;
+	}
+
+	it("get delega ao Redis e retorna o valor", async () => {
+		const fake = fakeRedis({ get: vi.fn().mockResolvedValue(QUOTE) });
+		await expect(getCachedQuote("frenet:quote:k1")).resolves.toEqual(QUOTE);
+		expect(fake.get).toHaveBeenCalledWith("frenet:quote:k1");
+	});
+
+	it("set delega ao Redis com TTL de 30min", async () => {
+		const fake = fakeRedis({});
+		await setCachedQuote("frenet:quote:k2", QUOTE);
+		expect(fake.set).toHaveBeenCalledWith("frenet:quote:k2", QUOTE, {
+			ex: 30 * 60,
+		});
+	});
+
+	it("falha de leitura no Redis → null + log.error (fail-open)", async () => {
+		fakeRedis({ get: vi.fn().mockRejectedValue(new Error("redis down")) });
+		await expect(getCachedQuote("frenet:quote:k3")).resolves.toBeNull();
+		expect(log.error).toHaveBeenCalledWith(
+			expect.objectContaining({ action: "frenet_cache_read_failed" })
+		);
+	});
+
+	it("falha de escrita no Redis → não lança + log.error (fail-open)", async () => {
+		fakeRedis({ set: vi.fn().mockRejectedValue(new Error("redis down")) });
+		await expect(
+			setCachedQuote("frenet:quote:k4", QUOTE)
+		).resolves.toBeUndefined();
+		expect(log.error).toHaveBeenCalledWith(
+			expect.objectContaining({ action: "frenet_cache_write_failed" })
+		);
 	});
 });
