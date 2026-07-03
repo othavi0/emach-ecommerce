@@ -1,6 +1,7 @@
 import type { ToolDetail } from "@emach/db/queries/tools";
 import type { Review } from "@emach/db/schema/reviews";
 import { cn } from "@emach/ui/lib/utils";
+import type { ReactNode } from "react";
 
 import { SectionLabel } from "@/components/section-label";
 
@@ -186,6 +187,43 @@ export function ProductReviews({
 	const mode = reviewLayoutMode(total);
 	const firstReview = reviews[0];
 
+	let lowCountContent: ReactNode;
+	if (firstReview === undefined) {
+		// ?reviewPage fora do alcance com n baixo (URL manipulada).
+		lowCountContent = (
+			<div className="py-12 text-center text-[14px] text-gray-60">
+				Nenhuma avaliação nesta página.
+			</div>
+		);
+	} else if (mode === "single") {
+		lowCountContent = (
+			<TestimonialCell review={firstReview} showStars={false} size="lg" />
+		);
+	} else {
+		lowCountContent = (
+			<div className="grid md:grid-cols-2">
+				{reviews.map((review, index) => (
+					<TestimonialCell
+						className={cn(
+							index % 2 === 0 &&
+								index < reviews.length - 1 &&
+								"md:border-border md:border-r",
+							stretchLast(reviews.length) &&
+								index === reviews.length - 1 &&
+								"md:col-span-2 md:border-border md:border-t",
+							index < reviews.length - 1 &&
+								"max-md:border-border max-md:border-b"
+						)}
+						key={review.id}
+						review={review}
+						showStars
+						size="md"
+					/>
+				))}
+			</div>
+		);
+	}
+
 	return (
 		<section aria-label="Avaliações dos clientes" className="py-14">
 			{/* Largura alinhada ao topo (galeria w-1/2 + buy box w-[480px],
@@ -219,39 +257,7 @@ export function ProductReviews({
 					) : (
 						<div className="grid grid-cols-1 md:grid-cols-[240px_1fr]">
 							<SummaryRail avg={avg} count={stats.count} />
-							{firstReview === undefined ? (
-								// ?reviewPage fora do alcance com n baixo (URL manipulada).
-								<div className="py-12 text-center text-[14px] text-gray-60">
-									Nenhuma avaliação nesta página.
-								</div>
-							) : mode === "single" ? (
-								<TestimonialCell
-									review={firstReview}
-									showStars={false}
-									size="lg"
-								/>
-							) : (
-								<div className="grid md:grid-cols-2">
-									{reviews.map((review, index) => (
-										<TestimonialCell
-											className={cn(
-												index % 2 === 0 &&
-													index < reviews.length - 1 &&
-													"md:border-border md:border-r",
-												stretchLast(reviews.length) &&
-													index === reviews.length - 1 &&
-													"md:col-span-2 md:border-border md:border-t",
-												index < reviews.length - 1 &&
-													"max-md:border-border max-md:border-b"
-											)}
-											key={review.id}
-											review={review}
-											showStars
-											size="md"
-										/>
-									))}
-								</div>
-							)}
+							{lowCountContent}
 						</div>
 					)}
 				</div>
