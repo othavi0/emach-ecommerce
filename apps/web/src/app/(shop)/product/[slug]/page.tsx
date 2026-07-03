@@ -132,11 +132,6 @@ export default async function ProductPage({
 					video={video}
 				/>
 
-				<RelatedProducts
-					categoryPath={detail.primaryCategory?.path ?? null}
-					toolId={detail.tool.id}
-				/>
-
 				<Suspense fallback={<ReviewsSkeleton />}>
 					<ProductReviewsSection
 						pathname={`/product/${slug}`}
@@ -145,6 +140,11 @@ export default async function ProductPage({
 						toolId={detail.tool.id}
 					/>
 				</Suspense>
+
+				<RelatedProducts
+					categoryPath={detail.primaryCategory?.path ?? null}
+					toolId={detail.tool.id}
+				/>
 			</main>
 		</>
 	);
