@@ -143,7 +143,7 @@ export function ProductSpecs({
 	const desktop = buildPlateLayout(n, hasMedia, 4);
 	const mobile = buildPlateLayout(n, false, 2);
 
-	const renderLeftover = (row: number[], cols: 2 | 4) => {
+	const renderLeftover = (row: number[]) => {
 		if (row.length === 0) {
 			return null;
 		}
@@ -231,7 +231,7 @@ export function ProductSpecs({
 									))}
 								</div>
 							))}
-							{renderLeftover(desktop.leftoverRow, 4)}
+							{renderLeftover(desktop.leftoverRow)}
 						</div>
 
 						{/* Mobile: mídia full-width + placa 2 colunas */}
@@ -259,7 +259,7 @@ export function ProductSpecs({
 										))}
 									</div>
 								))}
-								{renderLeftover(mobile.leftoverRow, 2)}
+								{renderLeftover(mobile.leftoverRow)}
 							</div>
 						</div>
 					</>
