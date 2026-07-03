@@ -114,7 +114,9 @@ export default async function ProductPage({
 				<ProductSpecs
 					attributes={detail.attributes}
 					categoryName={primaryCategoryName}
+					images={detail.images}
 					tool={detail.tool}
+					video={video}
 				/>
 
 				<RelatedProducts
