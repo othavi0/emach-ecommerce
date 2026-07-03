@@ -7,9 +7,10 @@ import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { getProductShell } from "@/lib/product-detail";
 
+import { Breadcrumb } from "./_components/breadcrumb";
 import { ProductGallery } from "./_components/product-gallery";
 import { ProductInfo } from "./_components/product-info";
-import { ProductJsonLd } from "./_components/product-json-ld";
+import { BreadcrumbJsonLd, ProductJsonLd } from "./_components/product-json-ld";
 import { ProductReviewsSection } from "./_components/product-reviews-section";
 import { ProductSpecs } from "./_components/product-specs";
 import { RelatedProducts } from "./_components/related-products";
@@ -89,10 +90,22 @@ export default async function ProductPage({
 	return (
 		<>
 			<ProductJsonLd detail={detail} />
+			<BreadcrumbJsonLd
+				category={detail.primaryCategory}
+				productName={detail.tool.name}
+				slug={detail.tool.slug ?? detail.tool.id}
+			/>
 			<SiteHeader />
 
 			<main id="main-content">
-				<div className="flex flex-col items-center gap-8 px-5 py-8 sm:px-8 lg:flex-row lg:items-start lg:justify-center lg:gap-10 lg:px-10">
+				<div className="mx-auto w-[calc(50%_+_480px)] max-w-[calc(100%_-_2.5rem)] pt-6">
+					<Breadcrumb
+						category={detail.primaryCategory}
+						productName={detail.tool.name}
+					/>
+				</div>
+
+				<div className="flex flex-col items-center gap-8 px-5 pt-4 pb-8 sm:px-8 lg:flex-row lg:items-start lg:justify-center lg:gap-10 lg:px-10">
 					<ProductGallery
 						categorySlug={primaryCategorySlug ?? ""}
 						images={detail.images}
