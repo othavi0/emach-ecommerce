@@ -3,7 +3,7 @@
 import type { CategoryNode } from "@emach/db/queries/categories";
 import { Checkbox } from "@emach/ui/components/checkbox";
 import type { VoltageKey } from "../_lib/catalog-filters";
-import { CategoryTree } from "./category-tree";
+import { CategoryDrilldown } from "./category-drilldown";
 
 const VOLTAGE_OPTIONS: VoltageKey[] = ["127V", "220V", "Bivolt", "380V"];
 
@@ -49,9 +49,11 @@ export function FilterPanel({
 	return (
 		<div>
 			<div className="mb-6">
-				<CategoryTree
+				<CategoryDrilldown
 					activeSlug={activeSlug}
+					counts={{}}
 					onSelect={onSelectCategory}
+					totalCount={0}
 					tree={tree}
 				/>
 			</div>
