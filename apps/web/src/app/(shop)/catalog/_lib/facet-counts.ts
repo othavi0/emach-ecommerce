@@ -9,6 +9,9 @@ import { PRICE_RANGES, type PriceRangeKey } from "./price-ranges";
 // dashboard-owned — não importável daqui): se aquele WHERE mudar, este arquivo
 // precisa acompanhar. O teste de integração (consistência com getTools) acusa
 // divergência.
+// O EXISTS de tool_variant.is_default abaixo espelha o INNER JOIN dv (variante
+// default) de getTools — sem ele, tools sem variante default seriam contadas
+// aqui mas excluídas do grid.
 
 export interface FacetCountsInput {
 	categoryId?: string;
@@ -52,7 +55,11 @@ interface PredicateFlags {
 }
 
 function buildPredicates(input: FacetCountsInput, flags: PredicateFlags): SQL {
-	const filters = [STATUS_SQL, sql`t.visible_on_site = true`];
+	const filters = [
+		STATUS_SQL,
+		sql`t.visible_on_site = true`,
+		sql`EXISTS (SELECT 1 FROM tool_variant dv WHERE dv.tool_id = t.id AND dv.is_default = true)`,
+	];
 
 	if (input.search && input.search.trim() !== "") {
 		const term = `%${input.search.trim()}%`;

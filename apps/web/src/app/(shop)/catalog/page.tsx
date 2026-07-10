@@ -144,7 +144,7 @@ async function CatalogResults({ searchParams }: CatalogPageProps) {
 			categoryTree={categoryTree}
 			currentCategoryDescription={currentCategoryDescription}
 			currentCategoryName={currentCategoryName}
-			currentCategorySlug={params.cat ?? null}
+			currentCategorySlug={categoryId ? (params.cat ?? null) : null}
 			facetCounts={facetCounts}
 			onlyPromo={onlyPromo}
 			page={page}
