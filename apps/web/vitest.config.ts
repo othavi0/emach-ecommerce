@@ -14,6 +14,7 @@ const INTEGRATION = [
 	"**/checkout/_actions/revalidate-cart.test.ts",
 	"**/lib/coupons/validate-coupon.test.ts",
 	"**/catalog/_lib/category-tree.test.ts",
+	"**/catalog/_lib/facet-counts.test.ts",
 ];
 
 const unitOnly = process.env.VITEST_UNIT_ONLY === "1";
