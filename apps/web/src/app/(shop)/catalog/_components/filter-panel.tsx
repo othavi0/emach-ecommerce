@@ -90,7 +90,7 @@ export function FilterPanel({
 
 	return (
 		<div>
-			<Accordion defaultValue={FILTER_SECTIONS}>
+			<Accordion defaultValue={FILTER_SECTIONS} multiple>
 				<AccordionItem value="categoria">
 					<AccordionTrigger className="py-3.5 hover:no-underline">
 						<SectionLabel>Categoria</SectionLabel>
@@ -131,7 +131,11 @@ export function FilterPanel({
 										htmlFor={id}
 										key={r.key}
 									>
-										<RadioGroupItem id={id} value={r.key} />
+										<RadioGroupItem
+											className="data-checked:border-near-black data-checked:bg-near-black"
+											id={id}
+											value={r.key}
+										/>
 										<span
 											className={cn(
 												"flex-1",
@@ -239,6 +243,7 @@ export function FilterPanel({
 			>
 				<Switch
 					checked={onlyPromo}
+					className="data-checked:bg-near-black"
 					id={promoId}
 					onCheckedChange={(v) => onTogglePromo(v === true)}
 				/>
