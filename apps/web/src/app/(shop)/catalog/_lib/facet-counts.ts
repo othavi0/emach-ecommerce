@@ -139,9 +139,15 @@ export async function getFacetCounts(
 		return sql`COUNT(*) FILTER (WHERE ${sql.join(conds, sql` AND `)})::int AS ${sql.raw(`"${r.key}"`)}`;
 	});
 
-	const [categoryRes, priceRes, voltageRes, promoRes, totalRes] =
-		await Promise.all([
-			db.execute<{ category_id: string; n: number | string }>(sql`
+	const [
+		categoryRes,
+		activeCategoriesRes,
+		priceRes,
+		voltageRes,
+		promoRes,
+		totalRes,
+	] = await Promise.all([
+		db.execute<{ category_id: string; n: number | string }>(sql`
 				SELECT root.id AS category_id, COUNT(DISTINCT t.id)::int AS n
 				FROM category root
 				JOIN category c ON (c.id = root.id OR c.path LIKE root.path || '%')
@@ -150,7 +156,10 @@ export async function getFacetCounts(
 				WHERE root.is_active = true AND ${exceptCategory}
 				GROUP BY root.id
 			`),
-			db.execute<Record<PriceRangeKey, number | string>>(sql`
+		db.execute<{ id: string }>(sql`
+				SELECT id FROM category WHERE is_active = true
+			`),
+		db.execute<Record<PriceRangeKey, number | string>>(sql`
 				SELECT ${sql.join(priceBuckets, sql`, `)}
 				FROM (
 					SELECT (SELECT MIN(price_amount) FROM tool_variant WHERE tool_id = t.id) AS minp
@@ -158,26 +167,29 @@ export async function getFacetCounts(
 					WHERE ${exceptPrice}
 				) s
 			`),
-			db.execute<{ voltage: VoltageKey; n: number | string }>(sql`
+		db.execute<{ voltage: VoltageKey; n: number | string }>(sql`
 				SELECT tv.voltage::text AS voltage, COUNT(DISTINCT t.id)::int AS n
 				FROM tool t
 				JOIN tool_variant tv ON tv.tool_id = t.id
 				WHERE tv.voltage IS NOT NULL AND ${exceptVoltage}
 				GROUP BY tv.voltage
 			`),
-			db.execute<{ n: number | string }>(sql`
+		db.execute<{ n: number | string }>(sql`
 				SELECT COUNT(*)::int AS n
 				FROM tool t
 				WHERE ${exceptPromo} AND ${PROMO_SQL}
 			`),
-			db.execute<{ n: number | string }>(sql`
+		db.execute<{ n: number | string }>(sql`
 				SELECT COUNT(*)::int AS n
 				FROM tool t
 				WHERE ${exceptCategory}
 			`),
-		]);
+	]);
 
 	const byCategory: Record<string, number> = {};
+	for (const row of activeCategoriesRes.rows) {
+		byCategory[row.id] = 0;
+	}
 	for (const row of categoryRes.rows) {
 		byCategory[row.category_id] = Number(row.n) || 0;
 	}

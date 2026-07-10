@@ -1,11 +1,18 @@
 import { db } from "@emach/db";
-import { getCategoryTree } from "@emach/db/queries/categories";
+import {
+	type CategoryNode,
+	getCategoryTree,
+} from "@emach/db/queries/categories";
 import { getTools } from "@emach/db/queries/tools";
 import { describe, expect, it } from "vitest";
 import { getFacetCounts } from "./facet-counts";
 import { PRICE_RANGES } from "./price-ranges";
 
 const NO_FILTERS = { onlyPromo: false, voltages: [] as never[] };
+
+function collectIds(nodes: CategoryNode[]): string[] {
+	return nodes.flatMap((n) => [n.id, ...collectIds(n.children)]);
+}
 
 describe("getFacetCounts (integração read-only: consistência com getTools)", () => {
 	it("byVoltage bate com getTools filtrado pela mesma voltagem", async () => {
@@ -44,7 +51,11 @@ describe("getFacetCounts (integração read-only: consistência com getTools)", 
 			return; // banco sem categorias: nada a verificar
 		}
 		const { total } = await getTools(db, { categoryId: root.id, limit: 1 });
-		expect(counts.byCategory[root.id] ?? 0).toBe(total);
+		expect(counts.byCategory[root.id]).toBe(total);
+
+		for (const id of collectIds(tree)) {
+			expect(counts.byCategory[id]).toBeTypeOf("number");
+		}
 	});
 
 	it("cross-filtro: byVoltage respeita categoria ativa", async () => {
