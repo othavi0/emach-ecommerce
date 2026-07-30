@@ -1776,9 +1776,13 @@ describe("FALLBACK_BANNERS", () => {
 	it("fallbacks são split-equivalentes: produto mr + cta br, sem texto", () => {
 		for (const banner of FALLBACK_BANNERS) {
 			expect(banner.title).toBeNull();
-			expect(
-				Object.keys(banner.composition?.desktop.elements ?? {}).sort()
-			).toEqual(["cta", "product"]);
+			// Banner["composition"] é o envelope raso do jsonb (Record<string, unknown>);
+			// o shape rico vem do parse — acessar .elements direto não compila.
+			const parsed = compositionSchema.parse(banner.composition);
+			expect(Object.keys(parsed.desktop.elements).sort()).toEqual([
+				"cta",
+				"product",
+			]);
 		}
 	});
 });
@@ -1860,7 +1864,7 @@ Nota de tipo: `HeroBanner["composition"]` é o campo do `Banner` (jsonb raso, nu
 
 - [ ] **Step 4: Emagrecer `hero-carousel.tsx`**
 
-O arquivo mantém APENAS: tipo `HeroBanner`, constantes de autoplay/parallax, o componente `HeroCarousel` (carousel/autoplay/dots/pause/parallax-spring/h1 — **intactos**, incluindo `useIsDesktop`) e o map de slides. Remover: `LAYOUT_CONFIG`, `LayoutConfig`, `CTA_CORNER_RIGHT`/`CTA_CENTER`, `GRADIENT_BY_SIDE`, `CTA_VARIANT_MAP`, `HeroCta`, `resolveMobileBg`, `HeroBackground`, `HeroGlow`, `HeroProduct`, `HeroCountdown`, `HeroSpecs`, `HeroContentBlock`, `HeroSlideContent`, `FALLBACK_BANNERS` local e os imports que ficarem órfãos (`VariantProps`, `ArrowRight`, `Image`, `Link`, `EmachButton`, `formatCountdown`, `resolveHeroSpecs`, `cn`…).
+O arquivo mantém APENAS: tipo `HeroBanner`, constantes de autoplay/parallax, o componente `HeroCarousel` (carousel/autoplay/dots/pause/parallax-spring/h1 — **intactos**, incluindo `useIsDesktop`) e o map de slides. Remover: `LAYOUT_CONFIG`, `LayoutConfig`, `CTA_CORNER_RIGHT`/`CTA_CENTER`, `GRADIENT_BY_SIDE`, `CTA_VARIANT_MAP`, `HeroCta`, `resolveMobileBg`, `HeroBackground`, `HeroGlow`, `HeroProduct`, `HeroCountdown`, `HeroSpecs`, `HeroContentBlock`, `HeroSlideContent`, `FALLBACK_BANNERS` local e os imports que ficarem órfãos (`VariantProps`, `ArrowRight`, `Image`, `Link`, `EmachButton`, `formatCountdown`, `resolveHeroSpecs`…). ATENÇÃO: `cn` NÃO é órfão — o bloco de dots (mantido) usa `cn(...)`; conferir cada import contra o arquivo final antes de remover.
 
 Mudanças pontuais no que fica:
 
@@ -1892,7 +1896,18 @@ export type HeroBanner = Pick<
 
 Imports novos: `import { resolveComposition } from "@/lib/composition/legacy-composition";` · `import { HeroSlide } from "@/components/hero/hero-slide";` · `import { FALLBACK_BANNERS } from "@/components/hero/hero-fallbacks";`
 
-No map de slides, o miolo do `<CarouselItem>` vira (por slide: resolve + `<HeroSlide/>` — spec F4):
+Resolver as compositions UMA vez por render (antes do `h1Index`), e o `h1Index` passa a exigir elemento `title` LIGADO na composition — a coluna `title` preenchida com elemento desligado não renderiza heading nenhum, e apontar o h1 pra esse slide deixaria a página sem h1 (a `<h1 sr-only>` de fallback só entra com `h1Index === -1`):
+
+```tsx
+const compositions = slides.map((b) => resolveComposition(b));
+// Primeiro slide com título VISÍVEL (campo preenchido E elemento ligado) vira h1.
+const h1Index = slides.findIndex(
+	(b, i) =>
+		b.title != null && compositions[i]?.desktop.elements.title !== undefined
+);
+```
+
+No map de slides, o miolo do `<CarouselItem>` vira (composition já resolvida — spec F4):
 
 ```tsx
 {slides.map((banner, index) => (
@@ -1902,7 +1917,7 @@ No map de slides, o miolo do `<CarouselItem>` vira (por slide: resolve + `<HeroS
 	>
 		<HeroSlide
 			banner={banner}
-			composition={resolveComposition(banner)}
+			composition={compositions[index] ?? resolveComposition(banner)}
 			isActive={index === selectedIndex}
 			isDesktop={isDesktop}
 			isFirst={index === 0}
@@ -1915,7 +1930,7 @@ No map de slides, o miolo do `<CarouselItem>` vira (por slide: resolve + `<HeroS
 ))}
 ```
 
-`h1Index`, autoplay, dots, pause, parallax handlers, `<section>`/`<LazyMotion>`: **sem mudança**.
+Autoplay, dots, pause, parallax handlers, `<section>`/`<LazyMotion>`: **sem mudança**. (O `?? resolveComposition(banner)` é só pro `noUncheckedIndexedAccess` — `compositions[index]` sempre existe.)
 
 - [ ] **Step 5: Atualizar o gotcha no `CLAUDE.md`** — no bullet "**Hero mobile ≠ desktop (`hero-carousel.tsx`).**", substituir o item "(1)" por:
 
