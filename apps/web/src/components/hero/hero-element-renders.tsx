@@ -133,19 +133,28 @@ function HeroSpecs({ specs }: { specs: string[] | null }) {
 	);
 }
 
+// Classes estáticas (Tailwind JIT exige literal — sem interpolação de string).
+const TITLE_ALIGN_CLASS: Record<"start" | "center" | "end", string> = {
+	start: "items-start",
+	center: "items-center",
+	end: "items-end",
+};
+
 function HeroTitle({
 	banner,
 	headingTag,
+	align,
 }: {
 	banner: HeroElementBanner;
 	headingTag: "h1" | "h2";
+	align: "start" | "center" | "end";
 }) {
 	if (!banner.title) {
 		return null;
 	}
 	const HeadingTag = headingTag;
 	return (
-		<div className="flex flex-col items-start">
+		<div className={cn("flex flex-col", TITLE_ALIGN_CLASS[align])}>
 			<HeadingTag className="text-balance font-display font-medium text-[clamp(44px,6vw,84px)] text-white uppercase leading-[0.9] tracking-[-0.01em] drop-shadow-[0_3px_18px_rgba(0,0,0,0.7)]">
 				{banner.title}
 			</HeadingTag>
@@ -160,7 +169,11 @@ function HeroTitle({
 export function renderHeroElement(
 	key: Exclude<ElementKey, "product">,
 	banner: HeroElementBanner,
-	opts: { headingTag: "h1" | "h2"; ctaFull: boolean }
+	opts: {
+		headingTag: "h1" | "h2";
+		ctaFull: boolean;
+		align?: "start" | "center" | "end";
+	}
 ): ReactNode {
 	switch (key) {
 		case "badge":
@@ -170,7 +183,13 @@ export function renderHeroElement(
 				</span>
 			) : null;
 		case "title":
-			return <HeroTitle banner={banner} headingTag={opts.headingTag} />;
+			return (
+				<HeroTitle
+					align={opts.align ?? "start"}
+					banner={banner}
+					headingTag={opts.headingTag}
+				/>
+			);
 		case "subtitle":
 			return banner.subtitle ? (
 				<p className="max-w-[44ch] font-sans text-[15px] text-white/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)] lg:text-[17px]">
