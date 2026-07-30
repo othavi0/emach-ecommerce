@@ -63,10 +63,11 @@ export function HeroStackProduct({
 	if (url == null) {
 		return null;
 	}
-	// Box central própria fora do fluxo da pilha (contrato #210): dimensão
-	// fixa, sem escala — centraliza via self-center no flex do slide mobile.
+	// Box absoluto 1:1 com o incumbente mobile (hero-carousel.tsx HeroProduct):
+	// paridade de posição é o critério de aceite, não a aproximação 38/82 do
+	// preview do dashboard (gap conhecido, ver disclaimer). Sem escala.
 	return (
-		<div className="relative h-[38%] w-[82%] self-center lg:hidden">
+		<div className="absolute top-[46%] left-1/2 z-15 h-[52%] w-[92%] -translate-x-1/2 -translate-y-1/2 lg:hidden">
 			<HeroProductMotion url={url} {...motion} />
 		</div>
 	);
