@@ -170,11 +170,13 @@ function HeroPositionedProduct({
 	banner,
 	placement,
 	viewport,
+	mobileProductRenders,
 	...motion
 }: HeroMotion & {
 	banner: HeroSlideBanner;
 	placement: ElementPlacement;
 	viewport: Viewport;
+	mobileProductRenders: boolean;
 }) {
 	const url =
 		viewport === "mobile"
@@ -185,9 +187,14 @@ function HeroPositionedProduct({
 	}
 	// Sem productImageMobileUrl, a camada mobile (posicionada OU empilhada, ver
 	// hero-safe-stack.tsx) cai pro mesmo productImageUrl do desktop — as duas
-	// <Image priority> duplicariam o preload do mesmo asset. A camada desktop
-	// cede (preload=false); mobile é o tráfego majoritário e mantém priority.
-	const preload = viewport === "mobile" || banner.productImageMobileUrl != null;
+	// <Image priority> duplicariam o preload do mesmo asset. Desktop só cede
+	// (preload=false) quando o mobile REALMENTE vai reivindicar esse preload
+	// (mobileProductRenders); produto `{hidden:true}` no mobile não reivindica
+	// nada — desktop mantém priority pra não perder o LCP. Mobile é o tráfego
+	// majoritário e sempre mantém priority.
+	const mobileClaimsSameUrl =
+		mobileProductRenders && banner.productImageMobileUrl == null;
+	const preload = viewport === "mobile" || !mobileClaimsSameUrl;
 	return (
 		<div
 			className={cn(
@@ -272,6 +279,12 @@ export function HeroSlide({
 	...motion
 }: HeroSlideProps) {
 	const partition = partitionMobileElements(composition);
+	// Produto mobile só reivindica preload quando vai de fato renderizar
+	// (empilhado OU posicionado) — `{hidden:true}` deixa o produto fora dos
+	// dois grupos, então ninguém no mobile reivindica.
+	const mobileProductRenders =
+		partition.stacked.includes("product") ||
+		partition.positioned.some(([key]) => key === "product");
 	// Contrato §gradiente: só título/subtítulo contam (specs não). Mesma regra
 	// do h1Index (hero-carousel.tsx): campo preenchido E elemento LIGADO na
 	// composition — sem elemento ligado, sem gradiente (nada visível pra proteger).
@@ -323,6 +336,7 @@ export function HeroSlide({
 						<HeroPositionedProduct
 							banner={banner}
 							key={key}
+							mobileProductRenders={mobileProductRenders}
 							placement={placement}
 							viewport="desktop"
 							{...motion}
@@ -347,6 +361,7 @@ export function HeroSlide({
 					<HeroPositionedProduct
 						banner={banner}
 						key={key}
+						mobileProductRenders={mobileProductRenders}
 						placement={placement}
 						viewport="mobile"
 						{...motion}
