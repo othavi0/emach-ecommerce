@@ -13,7 +13,7 @@ import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import {
 	EmachButton,
@@ -214,8 +214,33 @@ export interface HeroProductMotionProps {
 	isFirst: boolean;
 	parallaxX: MotionValue<number>;
 	parallaxY: MotionValue<number>;
+	// false quando OUTRA camada já renderiza o MESMO asset com priority (ex.:
+	// produto sem override mobile ecoa em desktop + pilha/posicionado mobile) —
+	// evita 2 <link rel=preload> pro mesmo produto no slide ativo. Default true.
+	preload?: boolean;
 	reduceMotion: boolean;
 	url: string;
+}
+
+type ProductImageLoadProps = Pick<
+	ComponentProps<typeof Image>,
+	"fetchPriority" | "loading" | "priority"
+>;
+
+// preload=false cede o preload à outra camada (mobile é o tráfego majoritário
+// do ecommerce — mantém priority). loading="eager" evita virar lazy sem gerar
+// o <link rel=preload> que `priority` cria.
+function productImageLoadProps(
+	isFirst: boolean,
+	preload: boolean
+): ProductImageLoadProps {
+	if (preload) {
+		return { priority: isFirst, fetchPriority: isFirst ? "high" : "auto" };
+	}
+	if (isFirst) {
+		return { loading: "eager" };
+	}
+	return {};
 }
 
 // Miolo do produto: parallax + float + realce de slide ativo — inalterados da
@@ -228,6 +253,7 @@ export function HeroProductMotion({
 	parallaxY,
 	reduceMotion,
 	url,
+	preload = true,
 }: HeroProductMotionProps) {
 	const floatAnimate = reduceMotion ? undefined : { y: [0, -15, 0] };
 	const floatTransition = reduceMotion
@@ -258,12 +284,11 @@ export function HeroProductMotion({
 				<Image
 					alt=""
 					className="object-contain"
-					fetchPriority={isFirst ? "high" : "auto"}
 					fill
-					priority={isFirst}
 					quality={85}
 					sizes="(max-width: 1024px) 92vw, 42vw"
 					src={url}
+					{...productImageLoadProps(isFirst, preload)}
 				/>
 			</m.div>
 		</m.div>
