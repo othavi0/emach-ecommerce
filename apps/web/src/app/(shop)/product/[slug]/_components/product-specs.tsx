@@ -17,10 +17,24 @@ interface ProductSpecsProps {
 }
 
 type Attr = ToolDetail["attributes"][number];
+type AttrOptions = Attr["definition"]["options"];
 
 // Separa "650 W" → número grande + unidade menor. Valores sem unidade
 // numérica ("até 2.800 RPM", "Sim") caem no else e renderizam inteiros.
 const HERO_VALUE = /^([\d.,]+)\s*(\S.*)$/;
+
+/**
+ * `value_text` de select/color guarda o **value** da opção (`com_fio`), não o
+ * rótulo. Quem tem o texto de vitrine é a definição (`{label, value}`) — sem
+ * essa resolução o slug do banco vaza cru na placa.
+ */
+function optionLabel(options: AttrOptions, raw: string): string | null {
+	if (!options) {
+		return null;
+	}
+	const list = options.kind === "select" ? options.options : options.swatches;
+	return list.find((option) => option.value === raw)?.label ?? null;
+}
 
 function fmtAttr(item: Attr): string {
 	const { definition, value } = item;
@@ -36,12 +50,15 @@ function fmtAttr(item: Attr): string {
 			return fmtSpecRange(value.valueNumeric, value.valueNumericMax, unit);
 		case "number":
 			return fmtSpecNumber(value.valueNumeric, unit);
-		case "select": {
+		case "select":
+		case "color": {
 			// Opções de select podem ter unidade ("Diâmetro do disco: 185" + mm).
 			if (!value.valueText) {
 				return "—";
 			}
-			return unit ? `${value.valueText} ${unit}` : value.valueText;
+			const label =
+				optionLabel(definition.options, value.valueText) ?? value.valueText;
+			return unit ? `${label} ${unit}` : label;
 		}
 		default:
 			return value.valueText ?? "—";
