@@ -4,6 +4,7 @@ import { cn } from "@emach/ui/lib/utils";
 import type { ReactNode } from "react";
 import { SectionLabel } from "@/components/section-label";
 import { fmtSpecNumber, fmtSpecRange } from "@/lib/format";
+import { toDescriptionParagraphs } from "./description-paragraphs";
 import { buildPlateLayout, type PlateAnchorCell } from "./plate-layout";
 import { PlateMedia } from "./plate-media";
 
@@ -142,8 +143,9 @@ export function ProductSpecs({
 	const n = sorted.length;
 	const mediaImage = images[1] ?? null;
 	const hasMedia = Boolean(video || mediaImage);
+	const paragraphs = toDescriptionParagraphs(tool.description);
 
-	if (n === 0 && !hasMedia && !tool.description) {
+	if (n === 0 && !hasMedia && paragraphs.length === 0) {
 		return null;
 	}
 
@@ -194,10 +196,20 @@ export function ProductSpecs({
 					)}
 				</div>
 
-				{tool.description && (
-					<p className="mb-7 max-w-[70ch] text-[15px] text-near-black/80 leading-relaxed">
-						{tool.description}
-					</p>
+				{paragraphs.length > 0 && (
+					<div className="mb-7 text-[15px] text-near-black/80 leading-relaxed">
+						{paragraphs.map((paragraph) => (
+							<p
+								className={cn(
+									"first:mt-0",
+									paragraph.tight ? "mt-0.5" : "mt-3"
+								)}
+								key={paragraph.key}
+							>
+								{paragraph.text}
+							</p>
+						))}
+					</div>
 				)}
 
 				{n === 0 ? (
