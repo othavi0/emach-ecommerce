@@ -149,6 +149,16 @@ export function ProductSpecs({
 		return null;
 	}
 
+	// O rótulo do topo nomeia o que vem primeiro. Com descrição, a placa ganha o
+	// dela logo acima — sem isso "Ficha técnica" estaria rotulando prosa.
+	const hasDescription = paragraphs.length > 0;
+	const hasPlate = n > 0 || hasMedia;
+	const leadLabel = hasDescription ? "Descrição" : "Ficha técnica";
+	const sectionLabel =
+		hasDescription && hasPlate
+			? "Descrição e ficha técnica do produto"
+			: `${leadLabel} do produto`;
+
 	const desktop = buildPlateLayout(n, hasMedia, 4);
 	const mobile = buildPlateLayout(n, false, 2);
 
@@ -183,12 +193,12 @@ export function ProductSpecs({
 		);
 
 	return (
-		<section aria-label="Ficha técnica do produto" className="py-14">
+		<section aria-label={sectionLabel} className="py-14">
 			{/* Largura alinhada ao topo (galeria w-1/2 + buy box w-[480px],
 			    centrados) — replica 50vw + 480px, com teto p/ telas estreitas. */}
 			<div className="mx-auto w-[calc(50%_+_480px)] max-w-[calc(100%_-_2.5rem)]">
 				<div className="mb-5 flex items-baseline justify-between gap-6">
-					<SectionLabel tone="accent">Ficha técnica</SectionLabel>
+					<SectionLabel tone="accent">{leadLabel}</SectionLabel>
 					{categoryName && (
 						<span className="font-display font-semibold text-[11.5px] text-gray-60 uppercase tracking-[0.1em]">
 							{categoryName}
@@ -209,6 +219,12 @@ export function ProductSpecs({
 								{paragraph.text}
 							</p>
 						))}
+					</div>
+				)}
+
+				{hasDescription && hasPlate && (
+					<div className="mb-5">
+						<SectionLabel tone="accent">Ficha técnica</SectionLabel>
 					</div>
 				)}
 
