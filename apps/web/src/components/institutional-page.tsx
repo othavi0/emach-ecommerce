@@ -9,6 +9,11 @@ export interface InstitutionalSection {
 
 interface InstitutionalPageProps {
 	children?: React.ReactNode;
+	/**
+	 * Entradas extras do sumário, para seções renderizadas via `children`
+	 * (ex.: a lista de filiais em /entrega). Vão depois de `sections`.
+	 */
+	extraTocItems?: Array<{ id: string; title: string }>;
 	/** Rótulo curto acima do título (Barlow Condensed, uppercase). */
 	label: string;
 	lede: string;
@@ -18,7 +23,12 @@ interface InstitutionalPageProps {
 	updatedAt: string;
 }
 
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 function formatDateBR(iso: string): string {
+	if (!ISO_DATE.test(iso)) {
+		return iso;
+	}
 	const [y, m, d] = iso.split("-");
 	return `${d}/${m}/${y}`;
 }
@@ -30,6 +40,7 @@ function formatDateBR(iso: string): string {
  */
 export function InstitutionalPage({
 	children,
+	extraTocItems,
 	label,
 	lede,
 	sections,
@@ -50,18 +61,22 @@ export function InstitutionalPage({
 						{lede}
 					</p>
 					<p className="mt-6 font-display text-[12px] text-white/45 uppercase tracking-[0.14em]">
-						Atualizado em {formatDateBR(updatedAt)}
+						Atualizado em{" "}
+						<time dateTime={updatedAt}>{formatDateBR(updatedAt)}</time>
 					</p>
 				</PageContainer>
 			</section>
 
 			<PageContainer className="grid grid-cols-1 gap-10 py-12 lg:grid-cols-[240px_minmax(0,1fr)] lg:py-16">
-				<nav aria-label="Sumário" className="hidden lg:block">
-					<div className="pb-4 font-bold font-display text-[12px] uppercase tracking-[0.14em]">
+				<nav aria-labelledby="sumario" className="hidden lg:block">
+					<h2
+						className="pb-4 font-bold font-display text-[12px] uppercase tracking-[0.14em]"
+						id="sumario"
+					>
 						Nesta página
-					</div>
+					</h2>
 					<ol className="sticky top-24 flex flex-col gap-2 border-border border-l pl-4">
-						{sections.map((s) => (
+						{[...sections, ...(extraTocItems ?? [])].map((s) => (
 							<li key={s.id}>
 								<a
 									className="text-[14px] text-gray-60 transition-colors hover:text-near-black"

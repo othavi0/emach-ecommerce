@@ -94,6 +94,7 @@ export default function DeliveryPage() {
 		<>
 			<SiteHeader />
 			<InstitutionalPage
+				extraTocItems={[{ id: "filiais", title: "Onde nos encontrar" }]}
 				label="Entrega"
 				lede={DELIVERY_LEDE}
 				sections={deliverySections}
