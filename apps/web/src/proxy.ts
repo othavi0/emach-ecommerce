@@ -1,5 +1,6 @@
 import { evlogMiddleware } from "evlog/next";
 import { type NextRequest, NextResponse } from "next/server";
+import { legacyCategoryRedirect } from "@/lib/seo/catalog-redirect";
 
 const PROTECTED = ["/dashboard", "/pedidos"];
 
@@ -9,6 +10,14 @@ const runEvlog = evlogMiddleware({
 
 export async function proxy(req: NextRequest) {
 	const { pathname } = req.nextUrl;
+
+	// URL legada de categoria (`/catalog?cat=x`) → rota própria. 308 preserva
+	// método e é tratado como permanente pelo Google.
+	const legacy = legacyCategoryRedirect(req.nextUrl);
+	if (legacy) {
+		return NextResponse.redirect(legacy, 308);
+	}
+
 	// 1ª camada (edge, só existência do cookie); a validação real da sessão fica
 	// no content sob Suspense (requireCurrentClient). Com cacheComponents o shell
 	// é servido com 200, então sem o edge-redirect o cliente deslogado veria o
