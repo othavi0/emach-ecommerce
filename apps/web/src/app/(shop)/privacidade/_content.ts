@@ -27,7 +27,7 @@ export const privacySections: InstitutionalSection[] = [
 			"Sessão: um cookie de login (ecommerce.session_token), com endereço IP e navegador registrados para segurança.",
 			"Pedidos: itens, valores, forma de entrega e o histórico de status.",
 			"Consentimentos: ao fechar um pedido, registramos que você aceitou os termos e esta política, e se optou por receber e-mails de ofertas, com data, versão do texto, IP e navegador.",
-			"Carrinho: fica no seu navegador (localStorage), junto com um identificador aleatório de visitante que não tem seu nome. Usamos isso para entender abandono de carrinho de forma agregada.",
+			"Carrinho: fica no seu navegador (localStorage), junto com um identificador aleatório de visitante. Usamos isso para entender abandono de carrinho de forma agregada. Quando você está logado, esses eventos ficam ligados à sua conta.",
 		],
 	},
 	{
@@ -38,7 +38,7 @@ export const privacySections: InstitutionalSection[] = [
 			"Cumprir o contrato de compra: separar, faturar e entregar o pedido, e responder quando você perguntar sobre ele.",
 			"Obrigação legal: nota fiscal e guarda de documentos fiscais pelo prazo que a lei exige.",
 			"Segurança: detectar acesso indevido à sua conta e fraude em pedidos.",
-			"Ofertas por e-mail: só se você marcou a opção no checkout. Dá para sair a qualquer momento pelo link no rodapé do e-mail.",
+			"Ofertas por e-mail: só se você marcou a opção no checkout. Para parar de receber, peça em qualquer filial.",
 		],
 	},
 	{
@@ -48,9 +48,9 @@ export const privacySections: InstitutionalSection[] = [
 			"Não vendemos dados. Compartilhamos o mínimo com quem precisa para o serviço funcionar:",
 		],
 		bullets: [
-			"Frenet (cotação de frete): recebe o CEP de destino e o peso e as medidas dos volumes. Não recebe seu nome nem documento.",
+			"Frenet (cotação de frete): recebe o CEP de destino, o peso e as medidas dos volumes e o valor declarado do pedido. Não recebe seu nome nem documento.",
 			"Transportadoras: recebem nome, endereço e telefone para entregar o pedido.",
-			"Resend (envio de e-mail): recebe seu e-mail para mandar confirmação de cadastro, redefinição de senha e avisos do pedido, sempre a partir de nao-responder@emachferramentas.com.br.",
+			"Resend (envio de e-mail): recebe seu e-mail para mandar confirmação de cadastro e redefinição de senha, sempre a partir de nao-responder@emachferramentas.com.br.",
 			"Google: só se você escolher entrar com a conta Google.",
 			"Vercel (hospedagem e medição de desempenho): estatísticas de acesso agregadas, sem cookie e sem identificar você.",
 			"Autoridades, quando a lei obrigar.",

@@ -20,9 +20,9 @@ import {
 } from "./_content";
 
 export const metadata: Metadata = {
-	title: "Entrega e retirada",
+	title: "Entrega e filiais",
 	description:
-		"Frete cotado em tempo real por CEP, item grande com frete a combinar, e retirada sem custo nas filiais da EMACH.",
+		"Frete cotado em tempo real por CEP, item grande com frete a combinar, e compra direta nas filiais da EMACH.",
 	alternates: canonicalFor("/entrega"),
 };
 
@@ -55,7 +55,7 @@ async function PickupBranchList() {
 	return (
 		<section className="scroll-mt-24 py-8" id="filiais">
 			<h2 className="font-display font-medium text-[26px] text-near-black leading-tight tracking-[-0.01em]">
-				Onde retirar
+				Onde nos encontrar
 			</h2>
 			<ul className="mt-6 grid gap-4 sm:grid-cols-2">
 				{branches.map((b) => (
@@ -97,7 +97,7 @@ export default function DeliveryPage() {
 				label="Entrega"
 				lede={DELIVERY_LEDE}
 				sections={deliverySections}
-				title="Entrega e retirada"
+				title="Entrega e filiais"
 				updatedAt={DELIVERY_UPDATED_AT}
 			>
 				<Suspense fallback={null}>
