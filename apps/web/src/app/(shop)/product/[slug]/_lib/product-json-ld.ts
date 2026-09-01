@@ -84,12 +84,16 @@ function gtinFrom(barcode: string | null): string | undefined {
 		: undefined;
 }
 
-/** Fim da promoção ativa; sem promoção (ou sem fim) vale um ano. */
+/**
+ * Fim da promoção ativa; sem promoção (ou sem fim) vale um ano. Promoção já
+ * vencida (o cache de 10min pode servir uma) também cai no +1 ano: data passada
+ * em `priceValidUntil` derruba o rich result no Google.
+ */
 export function priceValidUntil(
 	promotion: { endsAt: Date | null } | null,
 	now: Date
 ): string {
-	if (promotion?.endsAt) {
+	if (promotion?.endsAt && promotion.endsAt > now) {
 		return isoDate(promotion.endsAt);
 	}
 	const next = new Date(now);
@@ -116,10 +120,14 @@ function finalPriceAmount(
 	return (discountedCents / 100).toFixed(2);
 }
 
+/**
+ * Product JSON-LD, ou `null` quando não há nada indexável: sem nenhuma Offer e
+ * sem `aggregateRating` o Product é inválido no Rich Results (melhor não emitir).
+ */
 export function buildProductJsonLd(
 	input: ProductJsonLdInput,
 	opts: { baseUrl: string; now: Date }
-): ProductJsonLd {
+): ProductJsonLd | null {
 	const base = opts.baseUrl.replace(TRAILING_SLASHES, "");
 	const { tool, variants, images, stockByVariant, reviewStats } = input;
 	const url = `${base}/product/${tool.slug ?? tool.id}`;
@@ -133,7 +141,7 @@ export function buildProductJsonLd(
 		}
 		const gtin = gtinFrom(v.barcode);
 		offers.push({
-			"@id": `${url}#offer-${v.sku}`,
+			"@id": `${url}#offer-${encodeURIComponent(v.sku)}`,
 			"@type": "Offer",
 			availability: stockByVariant[v.id]
 				? "https://schema.org/InStock"
@@ -149,6 +157,18 @@ export function buildProductJsonLd(
 	}
 
 	const firstOffer = offers[0];
+	const rating =
+		reviewStats.count > 0 && reviewStats.avg !== null
+			? {
+					"@type": "AggregateRating" as const,
+					ratingValue: Number(reviewStats.avg.toFixed(2)),
+					reviewCount: reviewStats.count,
+				}
+			: null;
+
+	if (!(firstOffer || rating)) {
+		return null;
+	}
 
 	return {
 		"@context": "https://schema.org",
@@ -163,15 +183,7 @@ export function buildProductJsonLd(
 		...(firstOffer
 			? { offers: offers.length === 1 ? firstOffer : offers }
 			: {}),
-		...(reviewStats.count > 0 && reviewStats.avg !== null
-			? {
-					aggregateRating: {
-						"@type": "AggregateRating",
-						ratingValue: Number(reviewStats.avg.toFixed(2)),
-						reviewCount: reviewStats.count,
-					},
-				}
-			: {}),
+		...(rating ? { aggregateRating: rating } : {}),
 	};
 }
 

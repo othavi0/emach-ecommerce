@@ -69,6 +69,20 @@ describe("openingHoursFor", () => {
 	it("sem horário cadastrado devolve lista vazia", () => {
 		expect(openingHoursFor(null)).toEqual([]);
 	});
+	it("ignora período aberto sem hora de abertura", () => {
+		const out = openingHoursFor({
+			...hours,
+			weekdays: { ...hours.weekdays, opensAt: null },
+		});
+		expect(out).toEqual([
+			{
+				"@type": "OpeningHoursSpecification",
+				dayOfWeek: ["Saturday"],
+				opens: "08:00",
+				closes: "12:00",
+			},
+		]);
+	});
 });
 
 describe("buildSiteGraph", () => {
@@ -109,10 +123,10 @@ describe("buildSiteGraph", () => {
 			parentOrganization: { "@id": `${BASE}/#organization` },
 			address: {
 				"@type": "PostalAddress",
-				streetAddress: "Rua das Ferramentas, 100",
+				streetAddress: "Rua das Ferramentas, 100, Centro",
 				addressLocality: "Santa Rosa de Viterbo",
 				addressRegion: "SP",
-				postalCode: "14270000",
+				postalCode: "14270-000",
 				addressCountry: "BR",
 			},
 		});
@@ -129,6 +143,23 @@ describe("buildSiteGraph", () => {
 		expect(org).not.toHaveProperty("sameAs");
 		expect(store).not.toHaveProperty("telephone");
 		expect(store).not.toHaveProperty("openingHoursSpecification");
+	});
+
+	it("emite uma HardwareStore por filial, com @id distinto", () => {
+		const graph = buildSiteGraph({
+			baseUrl: BASE,
+			branches: [branch, { ...branch, id: "b2", name: "Filial Norte" }],
+			sameAs: [],
+		});
+		const stores = graph["@graph"].slice(2);
+		expect(stores.map((s) => s["@id"])).toEqual([
+			`${BASE}/#branch-b1`,
+			`${BASE}/#branch-b2`,
+		]);
+		expect(stores.map((s) => s.name)).toEqual([
+			"EMACH Matriz",
+			"EMACH Filial Norte",
+		]);
 	});
 
 	it("aceita baseUrl com barra final sem duplicar barra", () => {

@@ -1,6 +1,6 @@
-import type { ToolDetail } from "@emach/db/queries/tools";
 import { env } from "@emach/env/web";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
+import type { ProductShell } from "@/lib/product-detail";
 import {
 	buildBreadcrumbJsonLd,
 	buildProductJsonLd,
@@ -8,13 +8,18 @@ import {
 
 const BASE_URL = env.NEXT_PUBLIC_SITE_URL;
 
-export function ProductJsonLd({ detail }: { detail: ToolDetail }) {
-	// `new Date()` aqui roda dentro do shell cacheado da PDP (getProductShell,
-	// 10min) — priceValidUntil "congela" por janela, o que é aceitável.
+export function ProductJsonLd({ detail }: { detail: ProductShell }) {
+	// O relógio vem de `getProductShell` (lido dentro do `use cache`): sob
+	// `cacheComponents`, `new Date()` aqui quebraria o prerender da PDP.
+	// priceValidUntil "congela" pela janela de 10min, o que é aceitável.
 	const data = buildProductJsonLd(detail, {
 		baseUrl: BASE_URL,
-		now: new Date(),
+		now: new Date(detail.shellGeneratedAt),
 	});
+	// Sem Offer nem rating não há Product válido — não emite <script>.
+	if (!data) {
+		return null;
+	}
 	return <JsonLdScript data={data} />;
 }
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
 	buildBreadcrumbJsonLd,
 	buildProductJsonLd,
+	type ProductJsonLd,
 	type ProductJsonLdInput,
 	priceValidUntil,
 } from "./product-json-ld";
@@ -37,6 +38,18 @@ const input: ProductJsonLdInput = {
 	variants: [v1, v2],
 };
 
+/** `buildProductJsonLd` pode devolver null; nos casos válidos falha alto. */
+function buildOk(
+	data: ProductJsonLdInput,
+	opts: { baseUrl: string; now: Date }
+): ProductJsonLd {
+	const out = buildProductJsonLd(data, opts);
+	if (out === null) {
+		throw new Error("esperava um Product JSON-LD, veio null");
+	}
+	return out;
+}
+
 describe("priceValidUntil", () => {
 	it("usa o fim da promoção quando existe", () => {
 		expect(
@@ -47,11 +60,16 @@ describe("priceValidUntil", () => {
 		expect(priceValidUntil(null, NOW)).toBe("2027-09-01");
 		expect(priceValidUntil({ endsAt: null }, NOW)).toBe("2027-09-01");
 	});
+	it("promoção já vencida (cache stale) cai no +1 ano", () => {
+		expect(
+			priceValidUntil({ endsAt: new Date("2026-08-01T00:00:00Z") }, NOW)
+		).toBe("2027-09-01");
+	});
 });
 
 describe("buildProductJsonLd", () => {
 	it("monta uma Offer por variante com condição, validade e disponibilidade", () => {
-		const data = buildProductJsonLd(input, { baseUrl: BASE, now: NOW });
+		const data = buildOk(input, { baseUrl: BASE, now: NOW });
 		expect(data).toMatchObject({
 			"@context": "https://schema.org",
 			"@type": "Product",
@@ -94,7 +112,7 @@ describe("buildProductJsonLd", () => {
 	});
 
 	it("aplica a promoção ao preço e ao priceValidUntil", () => {
-		const data = buildProductJsonLd(
+		const data = buildOk(
 			{
 				...input,
 				activePromotion: {
@@ -114,7 +132,7 @@ describe("buildProductJsonLd", () => {
 	});
 
 	it("omite rating sem avaliações e usa id quando não há slug", () => {
-		const data = buildProductJsonLd(
+		const data = buildOk(
 			{
 				...input,
 				reviewStats: { avg: null, count: 0 },
@@ -127,25 +145,55 @@ describe("buildProductJsonLd", () => {
 		expect(offers[0]?.url).toBe(`${BASE}/product/t1`);
 	});
 
-	it("variante sem preço não gera Offer; sem nenhum preço, Product sai sem offers", () => {
-		const one = buildProductJsonLd(
+	it("escapa caracteres do sku no @id da Offer", () => {
+		const data = buildOk(
+			{ ...input, variants: [{ ...v1, sku: "FX 127#a" }] },
+			{ baseUrl: BASE, now: NOW }
+		);
+		expect(data.offers).toMatchObject({
+			"@id": `${BASE}/product/furadeira-x#offer-FX%20127%23a`,
+		});
+	});
+
+	it("variante sem preço não gera Offer", () => {
+		const one = buildOk(
 			{ ...input, variants: [{ ...v1, priceAmount: null }, v2] },
 			{ baseUrl: BASE, now: NOW }
 		);
 		expect(one.offers).toMatchObject({ sku: "FX-220" }); // sobrou uma → objeto
+		expect(one.sku).toBe("FX-127");
+	});
+
+	it("sem nenhuma Offer e sem rating não emite JSON-LD", () => {
 		const none = buildProductJsonLd(
 			{
 				...input,
+				reviewStats: { avg: null, count: 0 },
 				variants: input.variants.map((v) => ({ ...v, priceAmount: null })),
 			},
 			{ baseUrl: BASE, now: NOW }
 		);
-		expect(none).not.toHaveProperty("offers");
-		expect(none.sku).toBe("FX-127");
+		expect(none).toBeNull();
+	});
+
+	it("sem Offer mas com rating, o Product sai sem offers", () => {
+		const data = buildOk(
+			{
+				...input,
+				reviewStats: { avg: 4.5, count: 2 },
+				variants: input.variants.map((v) => ({ ...v, priceAmount: null })),
+			},
+			{ baseUrl: BASE, now: NOW }
+		);
+		expect(data).not.toHaveProperty("offers");
+		expect(data.aggregateRating).toMatchObject({
+			ratingValue: 4.5,
+			reviewCount: 2,
+		});
 	});
 
 	it("gtin só com 8/12/13/14 dígitos", () => {
-		const data = buildProductJsonLd(
+		const data = buildOk(
 			{
 				...input,
 				variants: [
@@ -189,5 +237,20 @@ describe("buildBreadcrumbJsonLd", () => {
 		expect(data.itemListElement[2]?.item).toBe(
 			`${BASE}/catalog?cat=furadeiras`
 		);
+	});
+
+	it("sem categoria fica com 3 itens em sequência", () => {
+		const data = buildBreadcrumbJsonLd({
+			baseUrl: BASE,
+			category: null,
+			productName: "Furadeira X",
+			slug: "furadeira-x",
+		});
+		expect(data.itemListElement.map((i) => i.name)).toEqual([
+			"Início",
+			"Catálogo",
+			"Furadeira X",
+		]);
+		expect(data.itemListElement.map((i) => i.position)).toEqual([1, 2, 3]);
 	});
 });

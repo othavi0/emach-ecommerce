@@ -1,5 +1,5 @@
 import type { BranchBusinessHours } from "@emach/db/schema/inventory";
-import type { BranchRow } from "@/lib/branches";
+import { type BranchRow, formatCep } from "@/lib/branches";
 
 export const ORGANIZATION_NAME = "EMACH Ferramentas";
 
@@ -161,10 +161,17 @@ function buildWebSite(base: string): WebSite {
 }
 
 function buildHardwareStore(base: string, branch: BranchRow): HardwareStore {
-	const streetAddress = [branch.street, branch.streetNumber]
+	// Bairro entra no streetAddress (o schema.org não tem campo próprio) e o CEP
+	// sai formatado, como o Google espera num endereço BR.
+	const streetAddress = [
+		branch.street,
+		branch.streetNumber,
+		branch.neighborhood,
+	]
 		.filter(Boolean)
 		.join(", ");
-	const postalCode = digitsOnly(branch.cep);
+	const postalCode =
+		digitsOnly(branch.cep).length === 8 ? formatCep(branch.cep) : null;
 	const telephone = e164(branch.phone);
 	const hours = openingHoursFor(branch.businessHours);
 	return {
@@ -179,7 +186,7 @@ function buildHardwareStore(base: string, branch: BranchRow): HardwareStore {
 			...(streetAddress ? { streetAddress } : {}),
 			...(branch.city ? { addressLocality: branch.city } : {}),
 			...(branch.state ? { addressRegion: branch.state } : {}),
-			...(postalCode.length === 8 ? { postalCode } : {}),
+			...(postalCode ? { postalCode } : {}),
 		},
 		...(telephone ? { telephone } : {}),
 		...(hours.length > 0 ? { openingHoursSpecification: hours } : {}),
