@@ -14,12 +14,14 @@ import { PageContainer } from "@/components/page-container";
 const navLinkClassName =
 	"rounded-[2px] font-display font-medium text-[14px] text-gray-20 uppercase tracking-[0.06em] no-underline transition-colors duration-150 ease-out hover:text-emach-red-on-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emach-red focus-visible:ring-offset-2 focus-visible:ring-offset-cinema-3";
 
+// TODO: remover os casts `as Route` de /entrega e /privacidade quando as rotas existirem.
 const navLinks: { href: Route; label: string }[] = [
 	{ href: "/catalog", label: "Catálogo" },
-	{ href: "/catalog", label: "Categorias" },
 	{ href: "/catalog?promo=1" as Route, label: "Ofertas" },
 	{ href: "/catalog?sort=newest" as Route, label: "Novidades" },
 	{ href: "/sobre", label: "Sobre" },
+	{ href: "/entrega" as Route, label: "Entrega" },
+	{ href: "/privacidade" as Route, label: "Privacidade" },
 ];
 
 const socialNetworkMeta: Record<
