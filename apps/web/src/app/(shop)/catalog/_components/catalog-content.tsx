@@ -96,6 +96,12 @@ export function CatalogContent({
 		});
 	}
 
+	// Href real das linhas do drilldown: o crawler segue o `<a>`; o clique é
+	// interceptado e vira a mesma navegação client-side do `navigate`.
+	function categoryHrefFor(slug: string | null) {
+		return buildHref(current, { cat: slug, page: null });
+	}
+
 	function clearAll() {
 		startTransition(() => {
 			router.replace("/catalog", { scroll: false });
@@ -190,6 +196,7 @@ export function CatalogContent({
 					</div>
 					<FilterPanel
 						activeSlug={currentCategorySlug}
+						categoryHrefFor={categoryHrefFor}
 						facetCounts={facetCounts}
 						idPrefix="desktop"
 						onApplyPrice={applyPriceFilters}
@@ -398,6 +405,7 @@ export function CatalogContent({
 			>
 				<FilterPanel
 					activeSlug={currentCategorySlug}
+					categoryHrefFor={categoryHrefFor}
 					facetCounts={facetCounts}
 					idPrefix="mobile"
 					onApplyPrice={applyPriceFilters}

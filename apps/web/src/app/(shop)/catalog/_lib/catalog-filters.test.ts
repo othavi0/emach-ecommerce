@@ -25,6 +25,11 @@ describe("buildHref", () => {
 			buildHref(base, { cat: "furadeiras", sort: "relevance", page: 1 })
 		).toBe("/catalog/furadeiras");
 	});
+	it("categoria com page > 1 mantém a página na query", () => {
+		expect(buildHref(base, { cat: "serras", page: 3 })).toBe(
+			"/catalog/serras?page=3"
+		);
+	});
 	it("mantém a categoria atual ao mudar outro filtro", () => {
 		expect(
 			buildHref(
