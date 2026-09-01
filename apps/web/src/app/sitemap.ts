@@ -1,5 +1,4 @@
 import { db } from "@emach/db";
-import { getAllCategorySlugs } from "@emach/db/queries/categories";
 import { getAllToolSlugs } from "@emach/db/queries/tools";
 import { env } from "@emach/env/web";
 import type { MetadataRoute } from "next";
@@ -36,5 +35,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		priority: 0.7,
 	}));
 
-	return [...staticRoutes, ...categoryRoutes, ...productRoutes];
+	return [...staticRoutes, ...productRoutes];
 }
