@@ -10,7 +10,7 @@ export const privacySections: InstitutionalSection[] = [
 		id: "quem-somos",
 		title: "Quem trata os seus dados",
 		paragraphs: [
-			"A EMACH Ferramentas (CNPJ 04.128.615/0001-59) é a controladora dos dados pessoais coletados neste site. Esta página vale para a loja virtual; nas filiais físicas o atendimento é presencial e segue as mesmas regras.",
+			"A EMACH Ferramentas (CNPJ 04.128.615/0001-59) é a controladora dos dados pessoais coletados neste site. Esta página vale para a loja virtual. Nas filiais o atendimento é presencial e segue as mesmas regras.",
 			"Tratamos dados conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018). Se algo aqui não estiver claro, pergunte em qualquer filial: os telefones estão na página Sobre.",
 		],
 	},
@@ -33,9 +33,7 @@ export const privacySections: InstitutionalSection[] = [
 	{
 		id: "para-que-usamos",
 		title: "Para que usamos",
-		paragraphs: [
-			"Cada dado tem um motivo. Se o motivo acabar, o dado também deve acabar.",
-		],
+		paragraphs: ["Usamos os dados para quatro coisas:"],
 		bullets: [
 			"Cumprir o contrato de compra: separar, faturar e entregar o pedido, e responder quando você perguntar sobre ele.",
 			"Obrigação legal: nota fiscal e guarda de documentos fiscais pelo prazo que a lei exige.",
@@ -96,14 +94,14 @@ export const privacySections: InstitutionalSection[] = [
 		id: "seguranca",
 		title: "Como protegemos",
 		paragraphs: [
-			"Senhas são guardadas com hash, nunca em texto. O site roda só em HTTPS. O acesso ao banco de dados é restrito à equipe que precisa dele para atender você, e cada alteração em dados de cliente fica registrada em um log de auditoria.",
+			"Guardamos senhas com hash, nunca em texto puro. O site roda só em HTTPS. Só a equipe que atende você acessa o banco de dados.",
 		],
 	},
 	{
 		id: "mudancas",
 		title: "Mudanças nesta política",
 		paragraphs: [
-			"Quando mudar algo relevante, atualizamos a data no topo desta página e, se a mudança afetar como usamos seus dados, avisamos por e-mail antes de valer.",
+			"Quando mudar algo relevante, atualizamos a data no topo desta página. Vale conferir de vez em quando.",
 		],
 	},
 ];

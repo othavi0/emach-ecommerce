@@ -39,7 +39,7 @@ export const deliverySections: InstitutionalSection[] = [
 	},
 	{
 		id: "duvidas",
-		title: "Ficou alguma dúvida",
+		title: "Ficou dúvida?",
 		paragraphs: [
 			"Fale com qualquer filial. Os telefones e horários estão na página Sobre e na lista abaixo.",
 		],
