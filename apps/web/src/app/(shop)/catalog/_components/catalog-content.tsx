@@ -7,7 +7,7 @@ import { cn } from "@emach/ui/lib/utils";
 import { Grid3x3, List, SlidersHorizontal } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { EmachButton } from "@/components/emach-button";
 import { PageContainer } from "@/components/page-container";
@@ -66,7 +66,6 @@ export function CatalogContent({
 	voltagesByTool,
 }: CatalogContentProps) {
 	const router = useRouter();
-	const pathname = usePathname();
 	const [isPending, startTransition] = useTransition();
 	const [view, setView] = useState<"grid" | "list">("grid");
 	const [filterOpen, setFilterOpen] = useState(false);
@@ -91,8 +90,7 @@ export function CatalogContent({
 	const activeFilters = deriveActiveFilters(current);
 
 	function navigate(updates: FilterUpdate) {
-		const href =
-			`${pathname}${buildHref(current, { ...updates, page: null })}` as Route;
+		const href = buildHref(current, { ...updates, page: null }) as Route;
 		startTransition(() => {
 			router.replace(href, { scroll: false });
 		});
@@ -100,13 +98,12 @@ export function CatalogContent({
 
 	function clearAll() {
 		startTransition(() => {
-			router.replace(pathname as Route, { scroll: false });
+			router.replace("/catalog", { scroll: false });
 		});
 	}
 
 	function navigatePage(nextPage: number) {
-		const href =
-			`${pathname}${buildHref(current, { page: nextPage })}` as Route;
+		const href = buildHref(current, { page: nextPage }) as Route;
 		startTransition(() => {
 			router.replace(href, { scroll: true });
 		});
