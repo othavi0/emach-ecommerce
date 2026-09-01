@@ -27,6 +27,17 @@ describe("legacyCategoryRedirect", () => {
 		).toBeNull();
 		expect(legacyCategoryRedirect(new URL(`${ORIGIN}/?cat=x`))).toBeNull();
 	});
+	it("dot-segment não redireciona pra fora de /catalog/", () => {
+		expect(
+			legacyCategoryRedirect(new URL(`${ORIGIN}/catalog?cat=..`))
+		).toBeNull();
+		expect(
+			legacyCategoryRedirect(new URL(`${ORIGIN}/catalog?cat=.`))
+		).toBeNull();
+		expect(
+			legacyCategoryRedirect(new URL(`${ORIGIN}/catalog?cat=%2E%2E`))
+		).toBeNull();
+	});
 	it("escapa slug malicioso", () => {
 		const out = legacyCategoryRedirect(
 			new URL(`${ORIGIN}/catalog?cat=..%2F..%2Fadmin`)

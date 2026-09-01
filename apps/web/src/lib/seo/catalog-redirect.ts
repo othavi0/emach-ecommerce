@@ -12,6 +12,11 @@ export function legacyCategoryRedirect(url: URL): URL | null {
 	}
 	const next = new URL(url);
 	next.pathname = `/catalog/${encodeURIComponent(cat)}`;
+	// O setter de `pathname` normaliza dot-segments: `cat=..` viraria `/` e o
+	// 308 mandaria a categoria legada pra raiz do site. Nesse caso não redireciona.
+	if (!next.pathname.startsWith("/catalog/") || next.pathname === "/catalog/") {
+		return null;
+	}
 	next.searchParams.delete("cat");
 	return next;
 }

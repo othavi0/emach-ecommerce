@@ -15,15 +15,26 @@ const VALID_VOLTAGES: readonly VoltageKey[] = [
 	"380V",
 ];
 
+/**
+ * Um param pode chegar repetido (`?q=a&q=b`) — o Next entrega array nesse caso.
+ * Tipar como string pura fazia `q.trim()` estourar e derrubar a listagem.
+ */
+type Param = string | string[] | undefined;
+
 export interface CatalogSearchParams {
-	cat?: string;
-	page?: string;
-	pmax?: string;
-	pmin?: string;
-	promo?: string;
-	q?: string;
-	sort?: string;
-	voltage?: string;
+	cat?: Param;
+	page?: Param;
+	pmax?: Param;
+	pmin?: Param;
+	promo?: Param;
+	q?: Param;
+	sort?: Param;
+	voltage?: Param;
+}
+
+/** Primeira ocorrência de um param repetido. */
+function first(value: Param): string | undefined {
+	return Array.isArray(value) ? value[0] : value;
 }
 
 export interface ParsedCatalogParams {
@@ -67,16 +78,16 @@ function parsePositiveInt(value: string | undefined): number | undefined {
 export function parseCatalogSearchParams(
 	params: CatalogSearchParams
 ): ParsedCatalogParams {
-	const q = params.q ?? "";
+	const q = first(params.q) ?? "";
 	const trimmed = q.trim();
 	return {
-		onlyPromo: params.promo === "1",
-		page: Math.max(1, parsePositiveInt(params.page) ?? 1),
-		priceMax: parsePositiveInt(params.pmax),
-		priceMin: parsePositiveInt(params.pmin),
+		onlyPromo: first(params.promo) === "1",
+		page: Math.max(1, parsePositiveInt(first(params.page)) ?? 1),
+		priceMax: parsePositiveInt(first(params.pmax)),
+		priceMin: parsePositiveInt(first(params.pmin)),
 		q,
 		search: trimmed ? trimmed : undefined,
-		sort: parseSort(params.sort),
-		voltages: parseVoltages(params.voltage),
+		sort: parseSort(first(params.sort)),
+		voltages: parseVoltages(first(params.voltage)),
 	};
 }

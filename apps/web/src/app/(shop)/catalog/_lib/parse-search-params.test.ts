@@ -47,6 +47,17 @@ describe("parseCatalogSearchParams", () => {
 			search: "serra",
 		});
 	});
+	it("param repetido (array) usa a primeira ocorrência", () => {
+		const out = parseCatalogSearchParams({
+			q: ["a", "b"],
+			voltage: ["127V", "220V"],
+			page: ["3", "9"],
+		});
+		expect(out.q).toBe("a");
+		expect(out.search).toBe("a");
+		expect(out.voltages).toEqual(["127V"]);
+		expect(out.page).toBe(3);
+	});
 	it("promo=1 liga onlyPromo", () => {
 		expect(parseCatalogSearchParams({ promo: "1" }).onlyPromo).toBe(true);
 		expect(parseCatalogSearchParams({ promo: "true" }).onlyPromo).toBe(false);
