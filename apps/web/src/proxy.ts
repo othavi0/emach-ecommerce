@@ -8,7 +8,10 @@ const runEvlog = evlogMiddleware({
 	exclude: ["/api/auth/**", "/_next/**", "/favicon/**"],
 });
 
-export async function proxy(req: NextRequest) {
+// Retorno anotado como `Response` (super-tipo de `NextResponse`): o `evlog`
+// tipa a resposta do middleware estruturalmente (só `headers`), então sem a
+// anotação a união perde `status` pra quem consome o proxy. Só tipos mudam.
+export async function proxy(req: NextRequest): Promise<Response> {
 	const { pathname } = req.nextUrl;
 
 	// URL legada de categoria (`/catalog?cat=x`) → rota própria. 308 preserva
@@ -44,7 +47,8 @@ export async function proxy(req: NextRequest) {
 		}
 	}
 
-	return await runEvlog(req);
+	// evlog entrega a Response real do middleware, mas declara só `headers`.
+	return (await runEvlog(req)) as Response;
 }
 
 export const config = {
