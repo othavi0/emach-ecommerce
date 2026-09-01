@@ -36,19 +36,30 @@ export async function generateMetadata({
 	const title = category.name;
 	const description =
 		category.description ?? defaultCategoryDescription(category.name);
-	const path = `/catalog/${cat}`;
+	// Canonical pelo slug canônico da categoria, não pelo `cat` cru da URL.
+	const path = `/catalog/${category.slug}`;
+	// `openGraph`/`twitter` no filho SUBSTITUEM o do root (não há merge
+	// profundo): repetir imagem, locale e sufixo do título aqui é obrigatório.
+	const ogTitle = `${title} · EMACH`;
 	return {
 		title,
 		description,
 		alternates: canonicalFor(path),
 		openGraph: {
-			title,
+			title: ogTitle,
 			description,
 			type: "website",
 			url: path,
 			siteName: "EMACH",
+			locale: "pt_BR",
+			images: ["/images/og-default.png"],
 		},
-		twitter: { card: "summary_large_image", title, description },
+		twitter: {
+			card: "summary_large_image",
+			title: ogTitle,
+			description,
+			images: ["/images/og-default.png"],
+		},
 	};
 }
 
