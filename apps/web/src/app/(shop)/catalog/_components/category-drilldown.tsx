@@ -6,6 +6,7 @@ import { ArrowLeft, ChevronDown } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { deriveDrilldownLevel } from "../_lib/drilldown-level";
+import { isModifiedClick } from "../_lib/is-modified-click";
 
 interface CategoryDrilldownProps {
 	activeSlug: string | null;
@@ -44,6 +45,10 @@ export function CategoryDrilldown({
 					className="flex min-h-11 cursor-pointer items-center gap-1.5 px-2 py-1 text-left text-[13px] text-gray-60 transition-colors hover:text-near-black lg:min-h-9"
 					href={hrefFor(level.back.slug) as Route}
 					onClick={(e) => {
+						// ctrl/cmd/shift/alt e botão do meio ficam com o browser (nova aba).
+						if (isModifiedClick(e)) {
+							return;
+						}
 						e.preventDefault();
 						onSelect(level.back?.slug ?? null);
 					}}
@@ -87,6 +92,9 @@ export function CategoryDrilldown({
 						href={hrefFor(row.slug) as Route}
 						key={row.id}
 						onClick={(e) => {
+							if (isModifiedClick(e)) {
+								return;
+							}
 							e.preventDefault();
 							onSelect(row.slug);
 						}}
