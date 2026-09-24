@@ -145,7 +145,6 @@ function buildInput(
 ): CreateOrderInput {
 	return {
 		name: "Cliente Teste",
-		email: "cliente@test.local",
 		phone: "11999999999",
 		document: String(Date.now()).padStart(11, "0").slice(-11),
 		addressId: null,
