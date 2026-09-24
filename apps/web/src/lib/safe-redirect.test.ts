@@ -8,7 +8,7 @@ describe("safeRedirect", () => {
 		["/dashboard/pedidos?x=1", "/dashboard/pedidos?x=1"],
 		["/checkout", "/checkout"],
 		["/", "/"],
-		["/product/furadeira-123#avaliacoes", "/product/furadeira-123#avaliacoes"],
+		["/product/parafusadeira-efp21", "/product/parafusadeira-efp21"],
 	])("aceita caminho relativo da mesma origem: %j", (raw, expected) => {
 		expect(safeRedirect(raw, FALLBACK)).toBe(expected);
 	});
@@ -26,6 +26,9 @@ describe("safeRedirect", () => {
 		["/dash board"],
 		["/\u0000/evil.com"],
 		["dashboard"],
+		["/product/furadeira-123#avaliacoes"],
+		["/busca%20x"],
+		["/a:b"],
 		[""],
 	])("rejeita e devolve o fallback: %j", (raw) => {
 		expect(safeRedirect(raw, FALLBACK)).toBe(FALLBACK);
