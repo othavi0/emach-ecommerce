@@ -41,6 +41,9 @@ export async function searchToolsAction(
 		}
 
 		const tools = await searchTools(db, trimmed, 8);
+		if (tools.length === 0) {
+			return { ok: true, data: [] };
+		}
 		const promos = await fetchAutoPromosByToolId(
 			db,
 			tools.map((t) => t.id),
