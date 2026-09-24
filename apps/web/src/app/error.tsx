@@ -9,10 +9,10 @@ import { PageContainer } from "@/components/page-container";
 
 export default function RootError({
 	error,
-	unstable_retry,
+	retry,
 }: {
 	error: Error & { digest?: string };
-	unstable_retry: () => void;
+	retry: () => void;
 }) {
 	useEffect(() => {
 		log.error({
@@ -36,7 +36,7 @@ export default function RootError({
 				segundos. Se o problema continuar, volte para a loja.
 			</p>
 			<div className="mt-8 flex flex-wrap justify-center gap-3">
-				<EmachButton onClick={unstable_retry} size="lg" variant="primary">
+				<EmachButton onClick={retry} size="lg" variant="primary">
 					Tentar de novo
 				</EmachButton>
 				<Link

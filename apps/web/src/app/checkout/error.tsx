@@ -8,10 +8,10 @@ import { EmachButton, emachButtonVariants } from "@/components/emach-button";
 
 export default function CheckoutError({
 	error,
-	unstable_retry,
+	retry,
 }: {
 	error: Error & { digest?: string };
-	unstable_retry: () => void;
+	retry: () => void;
 }) {
 	useEffect(() => {
 		log.error({
@@ -23,7 +23,7 @@ export default function CheckoutError({
 	}, [error]);
 
 	return (
-		<main className="mx-auto flex w-full max-w-5xl flex-col items-start px-4 py-24 sm:px-6 lg:px-10">
+		<div className="mx-auto flex w-full max-w-5xl flex-col items-start px-4 py-24 sm:px-6 lg:px-10">
 			<h1 className="text-balance font-display font-medium text-[36px] text-near-black leading-[1.05]">
 				Não foi possível carregar o checkout.
 			</h1>
@@ -33,7 +33,7 @@ export default function CheckoutError({
 				tarde.
 			</p>
 			<div className="mt-8 flex flex-wrap gap-3">
-				<EmachButton onClick={unstable_retry} size="lg" variant="primary">
+				<EmachButton onClick={retry} size="lg" variant="primary">
 					Tentar de novo
 				</EmachButton>
 				<Link
@@ -48,6 +48,6 @@ export default function CheckoutError({
 					Código do erro: {error.digest}
 				</p>
 			) : null}
-		</main>
+		</div>
 	);
 }

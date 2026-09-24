@@ -23,10 +23,10 @@ const barlowCondensed = Barlow_Condensed({
 // O link para a loja é <a> puro para forçar um carregamento completo.
 export default function GlobalError({
 	error,
-	unstable_retry,
+	retry,
 }: {
 	error: Error & { digest?: string };
-	unstable_retry: () => void;
+	retry: () => void;
 }) {
 	useEffect(() => {
 		log.error({
@@ -52,7 +52,7 @@ export default function GlobalError({
 						problema continuar, volte para a página inicial.
 					</p>
 					<div className="mt-8 flex flex-wrap justify-center gap-3">
-						<EmachButton onClick={unstable_retry} size="lg" variant="primary">
+						<EmachButton onClick={retry} size="lg" variant="primary">
 							Tentar de novo
 						</EmachButton>
 						<a
