@@ -179,6 +179,7 @@ describe("placeOrder (multi-filial)", () => {
 				input,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 
 			const [ord] = await tx
@@ -230,6 +231,7 @@ describe("placeOrder (multi-filial)", () => {
 				input,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 				shippingUnverified: true,
 			});
 
@@ -251,6 +253,7 @@ describe("placeOrder (multi-filial)", () => {
 				input,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 
 			const [ord] = await tx
@@ -286,6 +289,7 @@ describe("placeOrder (multi-filial)", () => {
 					input,
 					ipAddress: null,
 					userAgent: null,
+					verifiedShippingCents: null,
 				})
 			).rejects.toThrow(RE_ESTOQUE);
 		});
@@ -302,6 +306,7 @@ describe("placeOrder (multi-filial)", () => {
 					input,
 					ipAddress: null,
 					userAgent: null,
+					verifiedShippingCents: null,
 				})
 			).rejects.toThrow(RE_ESTOQUE);
 		});
@@ -322,6 +327,7 @@ describe("placeOrder (multi-filial)", () => {
 					input,
 					ipAddress: null,
 					userAgent: null,
+					verifiedShippingCents: null,
 				})
 			).rejects.toThrow(RE_ESTOQUE);
 
@@ -354,12 +360,14 @@ describe("placeOrder (multi-filial)", () => {
 				input: input1,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 			const r2 = await placeOrder(tx, {
 				clientId: otherClientId,
 				input: input2,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 
 			expect(r1.orderId).toBeTruthy();
@@ -395,6 +403,7 @@ describe("placeOrder (multi-filial)", () => {
 				input,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 
 			await expect(call).rejects.toThrow(RE_DOC_DUP);
@@ -429,6 +438,7 @@ describe("placeOrder (cupom)", () => {
 				input,
 				ipAddress: null,
 				userAgent: null,
+				verifiedShippingCents: null,
 			});
 
 			const [ord] = await tx
@@ -471,7 +481,13 @@ describe("placeOrder (cupom)", () => {
 			// senão createOrderAction vazaria o motivo real ("esgotado") e contornaria
 			// o controle do apply-coupon.
 			await expect(
-				placeOrder(tx, { clientId, input, ipAddress: null, userAgent: null })
+				placeOrder(tx, {
+					clientId,
+					input,
+					ipAddress: null,
+					userAgent: null,
+					verifiedShippingCents: null,
+				})
 			).rejects.toThrow(RE_COUPON_INVALID);
 		});
 	});
@@ -512,7 +528,13 @@ describe("placeOrder (cupom)", () => {
 			}
 			const input = { ...base, couponCode: "CUPOM" };
 			await expect(
-				placeOrder(tx, { clientId, input, ipAddress: null, userAgent: null })
+				placeOrder(tx, {
+					clientId,
+					input,
+					ipAddress: null,
+					userAgent: null,
+					verifiedShippingCents: null,
+				})
 			).rejects.toThrow(RE_COUPON_NOT_COVER);
 		});
 	});

@@ -516,7 +516,7 @@ export async function placeOrder(
 		// Preço da opção casada pelo assertShippingQuoted. null quando o frete não
 		// foi verificado (fail-open ou sem CEP): aí vale o do input, já marcado
 		// `shippingUnverified` p/ revisão do staff.
-		verifiedShippingCents?: number | null;
+		verifiedShippingCents: number | null;
 	}
 ): Promise<{ orderId: string; orderNumber: string }> {
 	const {
@@ -527,7 +527,7 @@ export async function placeOrder(
 		shippingUnverified = false,
 		shippingMethod = null,
 		shippingServiceCode = null,
-		verifiedShippingCents = null,
+		verifiedShippingCents,
 	} = params;
 
 	const { lines, autoPromoToolIds } = await prepareLines(tx, input);

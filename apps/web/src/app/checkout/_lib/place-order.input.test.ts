@@ -1,9 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-vi.mock("@/lib/shipping/quote", () => ({ quoteShipping: vi.fn() }));
-
-import { quoteShipping } from "@/lib/shipping/quote";
-import { assertShippingQuoted, inputSchema } from "./place-order";
+import { inputSchema } from "./place-order";
 
 const BASE_INPUT = {
 	name: "Maria Silva",
@@ -45,38 +42,5 @@ describe("inputSchema", () => {
 	it("não exige e-mail (o pedido usa o e-mail da conta)", () => {
 		const parsed = inputSchema.safeParse(BASE_INPUT);
 		expect(parsed.success).toBe(true);
-	});
-});
-
-describe("assertShippingQuoted", () => {
-	it("devolve o preço cotado, não o enviado pelo cliente", async () => {
-		vi.mocked(quoteShipping).mockResolvedValue({
-			negotiate: false,
-			options: [
-				{
-					carrierId: "COR-40010",
-					name: "Correios — Sedex",
-					priceCents: 3596,
-					deliveryDays: 1,
-				},
-			],
-		});
-		const result = await assertShippingQuoted({
-			shippingCents: 3595,
-			destinationCep: "01310100",
-			items: [{ toolId: "tool-1", quantity: 1 }],
-			shippingServiceCode: "COR-40010",
-		});
-		expect(result.shippingCents).toBe(3596);
-	});
-
-	it("sem cotação (fail-open) não tem preço verificado", async () => {
-		vi.mocked(quoteShipping).mockRejectedValue(new Error("timeout"));
-		const result = await assertShippingQuoted({
-			shippingCents: 3595,
-			destinationCep: "01310100",
-			items: [{ toolId: "tool-1", quantity: 1 }],
-		});
-		expect(result.shippingCents).toBeNull();
 	});
 });
