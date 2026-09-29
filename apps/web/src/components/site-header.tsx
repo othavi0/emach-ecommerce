@@ -11,12 +11,12 @@ import { CartSheet } from "@/components/cart-sheet";
 import { HeaderNav } from "@/components/header-nav";
 import { MobileMenu } from "@/components/mobile-menu";
 import { SearchOverlay } from "@/components/search-overlay";
-import { useCart } from "@/lib/cart-context";
+import { useCart, useCartSheet } from "@/lib/cart-context";
 
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 	const { totalCount } = useCart();
 	const [searchOpen, setSearchOpen] = useState(false);
-	const [cartOpen, setCartOpen] = useState(false);
+	const { open: cartOpen, setOpen: setCartOpen } = useCartSheet();
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [pulse, setPulse] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
