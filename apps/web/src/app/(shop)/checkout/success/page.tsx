@@ -7,6 +7,7 @@ import {
 } from "@/app/(shop)/pedidos/_components/order-received";
 import { EmachLinkButton } from "@/components/emach-button";
 import { SiteHeader } from "@/components/site-header";
+import { parseOrderNumber } from "@/lib/orders/order-number";
 
 export const metadata: Metadata = {
 	title: "Pedido recebido",
@@ -58,5 +59,6 @@ export default function CheckoutSuccessPage({
 
 async function SuccessOrderNumber({ searchParams }: SuccessPageProps) {
 	const { order } = await searchParams;
-	return order ? <OrderNumber number={order} /> : null;
+	const number = parseOrderNumber(order);
+	return number ? <OrderNumber number={number} /> : null;
 }
