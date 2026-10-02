@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 
 import { ContactLink } from "@/components/contact-link";
 import { useSession } from "@/lib/auth-client";
-import { isAuthPath } from "@/lib/safe-redirect";
+import { loginHref } from "@/lib/safe-redirect";
 import type { StoreNav } from "@/lib/store-nav";
 import { useOverlay } from "@/lib/use-overlay";
 import { useSignOut } from "@/lib/use-sign-out";
@@ -165,11 +165,7 @@ export function MobileMenu({ nav, open, onClose }: MobileMenuProps) {
 					) : (
 						<Link
 							className={rowClass}
-							href={
-								isAuthPath(pathname)
-									? { pathname: "/login" }
-									: { pathname: "/login", query: { redirect: pathname } }
-							}
+							href={loginHref(pathname)}
 							onClick={onClose}
 						>
 							Entrar ou criar conta

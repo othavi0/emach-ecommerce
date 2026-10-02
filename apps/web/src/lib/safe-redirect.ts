@@ -11,14 +11,36 @@ const SAFE_PATH_RE = /^\/(?!\/|\\|%2f|%5c)[\w\-.+/@]*(?:\?[\w\-.+/=&%@]*)?$/;
 const AUTH_PATH_RE =
 	/^\/(?:login|esqueci-senha|redefinir-senha|verificar-email)\/?(?:\?|$)/;
 
-/** Caminho (com ou sem query) de uma das telas de auth do grupo (auth). */
-export function isAuthPath(path: string): boolean {
-	return AUTH_PATH_RE.test(path);
+const REPEATED_SLASHES_RE = /\/{2,}/g;
+
+/**
+ * Caminho seguro e resolvido, ou null. O texto cru passa pela regex antes do
+ * parser: `//login` viraria host. Depois `.`, `..` e barras repetidas saem, e o
+ * resultado passa de novo pelas duas regex, para `/x/../login` não escapar.
+ */
+function toSafePath(raw: string | null | undefined): string | null {
+	if (!(raw && SAFE_PATH_RE.test(raw))) {
+		return null;
+	}
+	const url = new URL(raw, "http://local");
+	const path = `${url.pathname.replace(REPEATED_SLASHES_RE, "/")}${url.search}`;
+	return SAFE_PATH_RE.test(path) && !AUTH_PATH_RE.test(path) ? path : null;
 }
 
 export function safeRedirect(
 	raw: string | null | undefined,
 	fallback: string
 ): string {
-	return raw && SAFE_PATH_RE.test(raw) && !isAuthPath(raw) ? raw : fallback;
+	return toSafePath(raw) ?? fallback;
+}
+
+/** Link "Entrar": leva o caminho atual só quando o login vai aceitá-lo. */
+export function loginHref(pathname: string): {
+	pathname: "/login";
+	query?: { redirect: string };
+} {
+	const redirect = toSafePath(pathname);
+	return redirect
+		? { pathname: "/login", query: { redirect } }
+		: { pathname: "/login" };
 }

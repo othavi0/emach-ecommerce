@@ -15,7 +15,7 @@ import { LogOut, Package, User, UserCog } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
-import { isAuthPath } from "@/lib/safe-redirect";
+import { loginHref } from "@/lib/safe-redirect";
 import { useSignOut } from "@/lib/use-sign-out";
 
 const WHITESPACE_RE = /\s+/;
@@ -36,11 +36,7 @@ export function AccountMenu() {
 		return (
 			<Link
 				className="flex min-h-[52px] items-center gap-2.5 rounded-[3px] px-3 text-ink no-underline hover:bg-canteiro"
-				href={
-					isAuthPath(pathname)
-						? { pathname: "/login" }
-						: { pathname: "/login", query: { redirect: pathname } }
-				}
+				href={loginHref(pathname)}
 			>
 				<User aria-hidden="true" className="size-6" />
 				<span>
