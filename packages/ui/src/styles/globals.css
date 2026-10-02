@@ -176,6 +176,9 @@
 .emach-input:focus,
 .emach-select:focus,
 .emach-textarea:focus {
+	/* Transparente na tela; em forced-colors o navegador pinta e o foco aparece. */
+	outline: 2px solid transparent;
+	outline-offset: 2px;
 	border-color: var(--ink);
 	box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 18%, transparent);
 }
