@@ -69,7 +69,7 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 						Ver detalhes
 					</EmachLinkButton>
 					{isPending ? (
-						<EmachLinkButton href={pagarHref} variant="cta">
+						<EmachLinkButton href={pagarHref} variant="dark">
 							Pagar agora
 						</EmachLinkButton>
 					) : null}
