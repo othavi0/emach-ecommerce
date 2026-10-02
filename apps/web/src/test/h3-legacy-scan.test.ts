@@ -63,6 +63,11 @@ const FIXTURES: readonly [string, string, string][] = [
 		'className="text-destructive"',
 		'className="text-error-text"',
 	],
+	[
+		"emach-bg-placeholder",
+		'className="emach-bg-placeholder"',
+		'className="bg-well"',
+	],
 ];
 
 describe("scanSource", () => {

@@ -3,8 +3,8 @@ import { join, resolve } from "node:path";
 
 /**
  * Scanner de tokens visuais anteriores ao H3. Só testes importam este módulo
- * (lê o disco). Cada unidade da fase 2 cria um h3-legacy.test.ts na própria
- * pasta com a lista dos seus arquivos e espera zero achados.
+ * (lê o disco). `h3-legacy.global.test.ts` varre todo o `src` contra a lista
+ * de exceções.
  */
 
 export interface LegacyHit {
@@ -38,6 +38,7 @@ export const LEGACY_PATTERNS: ReadonlyArray<{ re: RegExp; token: string }> = [
 	{ token: "emach-ghost-btn", re: /emach-ghost-btn/ },
 	{ token: "text-success", re: /\btext-success\b/ },
 	{ token: "text-destructive", re: /\btext-destructive\b/ },
+	{ token: "emach-bg-placeholder", re: /emach-bg-placeholder/ },
 ];
 
 /** Varre um texto de fonte. Pura: o teste cobre cada padrão por fixture. */
