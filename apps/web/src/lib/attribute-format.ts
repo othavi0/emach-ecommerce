@@ -1,4 +1,7 @@
-import type { AttributeDefinition } from "@emach/db/schema/attributes";
+import type {
+	AttributeDefinition,
+	AttributeOptions,
+} from "@emach/db/schema/attributes";
 
 import { fmtSpecNumber, fmtSpecRange } from "@/lib/format";
 
@@ -6,6 +9,7 @@ import { fmtSpecNumber, fmtSpecRange } from "@/lib/format";
 export interface FormattableAttribute {
 	definition: {
 		inputType: AttributeDefinition["inputType"];
+		options: AttributeOptions | null;
 		unit: string | null;
 	};
 	value: {
@@ -17,6 +21,17 @@ export interface FormattableAttribute {
 }
 
 export const EMPTY_ATTRIBUTE = "—";
+
+/** Select e cor guardam a chave ("metal_duro"); a tela mostra o rótulo. */
+function optionLabel(options: AttributeOptions | null, value: string): string {
+	if (options?.kind === "select") {
+		return options.options.find((o) => o.value === value)?.label ?? value;
+	}
+	if (options?.kind === "color") {
+		return options.swatches.find((s) => s.value === value)?.label ?? value;
+	}
+	return value;
+}
 
 export function formatAttribute(item: FormattableAttribute): string {
 	const { definition, value } = item;
@@ -37,17 +52,23 @@ export function formatAttribute(item: FormattableAttribute): string {
 			if (!value.valueText) {
 				return EMPTY_ATTRIBUTE;
 			}
-			return unit ? `${value.valueText} ${unit}` : value.valueText;
+			const label = optionLabel(definition.options, value.valueText);
+			return unit ? `${label} ${unit}` : label;
 		}
+		case "color":
+			return value.valueText
+				? optionLabel(definition.options, value.valueText)
+				: EMPTY_ATTRIBUTE;
 		default:
 			return value.valueText ?? EMPTY_ATTRIBUTE;
 	}
 }
 
 /**
- * Chips curtos de especificação ("800 W", "Lixa de 225 mm"): os primeiros
- * atributos com valor, na ordem do cadastro. Sim/Não não dizem nada sem o
- * rótulo, então ficam de fora; texto longo também.
+ * Chips curtos de especificação ("800 W", "até 800 RPM"): os primeiros
+ * atributos com valor, na ordem do cadastro. Sem o rótulo ao lado, Sim/Não e
+ * número sem unidade ("2") não dizem nada, então ficam de fora; texto longo
+ * também.
  */
 export function specChips(
 	attributes: FormattableAttribute[],
@@ -58,7 +79,9 @@ export function specChips(
 		if (chips.length >= max) {
 			break;
 		}
-		if (attribute.definition.inputType === "boolean") {
+		const { inputType, unit } = attribute.definition;
+		const numeric = inputType === "number" || inputType === "numeric_range";
+		if (inputType === "boolean" || (numeric && !unit)) {
 			continue;
 		}
 		const text = formatAttribute(attribute);

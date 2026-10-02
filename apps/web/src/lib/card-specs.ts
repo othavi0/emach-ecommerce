@@ -27,6 +27,7 @@ export async function getCardSpecsByTool(
 	const rows = await db
 		.select({
 			inputType: attributeDefinition.inputType,
+			options: attributeDefinition.options,
 			toolId: toolAttributeAssignment.toolId,
 			unit: attributeDefinition.unit,
 			valueBool: toolAttributeValue.valueBool,
@@ -55,7 +56,11 @@ export async function getCardSpecsByTool(
 	for (const row of rows) {
 		const list = byTool.get(row.toolId) ?? [];
 		list.push({
-			definition: { inputType: row.inputType, unit: row.unit },
+			definition: {
+				inputType: row.inputType,
+				options: row.options,
+				unit: row.unit,
+			},
 			value: {
 				valueBool: row.valueBool,
 				valueNumeric: row.valueNumeric,
