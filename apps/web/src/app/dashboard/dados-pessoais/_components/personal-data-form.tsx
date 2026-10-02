@@ -270,7 +270,7 @@ function EmailCard({ email, verified }: { email: string; verified: boolean }) {
 				) : (
 					<div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-line border-t pt-3">
 						<span className="text-[14px] text-ink-2">
-							Confirme seu e-mail para receber atualizações de pedido.
+							Seu e-mail ainda não foi confirmado.
 						</span>
 						<EmachButton
 							className="shrink-0"
@@ -417,8 +417,7 @@ function DocumentCard({
 							<EmptyValue />
 							<div className="mt-3">
 								<Notice>
-									Você também informa na finalização da compra, ao emitir a nota
-									fiscal.
+									Você também pode informar na finalização da compra.
 								</Notice>
 							</div>
 						</>
