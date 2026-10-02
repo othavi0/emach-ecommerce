@@ -28,18 +28,18 @@ const LABEL_CLASS: Record<StepState, string> = {
 
 export function StatusStepper({ steps }: { steps: StepperStep[] }) {
 	return (
-		<div className="flex items-start border-line border-t px-[18px] pt-5 pb-4">
+		<div className="flex items-start border-line border-t px-3 pt-5 pb-4 sm:px-[18px]">
 			{steps.map((step, idx) => (
 				<div className="contents" key={step.key}>
 					{idx > 0 && (
 						<div
 							className={cn(
-								"mt-[18px] h-[2px] flex-1",
+								"mt-[18px] h-[2px] min-w-1 flex-1",
 								isFilled(steps[idx - 1].state) ? "bg-ink" : "bg-line-strong"
 							)}
 						/>
 					)}
-					<div className="flex w-[88px] shrink-0 flex-col items-center">
+					<div className="flex min-w-0 basis-[88px] flex-col items-center">
 						<span
 							className={cn(
 								"flex h-[38px] w-[38px] items-center justify-center rounded-full border-[1.5px]",
@@ -50,7 +50,7 @@ export function StatusStepper({ steps }: { steps: StepperStep[] }) {
 						</span>
 						<span
 							className={cn(
-								"mt-[9px] text-center text-[13px] leading-tight",
+								"mt-[9px] text-center text-[12px] leading-tight sm:text-[13px]",
 								LABEL_CLASS[step.state]
 							)}
 						>

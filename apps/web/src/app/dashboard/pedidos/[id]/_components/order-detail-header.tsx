@@ -59,9 +59,7 @@ export function OrderDetailHeader({
 			) : (
 				// flush: a borda de cima do stepper vira a divisória de ponta a ponta.
 				<Panel flush title="Andamento">
-					<div className="overflow-x-auto">
-						<StatusStepper steps={buildOrderSteps(status)} />
-					</div>
+					<StatusStepper steps={buildOrderSteps(status)} />
 				</Panel>
 			)}
 		</>
