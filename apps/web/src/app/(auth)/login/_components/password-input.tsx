@@ -31,13 +31,13 @@ export function PasswordInput({
 				onBlur={onBlur}
 				onChange={(e) => onChange(e.target.value)}
 				placeholder={placeholder}
-				style={{ paddingRight: "42px" }}
+				style={{ paddingRight: "44px" }}
 				type={isVisible ? "text" : "password"}
 				value={value}
 			/>
 			<button
 				aria-label={isVisible ? "Ocultar senha" : "Mostrar senha"}
-				className="absolute top-1/2 right-3 flex -translate-y-1/2 cursor-pointer items-center text-gray-50 transition-colors duration-150 hover:text-near-black"
+				className="absolute inset-y-0 right-0 flex w-11 cursor-pointer items-center justify-center text-ink-muted transition-colors duration-150 hover:text-ink focus-visible:outline-2 focus-visible:outline-ink focus-visible:-outline-offset-2"
 				onClick={() => setIsVisible((v) => !v)}
 				type="button"
 			>

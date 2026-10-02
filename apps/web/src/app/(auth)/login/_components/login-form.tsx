@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@emach/ui/components/button";
 import { Checkbox } from "@emach/ui/components/checkbox";
 import { Separator } from "@emach/ui/components/separator";
 import {
@@ -19,15 +18,16 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { AuthSubmitButton } from "@/components/auth-submit-button";
+import { EmachButton } from "@/components/emach-button";
+import { Notice } from "@/components/notice";
 import { authClient } from "@/lib/auth-client";
 import { safeRedirect } from "@/lib/safe-redirect";
-import { AuthHomeLogo } from "./auth-home-logo";
-import { LoginBrandPanel } from "./login-brand-panel";
 import { LoginFallback } from "./login-fallback";
+import { LoginShell } from "./login-shell";
 import { PasswordInput } from "./password-input";
 
 const TRIGGER_CLASS =
-	"h-auto flex-1 whitespace-nowrap border-none px-0 py-3.5 font-semibold text-[14px] text-gray-60 hover:text-near-black data-active:text-near-black focus-visible:ring-0 focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emach-red";
+	"h-auto min-h-12 flex-1 whitespace-nowrap border-none px-0 font-semibold text-[15px] text-ink-muted hover:text-ink data-active:text-ink";
 
 // Códigos que o Better Auth anexa ao `errorCallbackURL` do login social.
 const GOOGLE_ERROR_MESSAGES: Record<string, string> = {
@@ -159,313 +159,275 @@ export function LoginForm() {
 	}
 
 	return (
-		<main className="grid min-h-svh grid-cols-1 lg:grid-cols-[6fr_4fr]">
-			<LoginBrandPanel />
-
-			<div className="flex items-center justify-center bg-gray-10 px-6 py-12 sm:px-10 sm:py-16 lg:py-20">
-				<div className="flex w-full flex-col items-center justify-center md:w-2/3">
-					{/* Logo vermelho acima do form — só no mobile (no desktop o logo vive no painel esquerdo) */}
-					<AuthHomeLogo className="mb-8 h-9 lg:hidden" tone="red" />
-					{googleError && (
-						<p
-							className="mb-6 w-full border border-emach-red-hover/30 bg-[#FFF5F5] px-4 py-3 text-[13px] text-emach-red-hover leading-snug"
-							role="alert"
-						>
-							{googleError}
-						</p>
-					)}
-					<Tabs
-						className="w-full gap-0"
-						onValueChange={(v) => setMode(v as "sign-in" | "sign-up")}
-						value={mode}
-					>
-						<TabsList className="w-full" variant="line">
-							<TabsTrigger className={TRIGGER_CLASS} value="sign-in">
-								Entrar
-							</TabsTrigger>
-							<TabsTrigger className={TRIGGER_CLASS} value="sign-up">
-								Cadastrar
-							</TabsTrigger>
-						</TabsList>
-
-						<TabsContent value="sign-in">
-							<form
-								aria-label="Entrar"
-								className="flex flex-col gap-3.5 pt-8"
-								onSubmit={(e) => {
-									e.preventDefault();
-									e.stopPropagation();
-									signInForm.handleSubmit();
-								}}
-							>
-								<signInForm.Field name="email">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">E-mail</span>
-											<input
-												className="emach-input"
-												id={field.name}
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="seu@email.com"
-												type="email"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signInForm.Field>
-
-								<signInForm.Field name="password">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">Senha</span>
-											<PasswordInput
-												id={field.name}
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={field.handleChange}
-												placeholder="••••••••"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signInForm.Field>
-
-								<div className="flex items-center justify-between">
-									<signInForm.Field name="rememberMe">
-										{(field) => (
-											<label
-												className="flex cursor-pointer items-center gap-2 text-sm"
-												htmlFor="remember-me"
-											>
-												<Checkbox
-													checked={field.state.value}
-													id="remember-me"
-													name={field.name}
-													onCheckedChange={(checked) =>
-														field.handleChange(checked)
-													}
-												/>
-												Lembrar de mim
-											</label>
-										)}
-									</signInForm.Field>
-									<Link
-										className="emach-ghost-btn font-semibold text-emach-red-hover text-sm"
-										href={{ pathname: "/esqueci-senha" }}
-									>
-										Esqueci a senha
-									</Link>
-								</div>
-
-								<signInForm.Subscribe
-									selector={(state) => ({
-										canSubmit: state.canSubmit,
-										isSubmitting: state.isSubmitting,
-									})}
-								>
-									{({ canSubmit, isSubmitting }) => (
-										<AuthSubmitButton
-											canSubmit={canSubmit}
-											isSubmitting={isSubmitting}
-											label="Entrar"
-											pendingLabel="Entrando…"
-										/>
-									)}
-								</signInForm.Subscribe>
-							</form>
-						</TabsContent>
-
-						<TabsContent value="sign-up">
-							<form
-								aria-label="Criar conta"
-								className="flex flex-col gap-3.5 pt-8"
-								onSubmit={(e) => {
-									e.preventDefault();
-									e.stopPropagation();
-									signUpForm.handleSubmit();
-								}}
-							>
-								<signUpForm.Field name="name">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">Nome completo</span>
-											<input
-												className="emach-input"
-												id={field.name}
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="João da Silva"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signUpForm.Field>
-
-								<signUpForm.Field name="email">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">E-mail</span>
-											<input
-												className="emach-input"
-												id={field.name}
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="seu@email.com"
-												type="email"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signUpForm.Field>
-
-								<signUpForm.Field name="phone">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">
-												Telefone (opcional)
-											</span>
-											<input
-												className="emach-input"
-												id={field.name}
-												inputMode="numeric"
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={(e) =>
-													field.handleChange(maskPhone(e.target.value))
-												}
-												placeholder="(11) 99999-9999"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signUpForm.Field>
-
-								<signUpForm.Field name="password">
-									{(field) => (
-										<label className="emach-field" htmlFor={field.name}>
-											<span className="emach-field__label">Senha</span>
-											<PasswordInput
-												id={field.name}
-												name={field.name}
-												onBlur={field.handleBlur}
-												onChange={field.handleChange}
-												placeholder="••••••••"
-												value={field.state.value}
-											/>
-											<div aria-atomic="true" aria-live="polite">
-												{field.state.meta.errors.map((error) => (
-													<span
-														className="emach-field__error"
-														key={error?.message}
-													>
-														{error?.message}
-													</span>
-												))}
-											</div>
-										</label>
-									)}
-								</signUpForm.Field>
-
-								<signUpForm.Subscribe
-									selector={(state) => ({
-										canSubmit: state.canSubmit,
-										isSubmitting: state.isSubmitting,
-									})}
-								>
-									{({ canSubmit, isSubmitting }) => (
-										<AuthSubmitButton
-											canSubmit={canSubmit}
-											isSubmitting={isSubmitting}
-											label="Criar conta"
-											pendingLabel="Criando conta…"
-										/>
-									)}
-								</signUpForm.Subscribe>
-							</form>
-						</TabsContent>
-					</Tabs>
-
-					{/* Divider */}
-					<div className="my-5 flex items-center gap-3 text-[12px] text-gray-60">
-						<Separator className="flex-1" />
-						ou
-						<Separator className="flex-1" />
-					</div>
-
-					{/* Social login */}
-					<div className="flex w-full flex-col gap-2">
-						<Button
-							className="h-12 w-full"
-							disabled={isGooglePending}
-							onClick={handleGoogleSignIn}
-							type="button"
-							variant="outline"
-						>
-							<Image
-								alt=""
-								height={18}
-								src="/images/logos/google.png"
-								width={18}
-							/>
-							{isGooglePending ? "Redirecionando..." : "Continuar com Google"}
-						</Button>
-					</div>
+		<LoginShell>
+			{googleError && (
+				<div className="mb-6">
+					<Notice tone="error">{googleError}</Notice>
 				</div>
+			)}
+			<Tabs
+				className="w-full gap-0"
+				onValueChange={(v) => setMode(v as "sign-in" | "sign-up")}
+				value={mode}
+			>
+				<TabsList className="w-full" variant="line">
+					<TabsTrigger className={TRIGGER_CLASS} value="sign-in">
+						Entrar
+					</TabsTrigger>
+					<TabsTrigger className={TRIGGER_CLASS} value="sign-up">
+						Cadastrar
+					</TabsTrigger>
+				</TabsList>
+
+				<TabsContent value="sign-in">
+					<form
+						aria-label="Entrar"
+						className="flex flex-col gap-3.5 pt-8"
+						onSubmit={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							signInForm.handleSubmit();
+						}}
+					>
+						<signInForm.Field name="email">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">E-mail</span>
+									<input
+										className="emach-input"
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										placeholder="seu@email.com"
+										type="email"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signInForm.Field>
+
+						<signInForm.Field name="password">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">Senha</span>
+									<PasswordInput
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={field.handleChange}
+										placeholder="••••••••"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signInForm.Field>
+
+						<div className="flex items-center justify-between">
+							<signInForm.Field name="rememberMe">
+								{(field) => (
+									<label
+										className="flex min-h-11 cursor-pointer items-center gap-2 text-[14px] text-ink"
+										htmlFor="remember-me"
+									>
+										<Checkbox
+											checked={field.state.value}
+											id="remember-me"
+											name={field.name}
+											onCheckedChange={(checked) => field.handleChange(checked)}
+										/>
+										Lembrar de mim
+									</label>
+								)}
+							</signInForm.Field>
+							<Link
+								className="flex min-h-11 items-center font-semibold text-[14px] text-ink-2 underline underline-offset-[3px] hover:text-ink"
+								href={{ pathname: "/esqueci-senha" }}
+							>
+								Esqueci a senha
+							</Link>
+						</div>
+
+						<signInForm.Subscribe
+							selector={(state) => ({
+								canSubmit: state.canSubmit,
+								isSubmitting: state.isSubmitting,
+							})}
+						>
+							{({ canSubmit, isSubmitting }) => (
+								<AuthSubmitButton
+									canSubmit={canSubmit}
+									isSubmitting={isSubmitting}
+									label="Entrar"
+									pendingLabel="Entrando…"
+								/>
+							)}
+						</signInForm.Subscribe>
+					</form>
+				</TabsContent>
+
+				<TabsContent value="sign-up">
+					<form
+						aria-label="Criar conta"
+						className="flex flex-col gap-3.5 pt-8"
+						onSubmit={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							signUpForm.handleSubmit();
+						}}
+					>
+						<signUpForm.Field name="name">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">Nome completo</span>
+									<input
+										className="emach-input"
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										placeholder="João da Silva"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signUpForm.Field>
+
+						<signUpForm.Field name="email">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">E-mail</span>
+									<input
+										className="emach-input"
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										placeholder="seu@email.com"
+										type="email"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signUpForm.Field>
+
+						<signUpForm.Field name="phone">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">
+										Telefone (opcional)
+									</span>
+									<input
+										className="emach-input"
+										id={field.name}
+										inputMode="numeric"
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={(e) =>
+											field.handleChange(maskPhone(e.target.value))
+										}
+										placeholder="(11) 99999-9999"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signUpForm.Field>
+
+						<signUpForm.Field name="password">
+							{(field) => (
+								<label className="emach-field" htmlFor={field.name}>
+									<span className="emach-field__label">Senha</span>
+									<PasswordInput
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										onChange={field.handleChange}
+										placeholder="••••••••"
+										value={field.state.value}
+									/>
+									<div aria-atomic="true" aria-live="polite">
+										{field.state.meta.errors.map((error) => (
+											<span className="emach-field__error" key={error?.message}>
+												{error?.message}
+											</span>
+										))}
+									</div>
+								</label>
+							)}
+						</signUpForm.Field>
+
+						<signUpForm.Subscribe
+							selector={(state) => ({
+								canSubmit: state.canSubmit,
+								isSubmitting: state.isSubmitting,
+							})}
+						>
+							{({ canSubmit, isSubmitting }) => (
+								<AuthSubmitButton
+									canSubmit={canSubmit}
+									isSubmitting={isSubmitting}
+									label="Criar conta"
+									pendingLabel="Criando conta…"
+								/>
+							)}
+						</signUpForm.Subscribe>
+					</form>
+				</TabsContent>
+			</Tabs>
+
+			<div className="my-5 flex items-center gap-3 text-[13px] text-ink-muted">
+				<Separator className="flex-1" />
+				ou
+				<Separator className="flex-1" />
 			</div>
-		</main>
+
+			<EmachButton
+				disabled={isGooglePending}
+				full
+				icon={
+					<Image alt="" height={18} src="/images/logos/google.png" width={18} />
+				}
+				isLoading={isGooglePending}
+				onClick={handleGoogleSignIn}
+				variant="line"
+			>
+				{isGooglePending ? "Redirecionando..." : "Continuar com Google"}
+			</EmachButton>
+		</LoginShell>
 	);
 }
