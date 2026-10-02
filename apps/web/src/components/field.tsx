@@ -3,10 +3,8 @@
 import { cn } from "@emach/ui/lib/utils";
 import type { InputHTMLAttributes, ReactNode } from "react";
 
-/** Erros como o TanStack Form entrega em field.state.meta.errors. */
 export type FieldErrors = ReadonlyArray<{ message?: string } | undefined>;
 
-/** Mensagens do campo, sem vazias nem repetidas (a mensagem é a key do React). */
 export function errorMessages(errors: FieldErrors): string[] {
 	return [
 		...new Set(
@@ -15,7 +13,6 @@ export function errorMessages(errors: FieldErrors): string[] {
 	];
 }
 
-/** O que o Field entrega ao controle. Espalhar no elemento: <input {...control} />. */
 export interface FieldControl {
 	"aria-describedby"?: string;
 	"aria-invalid"?: true;
@@ -24,18 +21,12 @@ export interface FieldControl {
 
 interface FieldProps {
 	children: (control: FieldControl) => ReactNode;
-	/** Todas as mensagens do campo; vazio ou ausente = sem erro. */
 	error?: readonly string[];
 	hint?: string;
-	/** id do controle. A dica ganha `${id}-hint` e o erro `${id}-error`. */
 	id: string;
 	label: string;
 }
 
-/**
- * Rótulo, controle, dica e erros com a fiação de acessibilidade num lugar só.
- * O controle continua com a classe global (.emach-input, .emach-select).
- */
 export function Field({ children, error = [], hint, id, label }: FieldProps) {
 	const hintId = `${id}-hint`;
 	const errorId = `${id}-error`;
@@ -90,14 +81,11 @@ type TextFieldProps = Omit<
 > & {
 	field: StringFieldApi;
 	hint?: string;
-	/** Padrão: field.name. */
 	id?: string;
 	label: string;
-	/** Sanitiza o valor a cada tecla (só dígitos, máscara de telefone, UF). */
 	transform?: (raw: string) => string;
 };
 
-/** Field ligado a um campo de texto do TanStack Form. */
 export function TextField({
 	className,
 	field,

@@ -122,7 +122,6 @@ export function LoginForm() {
 				name: string;
 				phone?: string;
 			} = {
-				// O link do e-mail de confirmação volta para cá, não para "/".
 				callbackURL: redirectTo,
 				email: value.email,
 				password: value.password,

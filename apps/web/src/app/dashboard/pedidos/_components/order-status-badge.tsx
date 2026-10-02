@@ -15,9 +15,6 @@ import { type ChipTone, StatusChip } from "@/components/status-chip";
 import type { BadgeTone } from "@/lib/orders/status";
 import { ORDER_STATUS_BADGE } from "@/lib/orders/status";
 
-// Mapas totais: status novo vindo do sync do dashboard quebra o build em vez
-// de cair num padrão silencioso. Pago e entregue em ok (direção H3); encerrados
-// (cancelado, reembolsado, devolvido) em off.
 const TONE_TO_CHIP: Record<BadgeTone, ChipTone> = {
 	neutral: "neutral",
 	danger: "alert",

@@ -12,7 +12,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
 	{ label: "Meus dados", href: "/dashboard/dados-pessoais" },
 ];
 
-// "/dashboard" é prefixo de todas as outras rotas da conta, então só casa exato.
 export function isAccountNavActive(pathname: string, href: string): boolean {
 	if (pathname === href) {
 		return true;

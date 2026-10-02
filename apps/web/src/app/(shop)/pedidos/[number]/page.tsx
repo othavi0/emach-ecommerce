@@ -79,8 +79,6 @@ export default function OrderConfirmationPage({
 	);
 }
 
-// Mesma anatomia do conteúdo: cabeçalho com ações, painel de itens e os dois
-// painéis laterais (resumo e entrega).
 function OrderConfirmationSkeleton() {
 	return (
 		<main

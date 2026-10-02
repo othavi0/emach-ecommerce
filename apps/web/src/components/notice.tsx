@@ -15,10 +15,6 @@ const TONE = {
 	},
 } as const;
 
-/**
- * Aviso em faixa, com ícone para a cor nunca vir sozinha. tone="error" vira
- * role="alert"; info é texto comum (ambiente de demonstração, CPF ausente).
- */
 export function Notice({
 	action,
 	children,

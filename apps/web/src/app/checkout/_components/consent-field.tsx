@@ -15,7 +15,6 @@ interface ConsentFieldProps {
 	touched: boolean;
 }
 
-/** Caixa de consentimento. O erro aparece depois que o cliente mexe nela ou envia. */
 export function ConsentField({
 	checked,
 	errors,

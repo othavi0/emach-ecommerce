@@ -10,10 +10,6 @@ interface AuthSubmitButtonProps {
 	pendingLabel: string;
 }
 
-/**
- * Submit dos fluxos de auth (entrar, criar conta, recuperar e redefinir senha):
- * o único CTA vermelho de cada tela.
- */
 export function AuthSubmitButton({
 	canSubmit,
 	isSubmitting,

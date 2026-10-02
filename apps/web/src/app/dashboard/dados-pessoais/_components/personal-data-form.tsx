@@ -59,11 +59,6 @@ export function PersonalDataForm({ initialData }: PersonalDataFormProps) {
 	);
 }
 
-/**
- * Célula de um campo dentro da seção "Seus dados". Bordas internas formam a
- * grade, sem cartão dentro de cartão. A borda direita só aparece na coluna
- * esquerda (`sm`); a inferior, nas duas primeiras células.
- */
 function CardShell({ children }: { children: React.ReactNode }) {
 	return (
 		<div

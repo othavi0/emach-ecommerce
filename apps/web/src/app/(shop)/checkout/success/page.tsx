@@ -42,8 +42,6 @@ export default function CheckoutSuccessPage({
 						</>
 					}
 					meta={
-						// Só o número depende de searchParams: buraco dinâmico mínimo
-						// sob Suspense; o resto da página é shell estático.
 						<Suspense fallback={null}>
 							<SuccessOrderNumber searchParams={searchParams} />
 						</Suspense>

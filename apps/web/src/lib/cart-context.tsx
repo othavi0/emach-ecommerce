@@ -20,7 +20,6 @@ interface CartState {
 	/** `false` até o carrinho ser carregado do localStorage (1º render no client). */
 	hydrated: boolean;
 	items: CartItem[];
-	/** Soma dos snapshots em centavos (cartSubtotalCents), calculada uma vez aqui. */
 	subtotalCents: number;
 	totalCount: number;
 }

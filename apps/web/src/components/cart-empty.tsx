@@ -3,12 +3,10 @@ import { ArrowRight } from "lucide-react";
 
 import { EmachLinkButton } from "@/components/emach-button";
 
-/** Carrinho vazio, igual na gaveta e na página. */
 export function CartEmpty({
 	centered = false,
 	onNavigate,
 }: {
-	/** A página centra o bloco na largura do conteúdo; a gaveta alinha à esquerda. */
 	centered?: boolean;
 	onNavigate?: () => void;
 }) {

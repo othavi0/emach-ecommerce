@@ -4,13 +4,10 @@ import { cn } from "@emach/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
 
 interface QtyStepperProps {
-	/** Texto do <legend>. Linhas do carrinho passam o nome do item para o leitor de tela distinguir. */
 	label?: string;
 	max?: number;
-	/** Piso do "-". A gaveta passa 0: chegar a 0 remove a linha, regra que fecha no CartSheet. */
 	min?: number;
 	onChange: (next: number) => void;
-	/** lg = 52 px ao lado do CTA grande (produto, Ver rápido); md = botões de 44 px (linhas do carrinho). */
 	size?: "lg" | "md";
 	value: number;
 }
@@ -32,7 +29,6 @@ const SIZE_CLASS = {
 const stepClass =
 	"grid cursor-pointer place-items-center hover:bg-canteiro disabled:cursor-not-allowed disabled:opacity-35";
 
-/** Quantidade: compra (produto e "Ver rápido") e linhas do carrinho. */
 export function QtyStepper({
 	label = "Quantidade",
 	max = 20,

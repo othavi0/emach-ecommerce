@@ -1,11 +1,6 @@
 import type { ReactNode } from "react";
 import { PAGE_TITLE_CLASS } from "@/components/page-head";
 
-/**
- * Corpo de 404, erro, erro global e erro do checkout: título display, lede,
- * ações e nota de rodapé. Não abre <main> nem renderiza link próprio: as ações
- * vêm do chamador, e o global-error não tem providers.
- */
 export function StatusScreen({
 	actions,
 	footnote,

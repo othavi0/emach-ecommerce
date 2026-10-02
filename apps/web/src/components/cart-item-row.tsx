@@ -10,7 +10,6 @@ import type { CartItem } from "@/lib/cart-store";
 import { fmtBRL, numericToCents } from "@/lib/format";
 import { voltageLabel } from "@/lib/purchase";
 
-/** Teto do stepper nas linhas do carrinho. */
 const MAX_LINE_QTY = 99;
 
 interface CartItemRowProps {
@@ -19,7 +18,6 @@ interface CartItemRowProps {
 	onLinkClick?: () => void;
 	onQuantityChange: (next: number) => void;
 	onRemove: () => void;
-	/** compact = gaveta (foto de 72 px, "-" chega a 0); full = página (foto de 96 px no desktop, "-" para em 1). */
 	variant?: "full" | "compact";
 }
 

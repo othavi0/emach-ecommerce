@@ -13,7 +13,6 @@ export const CATALOG_CRUMB: Crumb = { href: "/catalog", label: "Catálogo" };
 const linkClass =
 	"inline-flex min-h-8 items-center text-ink-2 underline underline-offset-[3px]";
 
-/** Trilha estrutural: links antes da página atual, que fica sem link e com aria-current. */
 export function Breadcrumb({
 	current,
 	trail,

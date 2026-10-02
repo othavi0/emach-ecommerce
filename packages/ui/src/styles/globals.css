@@ -108,9 +108,7 @@
    EMACH Component Styles
    ============================================================ */
 
-/* ---------- Controles de formulário (H3) ----------
-   48px, borda 1.5px line-strong, raio 3px. Fonte de 16px porque abaixo
-   disso o Safari do iOS dá zoom no foco. */
+/* Fonte de 16px porque abaixo disso o Safari do iOS dá zoom no foco. */
 .emach-input,
 .emach-select,
 .emach-textarea {
@@ -215,8 +213,6 @@
 	line-height: 1.4;
 	color: var(--error-text);
 }
-/* Ícone de alerta (CircleAlert) por máscara: a cor do erro nunca vem
-   sozinha e os formulários existentes ganham o ícone sem mudar markup. */
 .emach-field__error::before {
 	flex: none;
 	width: 14px;

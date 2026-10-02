@@ -6,7 +6,6 @@ import {
 	scanSource,
 } from "./h3-legacy-scan";
 
-// [token, linha que o scanner precisa achar, linha H3 que ele precisa deixar passar]
 const FIXTURES: readonly [string, string, string][] = [
 	["near-black", 'className="bg-near-black"', 'className="bg-grafite"'],
 	[

@@ -3,8 +3,6 @@ import { filesUnder, scanForLegacyTokens } from "@/test/h3-legacy-scan";
 
 const D = "app/dashboard";
 
-// Só os arquivos do U4: moldura, início, lista de pedidos e reembolso. O
-// detalhe do pedido e Meus dados têm dono próprio.
 const FILES = [
 	`${D}/layout.tsx`,
 	`${D}/page.tsx`,

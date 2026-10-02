@@ -10,8 +10,6 @@ export interface StepperStep {
 	state: StepState;
 }
 
-// Feito e atual em ink, por vir em line-strong, entregue em ok. Sem vermelho:
-// na conta o vermelho é só do "Pagar".
 const NODE_CLASS: Record<StepState, string> = {
 	ok: "border-ok bg-ok text-white",
 	current: "border-ink bg-ink text-white",

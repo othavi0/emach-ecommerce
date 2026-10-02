@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { EmachLinkButton } from "@/components/emach-button";
 
-/** Cabeçalho do checkout: só logo e volta ao carrinho, sem a navegação da loja. */
 export function CheckoutHeader() {
 	return (
 		<header className="border-line border-b bg-paper">

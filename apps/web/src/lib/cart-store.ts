@@ -82,7 +82,6 @@ export function removeFromCart(
 	return next;
 }
 
-/** Subtotal em centavos: preço do snapshot vezes a quantidade de cada linha. */
 export function cartSubtotalCents(items: readonly CartItem[]): number {
 	return items.reduce(
 		(sum, item) => sum + numericToCents(item.priceAmount) * item.quantity,

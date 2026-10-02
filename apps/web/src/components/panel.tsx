@@ -7,21 +7,16 @@ const TONE_CLASS = {
 } as const;
 
 interface PanelProps {
-	/** À direita do título: link "Editar", chip de status. */
 	actions?: ReactNode;
 	as?: "section" | "aside";
 	children: ReactNode;
 	className?: string;
-	/** Corpo sem padding, para lista com divisórias de borda a borda. */
 	flush?: boolean;
-	/** Âncora (#rastreio). */
 	id?: string;
 	title: string;
-	/** paper = bloco ou cartão; canteiro = painel de resumo. */
 	tone?: keyof typeof TONE_CLASS;
 }
 
-/** Cartão do H3: borda line, raio de 5 px, sem sombra, título de bloco de 17 px. */
 export function Panel({
 	actions,
 	as: Tag = "section",
@@ -53,12 +48,10 @@ export function Panel({
 }
 
 const VALUE_TONE_CLASS = {
-	/** "Calculado na finalização", "A calcular". */
 	muted: "text-ink-muted",
 	discount: "text-ok",
 } as const;
 
-/** Linha de valor do resumo. O valor é sempre tabular. */
 export function SummaryRow({
 	children,
 	label,
@@ -68,7 +61,6 @@ export function SummaryRow({
 	children: ReactNode;
 	label: string;
 	tone?: keyof typeof VALUE_TONE_CLASS;
-	/** Linha de total: borda acima, valor de 25 px extrabold. */
 	total?: boolean;
 }) {
 	return (

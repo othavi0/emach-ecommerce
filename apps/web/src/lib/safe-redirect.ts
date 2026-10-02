@@ -6,8 +6,6 @@
 // caminho em "//outra-origem".
 const SAFE_PATH_RE = /^\/(?!\/|\\|%2f|%5c)[\w\-.+/@]*(?:\?[\w\-.+/=&%@]*)?$/;
 
-// Voltar para uma tela de auth depois de entrar prende o cliente no fallback
-// do /login, que só sai quando não há sessão.
 const AUTH_PATH_RE =
 	/^\/(?:login|esqueci-senha|redefinir-senha|verificar-email)\/?(?:\?|$)/;
 
@@ -34,7 +32,6 @@ export function safeRedirect(
 	return toSafePath(raw) ?? fallback;
 }
 
-/** Link "Entrar": leva o caminho atual só quando o login vai aceitá-lo. */
 export function loginHref(pathname: string): {
 	pathname: "/login";
 	query?: { redirect: string };

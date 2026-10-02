@@ -1,7 +1,6 @@
 import { requireCurrentClient } from "@/lib/session";
 import { AccountNav } from "./account-nav";
 
-/** Grade da conta: navegação de 240 px e página. Igual no skeleton, sem salto. */
 export const ACCOUNT_GRID_CLASS =
 	"shop-wrap grid grid-cols-1 gap-x-10 pb-16 md:grid-cols-[240px_minmax(0,1fr)]";
 

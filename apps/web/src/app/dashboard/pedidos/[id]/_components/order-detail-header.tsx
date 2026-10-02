@@ -57,7 +57,6 @@ export function OrderDetailHeader({
 					<NegativeNotice at={negativeAt} status={status} />
 				</Panel>
 			) : (
-				// flush: a borda de cima do stepper vira a divisória de ponta a ponta.
 				<Panel flush title="Andamento">
 					<StatusStepper steps={buildOrderSteps(status)} />
 				</Panel>

@@ -11,8 +11,7 @@ export const metadata: Metadata = {
 
 // A guarda P0 (#98) vive em DashboardChrome (chama `requireCurrentClient`),
 // sob Suspense por exigência do cacheComponents. Toda página em /dashboard
-// herda a proteção por renderizar dentro do chrome. Cabeçalho e rodapé do
-// StoreFrame ficam fora do Suspense: não leem sessão.
+// herda a proteção por renderizar dentro do chrome.
 export default function DashboardLayout({
 	children,
 }: {

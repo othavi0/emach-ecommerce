@@ -39,8 +39,6 @@ interface CtaStyle {
 	variant: HeroCtaVariant;
 }
 
-// Mapeia a variante do banco para a pele congelada do CTA. `white` reaproveita
-// primary sobrescrevendo as cores; `ghost` = outline-light (ações sobre dark).
 const CTA_VARIANT_MAP: Record<HeroElementBanner["ctaVariant"], CtaStyle> = {
 	red: { variant: "primary" },
 	dark: { variant: "dark", className: "border-white/25" },

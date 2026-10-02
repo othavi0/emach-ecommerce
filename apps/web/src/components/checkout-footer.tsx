@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-/** Rodapé mínimo do checkout. Sem ano: o layout é estático sob cacheComponents. */
 export function CheckoutFooter() {
 	return (
 		<footer className="bg-grafite-deep text-on-dark-muted">

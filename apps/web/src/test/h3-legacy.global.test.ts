@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { filesUnder, scanForLegacyTokens } from "./h3-legacy-scan";
 
-// Arquivos que ainda usam token anterior ao H3, cada um com o motivo. A lista
-// só encolhe: arquivo novo com token antigo falha, e exceção que ficou limpa
-// também falha até a linha sair daqui.
 const LEGACY_EXCEPTIONS: Readonly<Record<string, string>> = {
 	"app/(shop)/product/[slug]/_components/product-info.tsx":
 		"selo de oferta da PDP com tracking antigo; a PDP não foi migrada",

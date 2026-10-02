@@ -30,8 +30,6 @@ const SUMMARY_ITEMS = ["item-a", "item-b"] as const;
 const SUMMARY_ROWS = ["subtotal", "frete", "total"] as const;
 const FIELD_KEYS = ["a", "b", "c", "d"] as const;
 
-// Mesma anatomia do CheckoutContent: título, blocos do formulário à esquerda e
-// o resumo em canteiro à direita.
 function CheckoutPageSkeleton() {
 	return (
 		<div className="shop-wrap animate-pulse pt-6 pb-16 md:pt-10">

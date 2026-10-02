@@ -8,12 +8,10 @@ import { useCart } from "@/lib/cart-context";
 import { fmtBRL } from "@/lib/format";
 import { installmentLabel } from "@/lib/installments";
 
-/** "1 item", "3 itens". */
 export function itemCountLabel(count: number): string {
 	return `${count} ${count === 1 ? "item" : "itens"}`;
 }
 
-/** A gaveta leva à página do carrinho; a página devolve ao catálogo. */
 const SECONDARY_LINK = {
 	drawer: { href: "/cart", label: "Ver página do carrinho" },
 	page: { href: "/catalog", label: "Continuar comprando" },
@@ -21,11 +19,9 @@ const SECONDARY_LINK = {
 
 interface CartTotalsProps {
 	context: keyof typeof SECONDARY_LINK;
-	/** Chamado ao seguir um dos links: a gaveta fecha. */
 	onNavigate?: () => void;
 }
 
-/** Subtotal, parcelas, aviso de frete e os dois botões. Igual na gaveta e na página. */
 export function CartTotals({ context, onNavigate }: CartTotalsProps) {
 	const { subtotalCents, totalCount } = useCart();
 	const installments = installmentLabel(subtotalCents);

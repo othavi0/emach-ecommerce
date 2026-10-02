@@ -12,7 +12,6 @@ interface OrderTotalsProps {
 	totalAmount: string;
 }
 
-// Forma escolhida, não confirmação: o pedido pendente também tem método.
 const PAYMENT_LABEL: Record<string, string> = {
 	pix: "Pix",
 	boleto: "Boleto bancário",

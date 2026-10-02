@@ -34,8 +34,6 @@ describe("safeRedirect", () => {
 		expect(safeRedirect(raw, FALLBACK)).toBe(FALLBACK);
 	});
 
-	// Com o cabeçalho da loja no /login, "Entrar" geraria /login?redirect=/login
-	// e o login terminaria preso no fallback da própria tela.
 	it.each([
 		["/login"],
 		["/login?x=1"],

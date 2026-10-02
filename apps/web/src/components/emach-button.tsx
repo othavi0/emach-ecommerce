@@ -9,11 +9,9 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				/** Vermelho: um por tela, no CTA de compra ou de envio do formulário principal. */
 				cta: "border-transparent bg-emach-red text-white hover:bg-emach-red-hover",
 				dark: "border-transparent bg-grafite text-on-dark hover:bg-black",
 				line: "border-line-strong bg-paper text-ink hover:border-ink",
-				/** Ação destrutiva já confirmada. Texto e borda de erro, nunca fundo vermelho. */
 				danger: "border-error-text bg-paper text-error-text hover:bg-canteiro",
 				link: "border-transparent bg-transparent text-ink-2 underline underline-offset-[3px] hover:text-ink",
 			},
@@ -25,7 +23,6 @@ const buttonVariants = cva(
 				true: "w-full",
 			},
 		},
-		// Depois do size: o px-0 do link precisa vencer o padding do tamanho.
 		compoundVariants: [{ variant: "link", class: "px-0" }],
 		defaultVariants: {
 			size: "md",
@@ -38,14 +35,12 @@ export type ButtonVariant = NonNullable<
 >;
 type ButtonSize = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
 
-/** Sem variante padrão: quem chama escolhe o papel, e o vermelho nunca sai por omissão. */
 interface ButtonStyle {
 	full?: boolean;
 	size?: ButtonSize;
 	variant: ButtonVariant;
 }
 
-/** Classes do botão para elemento que não é EmachButton nem EmachLinkButton. */
 export function emachButtonVariants({
 	className,
 	...style

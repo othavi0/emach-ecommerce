@@ -22,7 +22,6 @@ interface InstitutionalPageProps {
 	updatedAt: string;
 }
 
-/** Título de seção do corpo; `children` (ex.: filiais em /entrega) usa o mesmo. */
 export const INSTITUTIONAL_H2_CLASS =
 	"font-display font-extrabold text-[28px] text-ink uppercase leading-[0.95]";
 
@@ -36,10 +35,6 @@ function formatDateBR(iso: string): string {
 	return `${d}/${m}/${y}`;
 }
 
-/**
- * Página de texto institucional: trilha e título pelo PageHead em fundo claro,
- * sumário à esquerda no desktop e corpo na medida de leitura (~70ch).
- */
 export function InstitutionalPage({
 	children,
 	extraTocItems,

@@ -4,10 +4,6 @@ import type { ReactNode } from "react";
 
 import { PAGE_TITLE_CLASS } from "@/components/page-head";
 
-/**
- * Faixa de pedido recebido: check em ok, título display, número em destaque e
- * só o que acontece de fato (pagamento pendente). Abre o h1 da página.
- */
 export function OrderReceived({
 	actions,
 	children,
@@ -16,7 +12,6 @@ export function OrderReceived({
 }: {
 	actions: ReactNode;
 	children: ReactNode;
-	/** Número do pedido, status e data. */
 	meta?: ReactNode;
 	title: string;
 }) {

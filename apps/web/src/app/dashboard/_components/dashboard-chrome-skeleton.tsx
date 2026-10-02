@@ -1,9 +1,6 @@
 import { ACCOUNT_GRID_CLASS } from "./dashboard-chrome";
 import { NAV_ITEMS } from "./nav-items";
 
-// Fallback do Suspense da guarda: mesma grade do chrome, para a página não
-// saltar quando a sessão resolve. Para o não-autenticado é só isto que
-// renderiza antes do redirect; nunca dado de sessão (os rótulos são estáticos).
 export function DashboardChromeSkeleton() {
 	return (
 		<div aria-busy="true" className={ACCOUNT_GRID_CLASS}>

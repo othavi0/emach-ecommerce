@@ -11,8 +11,6 @@ const LINK =
 const item = (href: string, label: string) =>
 	`<li class="inline-flex items-center gap-1.5"><a class="${LINK}" href="${href}">${label}</a>${CHEVRON}</li>`;
 
-// HTML do Breadcrumb da página de produto em 12b1379 (categoria Furadeiras),
-// antes de a trilha virar componente genérico.
 const PRODUCT_12B1379 = `<nav aria-label="Você está em" class="pt-2.5 pb-1.5 text-[13.5px] text-ink-muted md:pt-[18px] md:text-[14px]"><ol class="flex flex-wrap items-center gap-1.5">${item("/", "Início")}${item("/catalog", "Catálogo")}${item("/catalog/furadeiras", "Furadeiras")}<li class="min-w-0"><span aria-current="page" class="line-clamp-1">Furadeira X</span></li></ol></nav>`;
 
 describe("Breadcrumb", () => {

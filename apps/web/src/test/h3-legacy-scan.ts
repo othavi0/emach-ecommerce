@@ -1,12 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-/**
- * Scanner de tokens visuais anteriores ao H3. Só testes importam este módulo
- * (lê o disco). `h3-legacy.global.test.ts` varre todo o `src` contra a lista
- * de exceções.
- */
-
 export interface LegacyHit {
 	file: string;
 	line: number;
@@ -41,7 +35,6 @@ export const LEGACY_PATTERNS: ReadonlyArray<{ re: RegExp; token: string }> = [
 	{ token: "emach-bg-placeholder", re: /emach-bg-placeholder/ },
 ];
 
-/** Varre um texto de fonte. Pura: o teste cobre cada padrão por fixture. */
 export function scanSource(source: string, file: string): LegacyHit[] {
 	const hits: LegacyHit[] = [];
 	const lines = source.split("\n");
@@ -55,7 +48,6 @@ export function scanSource(source: string, file: string): LegacyHit[] {
 	return hits;
 }
 
-/** Lê os arquivos (caminhos relativos a apps/web/src) e junta os achados. */
 export function scanForLegacyTokens(files: readonly string[]): LegacyHit[] {
 	return files.flatMap((file) =>
 		scanSource(readFileSync(join(SRC_ROOT, file), "utf8"), file)
@@ -65,7 +57,6 @@ export function scanForLegacyTokens(files: readonly string[]): LegacyHit[] {
 const SOURCE_FILE = /\.tsx?$/;
 const TEST_FILE = /\.test\.tsx?$/;
 
-/** .ts e .tsx sob a pasta (relativa a apps/web/src), sem *.test.*. */
 export function filesUnder(dir: string): string[] {
 	return readdirSync(join(SRC_ROOT, dir), { encoding: "utf8", recursive: true })
 		.filter((path) => SOURCE_FILE.test(path) && !TEST_FILE.test(path))

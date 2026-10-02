@@ -1,8 +1,6 @@
 import { PAGE_TITLE_CLASS } from "@/components/page-head";
 import { SiteHeader } from "@/components/site-header";
 
-// Espelha a anatomia de CartContent (trilha, título, linhas e resumo canteiro)
-// para a troca skeleton→dados não deslocar o layout.
 export default function Loading() {
 	return (
 		<>

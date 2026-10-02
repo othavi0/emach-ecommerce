@@ -9,10 +9,6 @@ const ACCOUNT_PERKS = [
 	"Compre de novo um pedido anterior",
 ] as const;
 
-/**
- * Moldura do /login. O formulário e o fallback de carregamento entram no
- * mesmo encaixe de altura mínima, para a troca não empurrar o rodapé.
- */
 export function LoginShell({ children }: { children: ReactNode }) {
 	return (
 		<div className="shop-wrap pb-16 md:pb-24">

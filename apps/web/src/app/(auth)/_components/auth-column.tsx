@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { PageHead } from "@/components/page-head";
 
-/** Miolo de uma coluna das telas de senha e verificação. */
 export function AuthColumn({
 	children,
 	lede,

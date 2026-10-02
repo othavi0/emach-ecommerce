@@ -19,7 +19,6 @@ export default async function DashboardPage() {
 
 	return (
 		<>
-			{/* Na própria "Minha conta" a trilha para em Início: a página atual já é o título. */}
 			<PageHead title="Minha conta" trail={[HOME_CRUMB]}>
 				Acompanhe seus pedidos, devoluções e dados de cadastro num só lugar.
 			</PageHead>

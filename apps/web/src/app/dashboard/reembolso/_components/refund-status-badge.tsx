@@ -13,7 +13,6 @@ import {
 	type RefundBadgeTone,
 } from "@/lib/refunds/status";
 
-// Tabela própria da devolução: o "info" dela é "Solicitado", não pago.
 const TONE_TO_CHIP: Record<RefundBadgeTone, ChipTone> = {
 	info: "neutral",
 	warning: "neutral",

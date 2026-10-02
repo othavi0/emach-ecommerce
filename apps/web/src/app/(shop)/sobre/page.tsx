@@ -154,8 +154,6 @@ export default function AboutPage() {
 	);
 }
 
-// Fallback do cache-miss (getBranches é 'use cache' 600s): reserva a altura
-// dos cartões de filial para o rodapé não pular quando os dados chegam.
 function BranchesSkeleton() {
 	return (
 		<div aria-hidden="true">

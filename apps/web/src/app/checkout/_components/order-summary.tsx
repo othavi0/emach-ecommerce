@@ -14,18 +14,15 @@ export interface AppliedCoupon {
 }
 
 interface OrderSummaryProps {
-	/** Botão de envio do formulário, ligado a ele pelo atributo `form`. */
 	action: ReactNode;
 	coupon: AppliedCoupon | null;
 	items: CartItem[];
 	onCouponApplied: (coupon: AppliedCoupon) => void;
 	onCouponRemoved: () => void;
-	/** null enquanto não há frete escolhido: frete e total ficam "A calcular". */
 	shippingCents: number | null;
 	subtotalCents: number;
 }
 
-/** Resumo em canteiro, igual ao do carrinho: itens, cupom, valores e o CTA. */
 export function OrderSummary({
 	action,
 	coupon,

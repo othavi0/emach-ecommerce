@@ -3,7 +3,6 @@ import Image from "next/image";
 import { fmtNumericBRL } from "@/lib/format";
 import type { OrderPreviewItem } from "@/lib/orders/queries";
 
-/** Rótulo e valor do cabeçalho do cartão de pedido ou de devolução. */
 export function MetaPair({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="flex flex-col">
@@ -15,7 +14,6 @@ export function MetaPair({ label, value }: { label: string; value: string }) {
 	);
 }
 
-/** Itens do pedido com foto no poço, como no cartão de produto. */
 export function PreviewItems({
 	items,
 }: {

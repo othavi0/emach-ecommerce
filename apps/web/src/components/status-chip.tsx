@@ -11,7 +11,6 @@ const TONE_CLASS = {
 
 export type ChipTone = keyof typeof TONE_CLASS;
 
-/** Estado em texto e ícone na cor do estado, sem fundo. Cor nunca sozinha. */
 export function StatusChip({
 	children,
 	icon: Icon,
@@ -20,7 +19,6 @@ export function StatusChip({
 }: {
 	children: ReactNode;
 	icon: LucideIcon;
-	/** Cancelado: risca o rótulo. */
 	struck?: boolean;
 	tone: ChipTone;
 }) {

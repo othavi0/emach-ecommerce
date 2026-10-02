@@ -71,7 +71,6 @@ function SheetContent({
 	);
 }
 
-// pr-16 reserva o botão de fechar de 44 px no canto.
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div

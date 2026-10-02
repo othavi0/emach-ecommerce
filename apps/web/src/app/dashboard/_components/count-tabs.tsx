@@ -12,10 +12,6 @@ export interface CountTab<K extends string> {
 	value: K;
 }
 
-/**
- * Abas de filtro com contagem. Server Component: o painel de cada aba sai de
- * `children(value)` no servidor e só a troca de aba roda no cliente.
- */
 export function CountTabs<K extends string>({
 	children,
 	defaultValue,
@@ -27,7 +23,6 @@ export function CountTabs<K extends string>({
 }) {
 	return (
 		<Tabs defaultValue={defaultValue}>
-			{/* Cinco abas não cabem em 375 px: a faixa rola na horizontal. */}
 			<div className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
 				<TabsList
 					className="w-max min-w-full justify-start gap-6 border-line"
