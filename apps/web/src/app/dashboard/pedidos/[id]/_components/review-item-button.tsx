@@ -26,11 +26,7 @@ export function ReviewItemButton({
 	}
 	return (
 		<>
-			<EmachButton
-				onClick={() => setOpen(true)}
-				size="sm"
-				variant="outline-light"
-			>
+			<EmachButton onClick={() => setOpen(true)} size="md" variant="line">
 				Avaliar
 			</EmachButton>
 			<ReviewSheet

@@ -23,10 +23,10 @@ export default function NotFound() {
 					Volte ao catálogo para seguir explorando.
 				</p>
 				<div className="mt-8 flex gap-3">
-					<EmachLinkButton href="/" size="lg" variant="primary">
+					<EmachLinkButton href="/" size="lg" variant="cta">
 						Página inicial
 					</EmachLinkButton>
-					<EmachLinkButton href="/catalog" size="lg" variant="outline">
+					<EmachLinkButton href="/catalog" size="lg" variant="line">
 						Ver catálogo
 					</EmachLinkButton>
 				</div>

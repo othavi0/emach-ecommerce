@@ -3,15 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { EmachButton } from "@/components/emach-button";
+import { type ButtonVariant, EmachButton } from "@/components/emach-button";
 import { cancelOrderAction } from "../../_actions/orders";
 
 export function CancelOrderButton({
 	orderId,
-	variant = "ghost",
+	variant = "link",
 }: {
 	orderId: string;
-	variant?: "outline" | "outline-light" | "ghost";
+	variant?: Extract<ButtonVariant, "line" | "link" | "dark">;
 }) {
 	const [confirming, setConfirming] = useState(false);
 	const [pending, start] = useTransition();
@@ -47,7 +47,7 @@ export function CancelOrderButton({
 				isLoading={pending}
 				onBlur={() => setConfirming(false)}
 				onClick={onClick}
-				size="sm"
+				size="md"
 				variant={variant}
 			>
 				{label()}

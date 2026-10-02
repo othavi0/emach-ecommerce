@@ -29,7 +29,7 @@ export function AuthSubmitButton({
 			isLoading={isSubmitting}
 			size="md"
 			type="submit"
-			variant="primary"
+			variant="cta"
 		>
 			{isSubmitting ? pendingLabel : label}
 		</EmachButton>

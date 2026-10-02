@@ -36,11 +36,11 @@ export default function RootError({
 				segundos. Se o problema continuar, volte para a loja.
 			</p>
 			<div className="mt-8 flex flex-wrap justify-center gap-3">
-				<EmachButton onClick={retry} size="lg" variant="primary">
+				<EmachButton onClick={retry} size="lg" variant="cta">
 					Tentar de novo
 				</EmachButton>
 				<Link
-					className={emachButtonVariants({ size: "lg", variant: "outline" })}
+					className={emachButtonVariants({ size: "lg", variant: "line" })}
 					href="/"
 				>
 					Voltar para a loja

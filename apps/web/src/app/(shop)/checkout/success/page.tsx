@@ -46,10 +46,10 @@ export default function CheckoutSuccessPage({
 					<OrderNumber searchParams={searchParams} />
 				</Suspense>
 				<div className="mt-8 flex gap-3">
-					<EmachLinkButton href="/catalog" size="lg" variant="primary">
+					<EmachLinkButton href="/catalog" size="lg" variant="cta">
 						Continuar comprando
 					</EmachLinkButton>
-					<EmachLinkButton href="/" size="lg" variant="outline">
+					<EmachLinkButton href="/" size="lg" variant="line">
 						Página inicial
 					</EmachLinkButton>
 				</div>

@@ -41,7 +41,7 @@ export function CartContent() {
 					className="mt-7"
 					href="/catalog"
 					size="lg"
-					variant="primary"
+					variant="cta"
 				>
 					Ver catálogo
 				</EmachLinkButton>
@@ -117,7 +117,7 @@ export function CartContent() {
 							full
 							href="/checkout"
 							size="lg"
-							variant="primary"
+							variant="cta"
 						>
 							Finalizar compra
 						</EmachLinkButton>
@@ -126,7 +126,7 @@ export function CartContent() {
 							full
 							href="/catalog"
 							size="md"
-							variant="ghost-light"
+							variant="line"
 						>
 							Continuar comprando
 						</EmachLinkButton>

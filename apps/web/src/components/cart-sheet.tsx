@@ -87,7 +87,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 							className={emachButtonVariants({
 								className: "mt-6 w-full max-w-[220px]",
 								size: "md",
-								variant: "primary",
+								variant: "cta",
 							})}
 							href="/catalog"
 							onClick={close}
@@ -134,7 +134,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 									className: "mb-2",
 									full: true,
 									size: "lg",
-									variant: "primary",
+									variant: "cta",
 								})}
 								href="/checkout"
 								onClick={close}
@@ -145,7 +145,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 								className={emachButtonVariants({
 									full: true,
 									size: "md",
-									variant: "ghost-light",
+									variant: "line",
 								})}
 								href="/cart"
 								onClick={close}

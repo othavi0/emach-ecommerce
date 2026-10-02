@@ -44,14 +44,11 @@ export default function GlobalError({
 						problema continuar, volte para a página inicial.
 					</p>
 					<div className="mt-8 flex flex-wrap justify-center gap-3">
-						<EmachButton onClick={retry} size="lg" variant="primary">
+						<EmachButton onClick={retry} size="lg" variant="cta">
 							Tentar de novo
 						</EmachButton>
 						<a
-							className={emachButtonVariants({
-								size: "lg",
-								variant: "outline",
-							})}
+							className={emachButtonVariants({ size: "lg", variant: "line" })}
 							href="/"
 						>
 							Página inicial

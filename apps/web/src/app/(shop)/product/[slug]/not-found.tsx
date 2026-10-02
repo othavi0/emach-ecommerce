@@ -22,10 +22,10 @@ export default function ProductNotFound() {
 					catálogo completo para encontrar alternativas.
 				</p>
 				<div className="mt-8 flex gap-3">
-					<EmachLinkButton href="/catalog" size="lg" variant="primary">
+					<EmachLinkButton href="/catalog" size="lg" variant="cta">
 						Ver catálogo
 					</EmachLinkButton>
-					<EmachLinkButton href="/" size="lg" variant="outline">
+					<EmachLinkButton href="/" size="lg" variant="line">
 						Página inicial
 					</EmachLinkButton>
 				</div>

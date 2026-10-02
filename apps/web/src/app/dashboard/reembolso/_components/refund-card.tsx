@@ -121,10 +121,7 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 
 			<footer className="flex justify-end gap-2 border-white/12 border-t px-[18px] py-2.5">
 				<Link
-					className={emachButtonVariants({
-						variant: "outline-light",
-						size: "sm",
-					})}
+					className={emachButtonVariants({ variant: "line", size: "md" })}
 					href={detailsHref}
 				>
 					Ver pedido

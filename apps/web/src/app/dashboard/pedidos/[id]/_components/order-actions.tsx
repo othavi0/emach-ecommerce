@@ -22,7 +22,7 @@ export function OrderActions({
 		buttons.push(<CancelOrderButton key="cancel" orderId={orderId} />);
 		buttons.push(
 			<Link
-				className={emachButtonVariants({ variant: "primary", size: "sm" })}
+				className={emachButtonVariants({ variant: "cta", size: "md" })}
 				href={pagarHref}
 				key="pay"
 			>
@@ -30,9 +30,7 @@ export function OrderActions({
 			</Link>
 		);
 	} else if (canRebuy) {
-		buttons.push(
-			<RebuyButton key="rebuy" orderId={orderId} variant="primary" />
-		);
+		buttons.push(<RebuyButton key="rebuy" orderId={orderId} variant="dark" />);
 	}
 
 	if (buttons.length === 0) {

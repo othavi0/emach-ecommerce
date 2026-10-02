@@ -121,7 +121,7 @@ export function RefundSheet({
 					<EmachButton
 						onClick={() => handleOpenChange(false)}
 						size="md"
-						variant="ghost"
+						variant="link"
 					>
 						Cancelar
 					</EmachButton>
@@ -129,7 +129,7 @@ export function RefundSheet({
 						disabled={pending}
 						onClick={submit}
 						size="md"
-						variant="primary"
+						variant="dark"
 					>
 						{pending ? "Enviando..." : "Solicitar devolução"}
 					</EmachButton>

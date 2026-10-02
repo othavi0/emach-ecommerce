@@ -207,19 +207,13 @@ async function OrderConfirmationContent({
 					) : null}
 					<div className="mt-6 flex flex-col gap-3 sm:flex-row">
 						<Link
-							className={emachButtonVariants({
-								size: "lg",
-								variant: "primary",
-							})}
+							className={emachButtonVariants({ size: "lg", variant: "cta" })}
 							href={accountOrderHref}
 						>
 							Ver pedido na conta
 						</Link>
 						<Link
-							className={emachButtonVariants({
-								size: "lg",
-								variant: "outline",
-							})}
+							className={emachButtonVariants({ size: "lg", variant: "line" })}
 							href="/catalog"
 						>
 							Continuar comprando

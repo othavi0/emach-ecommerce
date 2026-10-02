@@ -155,7 +155,7 @@ export function ReviewSheet({
 					<EmachButton
 						onClick={() => handleOpenChange(false)}
 						size="md"
-						variant="ghost"
+						variant="link"
 					>
 						Cancelar
 					</EmachButton>
@@ -163,7 +163,7 @@ export function ReviewSheet({
 						disabled={pending}
 						onClick={submit}
 						size="md"
-						variant="primary"
+						variant="dark"
 					>
 						{pending ? "Enviando..." : "Enviar avaliação"}
 					</EmachButton>

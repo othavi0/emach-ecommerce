@@ -374,9 +374,9 @@ export function CheckoutContent({
 								className="shrink-0"
 								disabled={resendingVerification}
 								onClick={handleResendVerification}
-								size="sm"
+								size="md"
 								type="button"
-								variant="outline"
+								variant="line"
 							>
 								{resendingVerification ? "Enviando…" : "Reenviar e-mail"}
 							</EmachButton>
@@ -651,10 +651,7 @@ export function CheckoutContent({
 
 						<div className="flex flex-col-reverse items-stretch gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
 							<Link
-								className={emachButtonVariants({
-									size: "lg",
-									variant: "outline",
-								})}
+								className={emachButtonVariants({ size: "lg", variant: "line" })}
 								href="/cart"
 							>
 								Voltar ao carrinho
@@ -675,7 +672,7 @@ export function CheckoutContent({
 										}
 										size="lg"
 										type="submit"
-										variant="primary"
+										variant="cta"
 									>
 										{isSubmitting ? "Processando…" : "Confirmar pedido"}
 									</EmachButton>

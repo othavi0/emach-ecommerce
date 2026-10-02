@@ -85,28 +85,23 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 
 			<footer className="flex flex-wrap justify-end gap-2 border-white/12 border-t px-[18px] py-2.5">
 				{isPending ? (
-					<CancelOrderButton orderId={order.id} variant="outline-light" />
+					<CancelOrderButton orderId={order.id} variant="line" />
 				) : null}
 				<Link
-					className={emachButtonVariants({
-						variant: "outline-light",
-						size: "sm",
-					})}
+					className={emachButtonVariants({ variant: "line", size: "md" })}
 					href={detailsHref}
 				>
 					Ver detalhes
 				</Link>
 				{isPending ? (
 					<Link
-						className={emachButtonVariants({ variant: "primary", size: "sm" })}
+						className={emachButtonVariants({ variant: "cta", size: "md" })}
 						href={pagarHref}
 					>
 						Pagar agora
 					</Link>
 				) : null}
-				{canRebuy ? (
-					<RebuyButton orderId={order.id} variant="outline-light" />
-				) : null}
+				{canRebuy ? <RebuyButton orderId={order.id} variant="line" /> : null}
 			</footer>
 		</article>
 	);
