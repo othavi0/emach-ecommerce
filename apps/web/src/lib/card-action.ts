@@ -1,6 +1,7 @@
 import type { ToolListItem } from "@emach/db/queries/tools";
 import type { Voltage } from "@emach/db/schema/tools";
 
+import type { CartItemSnapshot } from "@/lib/cart-store";
 import { listPriceCents } from "@/lib/list-price";
 import { voltageLabel } from "@/lib/purchase";
 
@@ -32,4 +33,21 @@ export function voltageSummary(voltages: Voltage[]): string | null {
 		return null;
 	}
 	return voltages.map((v) => voltageLabel(v).name).join(" ou ");
+}
+
+/** Item de carrinho da variante default de um produto de vitrine. */
+export function listItemSnapshot(tool: ToolListItem): CartItemSnapshot {
+	return {
+		categoryName: tool.primaryCategory?.name ?? null,
+		categorySlug: tool.primaryCategory?.slug ?? null,
+		imageUrl: tool.primaryImage?.url ?? null,
+		name: tool.name,
+		priceAmount:
+			tool.defaultVariant.discountedAmount ?? tool.defaultVariant.priceAmount,
+		sku: tool.defaultVariant.sku,
+		slug: tool.slug,
+		toolId: tool.id,
+		variantId: tool.defaultVariant.id,
+		voltage: tool.defaultVariant.voltage,
+	};
 }

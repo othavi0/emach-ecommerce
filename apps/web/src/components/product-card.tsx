@@ -10,9 +10,12 @@ import {
 	QuickViewButton,
 } from "@/components/product-card-actions";
 import { StockLine } from "@/components/stock-line";
-import { cardAction, voltageSummary } from "@/lib/card-action";
+import {
+	cardAction,
+	listItemSnapshot,
+	voltageSummary,
+} from "@/lib/card-action";
 import type { CardExtras } from "@/lib/card-data";
-import type { CartItemSnapshot } from "@/lib/cart-store";
 import { fmtBRL, fmtNumericBRL } from "@/lib/format";
 import { installmentText } from "@/lib/installments";
 import { listPriceCents } from "@/lib/list-price";
@@ -52,20 +55,6 @@ export function ProductCard({
 	const voltageText = voltageSummary(extras.voltages);
 	const specs = [...extras.specs, ...(voltageText ? [voltageText] : [])];
 	const compact = size === "compact";
-
-	const item: CartItemSnapshot = {
-		categoryName: tool.primaryCategory?.name ?? null,
-		categorySlug: tool.primaryCategory?.slug ?? null,
-		imageUrl: tool.primaryImage?.url ?? null,
-		name: tool.name,
-		priceAmount:
-			tool.defaultVariant.discountedAmount ?? tool.defaultVariant.priceAmount,
-		sku: tool.defaultVariant.sku,
-		slug: tool.slug,
-		toolId: tool.id,
-		variantId: tool.defaultVariant.id,
-		voltage: tool.defaultVariant.voltage,
-	};
 
 	return (
 		<article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[5px] border border-line bg-paper transition-colors duration-150 ease-out hover:border-line-strong">
@@ -167,7 +156,7 @@ export function ProductCard({
 				</div>
 				<CardActionButton
 					action={cardAction(tool, extras.voltages)}
-					item={item}
+					item={listItemSnapshot(tool)}
 					name={tool.name}
 					slug={tool.slug}
 				/>
