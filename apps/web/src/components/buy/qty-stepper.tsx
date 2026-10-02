@@ -1,26 +1,60 @@
 "use client";
 
+import { cn } from "@emach/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
 
 interface QtyStepperProps {
+	/** Texto do <legend>. Linhas do carrinho passam o nome do item para o leitor de tela distinguir. */
+	label?: string;
 	max?: number;
+	/** Piso do "-". A gaveta passa 0: chegar a 0 remove a linha, regra que fecha no CartSheet. */
+	min?: number;
 	onChange: (next: number) => void;
+	/** lg = 52 px ao lado do CTA grande (produto, Ver rápido); md = botões de 44 px (linhas do carrinho). */
+	size?: "lg" | "md";
 	value: number;
 }
 
-const stepClass =
-	"grid h-full w-11 cursor-pointer place-items-center hover:bg-canteiro disabled:cursor-not-allowed disabled:opacity-35";
+export function stepQty(
+	value: number,
+	delta: -1 | 1,
+	min: number,
+	max: number
+): number {
+	return Math.min(max, Math.max(min, value + delta));
+}
 
-/** Quantidade da compra (página de produto e "Ver rápido"), 52px de altura. */
-export function QtyStepper({ max = 20, onChange, value }: QtyStepperProps) {
+const SIZE_CLASS = {
+	lg: { box: "h-[52px]", step: "h-full w-11" },
+	md: { box: "", step: "size-11" },
+} as const;
+
+const stepClass =
+	"grid cursor-pointer place-items-center hover:bg-canteiro disabled:cursor-not-allowed disabled:opacity-35";
+
+/** Quantidade: compra (produto e "Ver rápido") e linhas do carrinho. */
+export function QtyStepper({
+	label = "Quantidade",
+	max = 20,
+	min = 1,
+	onChange,
+	size = "lg",
+	value,
+}: QtyStepperProps) {
+	const sizeClass = SIZE_CLASS[size];
 	return (
-		<fieldset className="flex h-[52px] shrink-0 items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper">
-			<legend className="sr-only">Quantidade</legend>
+		<fieldset
+			className={cn(
+				"flex shrink-0 items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper",
+				sizeClass.box
+			)}
+		>
+			<legend className="sr-only">{label}</legend>
 			<button
 				aria-label="Diminuir quantidade"
-				className={stepClass}
-				disabled={value <= 1}
-				onClick={() => onChange(Math.max(1, value - 1))}
+				className={cn(stepClass, sizeClass.step)}
+				disabled={value <= min}
+				onClick={() => onChange(stepQty(value, -1, min, max))}
 				type="button"
 			>
 				<Minus aria-hidden="true" className="size-4" />
@@ -33,9 +67,9 @@ export function QtyStepper({ max = 20, onChange, value }: QtyStepperProps) {
 			</output>
 			<button
 				aria-label="Aumentar quantidade"
-				className={stepClass}
+				className={cn(stepClass, sizeClass.step)}
 				disabled={value >= max}
-				onClick={() => onChange(Math.min(max, value + 1))}
+				onClick={() => onChange(stepQty(value, 1, min, max))}
 				type="button"
 			>
 				<Plus aria-hidden="true" className="size-4" />
