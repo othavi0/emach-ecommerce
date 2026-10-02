@@ -5,7 +5,7 @@ import { cn } from "@emach/ui/lib/utils";
 import { ChevronDown, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AccountSection } from "@/app/dashboard/_components/account-section";
+import { Panel } from "@/components/panel";
 import type { OrderHistoryEntry } from "@/lib/orders/queries";
 import { isTerminalNegative, ORDER_STATUS_BADGE } from "@/lib/orders/status";
 
@@ -130,7 +130,7 @@ export function OrderTracking({
 	const negative = isTerminalNegative(status);
 
 	return (
-		<AccountSection id="rastreio" title="Rastreio do envio">
+		<Panel id="rastreio" title="Rastreio do envio">
 			<TrackingBody
 				method={shippingMethod}
 				negative={negative}
@@ -162,6 +162,6 @@ export function OrderTracking({
 					<HistoryTimeline history={history} />
 				</div>
 			) : null}
-		</AccountSection>
+		</Panel>
 	);
 }

@@ -2,7 +2,7 @@ import type { OrderStatus } from "@emach/db/schema/orders";
 import { cn } from "@emach/ui/lib/utils";
 import { Package } from "lucide-react";
 import Image from "next/image";
-import { AccountSection } from "@/app/dashboard/_components/account-section";
+import { Panel } from "@/components/panel";
 import { fmtNumericBRL } from "@/lib/format";
 import type { OrderDetailData } from "@/lib/orders/queries";
 import { ReviewItemButton } from "./review-item-button";
@@ -68,7 +68,7 @@ export function OrderItems({
 	status: OrderStatus;
 }) {
 	return (
-		<AccountSection title="Itens do pedido">
+		<Panel title="Itens do pedido">
 			<div>
 				{items.map((item, idx) => (
 					<div
@@ -109,6 +109,6 @@ export function OrderItems({
 					</div>
 				))}
 			</div>
-		</AccountSection>
+		</Panel>
 	);
 }

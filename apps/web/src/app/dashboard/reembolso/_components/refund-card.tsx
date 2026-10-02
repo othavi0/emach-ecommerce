@@ -53,7 +53,7 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 					value={DATE_FMT.format(refund.requestedAt)}
 				/>
 				<div className="flex-1" />
-				<RefundStatusBadge status={refund.status} tone="dark" />
+				<RefundStatusBadge status={refund.status} />
 			</header>
 
 			{refund.preview.map((item, idx) => (
@@ -100,7 +100,7 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 					variant="card"
 				/>
 			) : (
-				<StatusStepper steps={buildRefundSteps(refund.status)} tone="dark" />
+				<StatusStepper steps={buildRefundSteps(refund.status)} />
 			)}
 
 			<div className="flex items-center justify-between border-white/12 border-t px-[18px] py-3.5">

@@ -60,14 +60,14 @@ export function OrderDetailHeader({
 						</strong>
 					</p>
 				</div>
-				<OrderStatusBadge status={status} tone="dark" />
+				<OrderStatusBadge status={status} />
 			</div>
 
 			<div className="mt-7 border border-white/12">
 				{negative ? (
 					<NegativeNotice at={negativeAt} status={status} />
 				) : (
-					<StatusStepper steps={buildOrderSteps(status)} tone="dark" />
+					<StatusStepper steps={buildOrderSteps(status)} />
 				)}
 			</div>
 		</header>

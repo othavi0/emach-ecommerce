@@ -1,4 +1,4 @@
-import { AccountSection } from "@/app/dashboard/_components/account-section";
+import { Panel } from "@/components/panel";
 
 function maskDocument(doc: string | null): string {
 	if (!doc) {
@@ -36,13 +36,13 @@ function Field({ label, value }: { label: string; value: string }) {
 
 export function BuyerInfo({ buyer }: { buyer: Buyer }) {
 	return (
-		<AccountSection title="Comprador">
+		<Panel title="Comprador">
 			<div className="grid grid-cols-1 gap-x-6 gap-y-3.5 sm:grid-cols-2">
 				<Field label="Nome" value={buyer.name} />
 				<Field label="E-mail" value={buyer.email} />
 				<Field label="Telefone" value={buyer.phone ?? "—"} />
 				<Field label="CPF / CNPJ" value={maskDocument(buyer.document)} />
 			</div>
-		</AccountSection>
+		</Panel>
 	);
 }

@@ -1,39 +1,55 @@
 import type { OrderStatus } from "@emach/db/schema/orders";
 import {
-	AccountBadge,
-	type BadgeFamily,
-} from "@/app/dashboard/_components/account-badge";
+	Ban,
+	CircleAlert,
+	CircleCheck,
+	Clock,
+	CreditCard,
+	type LucideIcon,
+	Package,
+	RotateCcw,
+	Truck,
+	Undo2,
+} from "lucide-react";
+import { type ChipTone, StatusChip } from "@/components/status-chip";
 import type { BadgeTone } from "@/lib/orders/status";
 import { ORDER_STATUS_BADGE } from "@/lib/orders/status";
 
-const TONE_TO_FAMILY: Record<BadgeTone, BadgeFamily> = {
-	neutral: "amber",
-	danger: "red",
-	info: "blue",
-	progress: "blue",
-	transit: "blue",
-	success: "green",
-	muted: "gray",
-	// refunded/returned são terminais (encerrados), não "atenção" — cinza os
-	// distingue do âmbar de pending_payment.
-	warning: "gray",
+// Mapas totais: status novo vindo do sync do dashboard quebra o build em vez
+// de cair num padrão silencioso. Pago e entregue em ok (direção H3); encerrados
+// (cancelado, reembolsado, devolvido) em off.
+const TONE_TO_CHIP: Record<BadgeTone, ChipTone> = {
+	neutral: "neutral",
+	danger: "alert",
+	info: "ok",
+	progress: "neutral",
+	transit: "neutral",
+	success: "ok",
+	muted: "off",
+	warning: "off",
 };
 
-export function OrderStatusBadge({
-	status,
-	tone = "light",
-}: {
-	status: OrderStatus;
-	tone?: "light" | "dark";
-}) {
-	const { label, tone: badgeTone } = ORDER_STATUS_BADGE[status];
+const STATUS_ICON: Record<OrderStatus, LucideIcon> = {
+	pending_payment: Clock,
+	payment_failed: CircleAlert,
+	paid: CreditCard,
+	preparing: Package,
+	shipped: Truck,
+	delivered: CircleCheck,
+	canceled: Ban,
+	refunded: RotateCcw,
+	returned: Undo2,
+};
+
+export function OrderStatusBadge({ status }: { status: OrderStatus }) {
+	const { label, tone } = ORDER_STATUS_BADGE[status];
 	return (
-		<AccountBadge
-			className={badgeTone === "muted" ? "line-through" : undefined}
-			family={TONE_TO_FAMILY[badgeTone]}
-			tone={tone}
+		<StatusChip
+			icon={STATUS_ICON[status]}
+			struck={tone === "muted"}
+			tone={TONE_TO_CHIP[tone]}
 		>
 			{label}
-		</AccountBadge>
+		</StatusChip>
 	);
 }

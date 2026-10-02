@@ -1,32 +1,40 @@
 import type { RefundStatus } from "@emach/db/schema/orders";
 import {
-	AccountBadge,
-	type BadgeFamily,
-} from "@/app/dashboard/_components/account-badge";
+	Ban,
+	Check,
+	CircleCheck,
+	Clock,
+	type LucideIcon,
+	Search,
+} from "lucide-react";
+import { type ChipTone, StatusChip } from "@/components/status-chip";
 import {
 	REFUND_STATUS_BADGE,
 	type RefundBadgeTone,
 } from "@/lib/refunds/status";
 
-const TONE_TO_FAMILY: Record<RefundBadgeTone, BadgeFamily> = {
-	info: "blue",
-	warning: "amber",
-	progress: "blue",
-	success: "green",
-	muted: "gray",
+// Tabela própria da devolução: o "info" dela é "Solicitado", não pago.
+const TONE_TO_CHIP: Record<RefundBadgeTone, ChipTone> = {
+	info: "neutral",
+	warning: "neutral",
+	progress: "neutral",
+	success: "ok",
+	muted: "off",
 };
 
-export function RefundStatusBadge({
-	status,
-	tone = "light",
-}: {
-	status: RefundStatus;
-	tone?: "light" | "dark";
-}) {
-	const { label, tone: badgeTone } = REFUND_STATUS_BADGE[status];
+const STATUS_ICON: Record<RefundStatus, LucideIcon> = {
+	requested: Clock,
+	under_review: Search,
+	approved: Check,
+	refunded: CircleCheck,
+	rejected: Ban,
+};
+
+export function RefundStatusBadge({ status }: { status: RefundStatus }) {
+	const { label, tone } = REFUND_STATUS_BADGE[status];
 	return (
-		<AccountBadge family={TONE_TO_FAMILY[badgeTone]} tone={tone}>
+		<StatusChip icon={STATUS_ICON[status]} tone={TONE_TO_CHIP[tone]}>
 			{label}
-		</AccountBadge>
+		</StatusChip>
 	);
 }

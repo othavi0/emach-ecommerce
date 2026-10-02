@@ -1,7 +1,7 @@
-import { Package, RotateCcw, UserRound } from "lucide-react";
+import { Clock, Package, RotateCcw, UserRound } from "lucide-react";
+import { StatusChip } from "@/components/status-chip";
 import { listClientOrders } from "@/lib/orders/queries";
 import { requireCurrentClient } from "@/lib/session";
-import { AccountBadge } from "./_components/account-badge";
 import { AccountHero } from "./_components/account-hero";
 import { QuickActionCard } from "./_components/quick-action-card";
 import { OrderCard } from "./pedidos/_components/order-card";
@@ -41,9 +41,9 @@ export default async function DashboardPage() {
 							description="Acompanhe e pague seus pedidos."
 							flag={
 								toPay.length > 0 ? (
-									<AccountBadge family="amber" tone="dark">
+									<StatusChip icon={Clock} tone="neutral">
 										{toPay.length} a pagar
-									</AccountBadge>
+									</StatusChip>
 								) : null
 							}
 							href="/dashboard/pedidos"

@@ -37,7 +37,7 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 					value={DATE_FMT.format(order.createdAt)}
 				/>
 				<div className="flex-1" />
-				<OrderStatusBadge status={order.status} tone="dark" />
+				<OrderStatusBadge status={order.status} />
 			</header>
 
 			{order.preview.map((item, idx) => (
@@ -66,7 +66,7 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 			))}
 
 			{terminalNeg ? null : (
-				<StatusStepper steps={buildOrderSteps(order.status)} tone="dark" />
+				<StatusStepper steps={buildOrderSteps(order.status)} />
 			)}
 
 			<div className="flex items-center justify-between border-white/12 border-t px-[18px] py-3.5">

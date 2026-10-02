@@ -4,8 +4,8 @@ import type { ClientAddress } from "@emach/db/schema/client";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { AccountSection } from "@/app/dashboard/_components/account-section";
 import { setDefaultAddressAction } from "@/app/dashboard/dados-pessoais/_actions/addresses";
+import { Panel } from "@/components/panel";
 
 import { AddressSheet, type AddressSheetMode } from "./address-sheet";
 
@@ -37,7 +37,7 @@ export function AddressesSection({ addresses }: AddressesSectionProps) {
 	const hasOthers = addresses.length > 0;
 
 	return (
-		<AccountSection bodyClassName="p-0" title="Endereço de entrega">
+		<Panel flush title="Endereço de entrega">
 			{primary === null ? (
 				<EmptyState
 					onAdd={() => setSheetMode({ kind: "create", hasOthers: false })}
@@ -81,7 +81,7 @@ export function AddressesSection({ addresses }: AddressesSectionProps) {
 			)}
 
 			<AddressSheet mode={sheetMode} onClose={() => setSheetMode(null)} />
-		</AccountSection>
+		</Panel>
 	);
 }
 

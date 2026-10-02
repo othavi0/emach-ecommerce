@@ -14,12 +14,13 @@ import {
 	maskPhone,
 	onlyDigits,
 } from "@emach/validators";
+import { CircleAlert, CircleCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { AccountBadge } from "@/app/dashboard/_components/account-badge";
-import { AccountSection } from "@/app/dashboard/_components/account-section";
+import { Panel } from "@/components/panel";
+import { StatusChip } from "@/components/status-chip";
 import { authClient } from "@/lib/auth-client";
 
 type AccountType = "PF" | "PJ";
@@ -43,7 +44,7 @@ export function PersonalDataForm({ initialData }: PersonalDataFormProps) {
 	const [data, setData] = useState(initialData);
 
 	return (
-		<AccountSection bodyClassName="p-0" title="Seus dados">
+		<Panel flush title="Seus dados">
 			<div className="grid grid-cols-1 sm:grid-cols-2">
 				<NameCard
 					initialValue={data.name}
@@ -59,7 +60,7 @@ export function PersonalDataForm({ initialData }: PersonalDataFormProps) {
 					onSaved={(v) => setData((d) => ({ ...d, document: v }))}
 				/>
 			</div>
-		</AccountSection>
+		</Panel>
 	);
 }
 
@@ -276,9 +277,15 @@ function EmailCard({ email, verified }: { email: string; verified: boolean }) {
 			<div className="min-w-0 flex-1">
 				<div className="flex items-center justify-between gap-2">
 					<FieldLabel>E-mail</FieldLabel>
-					<AccountBadge family={verified ? "green" : "amber"}>
-						{verified ? "Verificado" : "Não verificado"}
-					</AccountBadge>
+					{verified ? (
+						<StatusChip icon={CircleCheck} tone="ok">
+							Verificado
+						</StatusChip>
+					) : (
+						<StatusChip icon={CircleAlert} tone="neutral">
+							Não verificado
+						</StatusChip>
+					)}
 				</div>
 				<div className="mt-2 truncate text-[18px] text-white">{email}</div>
 				{verified ? (
