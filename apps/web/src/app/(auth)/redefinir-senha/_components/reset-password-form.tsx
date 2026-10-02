@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
-import { AuthHomeLogo } from "@/app/login/_components/auth-home-logo";
+import { AuthHomeLogo } from "@/app/(auth)/login/_components/auth-home-logo";
 import { AuthSubmitButton } from "@/components/auth-submit-button";
 import { authClient } from "@/lib/auth-client";
 

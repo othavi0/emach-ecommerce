@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AuthHomeLogo } from "@/app/login/_components/auth-home-logo";
+import { AuthHomeLogo } from "@/app/(auth)/login/_components/auth-home-logo";
 import { ResetPasswordForm } from "./_components/reset-password-form";
 
 export const metadata: Metadata = {
