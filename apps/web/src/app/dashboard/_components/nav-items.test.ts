@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { isAccountNavActive, NAV_ITEMS } from "./nav-items";
 
 function activeLabels(pathname: string): string[] {
-	return NAV_ITEMS.filter((item) =>
-		isAccountNavActive(pathname, item.href)
-	).map((item) => item.label);
+	return NAV_ITEMS.filter((item) => isAccountNavActive(pathname, item)).map(
+		(item) => item.label
+	);
 }
 
 describe("isAccountNavActive", () => {

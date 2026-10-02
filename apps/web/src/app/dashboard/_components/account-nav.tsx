@@ -27,7 +27,7 @@ export function AccountNav({
 				className="-mx-4 flex overflow-x-auto border-line border-b px-4 md:hidden"
 			>
 				{NAV_ITEMS.map((item) => {
-					const active = isAccountNavActive(pathname, item.href);
+					const active = isAccountNavActive(pathname, item);
 					return (
 						<Link
 							aria-current={active ? "page" : undefined}
@@ -58,7 +58,7 @@ export function AccountNav({
 				</div>
 				<nav aria-label="Navegação da conta">
 					{NAV_ITEMS.map((item) => {
-						const active = isAccountNavActive(pathname, item.href);
+						const active = isAccountNavActive(pathname, item);
 						return (
 							<Link
 								aria-current={active ? "page" : undefined}
