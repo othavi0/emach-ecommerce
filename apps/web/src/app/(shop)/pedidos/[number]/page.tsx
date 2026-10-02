@@ -2,18 +2,6 @@ import { db } from "@emach/db";
 import type { OrderStatus } from "@emach/db/schema/orders";
 import { order, orderItem } from "@emach/db/schema/orders";
 import { and, eq } from "drizzle-orm";
-import {
-	Ban,
-	CircleAlert,
-	CircleCheck,
-	Clock,
-	CreditCard,
-	type LucideIcon,
-	Package,
-	RotateCcw,
-	Truck,
-	Undo2,
-} from "lucide-react";
 import type { Metadata, Route } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -26,12 +14,12 @@ import {
 	ACCOUNT_TRAIL,
 	ORDERS_CRUMB,
 } from "@/app/dashboard/_components/account-trail";
+import { OrderStatusBadge } from "@/app/dashboard/pedidos/_components/order-status-badge";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { EmachLinkButton } from "@/components/emach-button";
 import { PageHead } from "@/components/page-head";
 import { Panel, SummaryRow } from "@/components/panel";
 import { SiteHeader } from "@/components/site-header";
-import { type ChipTone, StatusChip } from "@/components/status-chip";
 import { fmtNumericBRL } from "@/lib/format";
 import { requireCurrentClient } from "@/lib/session";
 
@@ -56,18 +44,6 @@ interface AddressSnapshot {
 	zipCode?: string;
 }
 
-const STATUS_LABEL: Record<OrderStatus, string> = {
-	pending_payment: "Aguardando pagamento",
-	paid: "Pago",
-	preparing: "Em preparação",
-	shipped: "Enviado",
-	delivered: "Entregue",
-	canceled: "Cancelado",
-	refunded: "Reembolsado",
-	payment_failed: "Pagamento falhou",
-	returned: "Devolvido",
-};
-
 // O checkout cai aqui com o pedido em pending_payment: o título diz o que
 // falta em vez de "confirmado", e o pagamento mora no detalhe da conta.
 const HEADLINE: Partial<Record<OrderStatus, { title: string; lead: string }>> =
@@ -81,19 +57,6 @@ const HEADLINE: Partial<Record<OrderStatus, { title: string; lead: string }>> =
 			lead: "O pedido continua aberto. Tente pagar de novo pela página do pedido na sua conta.",
 		},
 	};
-
-// Cor nunca sozinha: o chip leva o rótulo de STATUS_LABEL e um ícone.
-const STATUS_CHIP: Record<OrderStatus, { icon: LucideIcon; tone: ChipTone }> = {
-	pending_payment: { icon: Clock, tone: "neutral" },
-	payment_failed: { icon: CircleAlert, tone: "alert" },
-	paid: { icon: CreditCard, tone: "ok" },
-	preparing: { icon: Package, tone: "neutral" },
-	shipped: { icon: Truck, tone: "neutral" },
-	delivered: { icon: CircleCheck, tone: "ok" },
-	canceled: { icon: Ban, tone: "off" },
-	refunded: { icon: RotateCcw, tone: "off" },
-	returned: { icon: Undo2, tone: "off" },
-};
 
 const ORDER_TRAIL = [...ACCOUNT_TRAIL, ORDERS_CRUMB] as const;
 
@@ -202,12 +165,7 @@ async function OrderConfirmationContent({
 	const headline = HEADLINE[orderRow.status];
 	const accountOrderHref = `/dashboard/pedidos/${orderRow.id}` as Route;
 	const current = `Pedido ${orderRow.number}`;
-	const chip = STATUS_CHIP[orderRow.status];
-	const status = (
-		<StatusChip icon={chip.icon} tone={chip.tone}>
-			{STATUS_LABEL[orderRow.status]}
-		</StatusChip>
-	);
+	const status = <OrderStatusBadge status={orderRow.status} />;
 	const createdAt = orderRow.createdAt.toLocaleString("pt-BR", {
 		timeZone: "America/Sao_Paulo",
 		dateStyle: "short",
