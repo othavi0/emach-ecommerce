@@ -62,15 +62,13 @@ export function EmachButton({
 	size,
 	full,
 	icon,
-	isLoading,
+	isLoading: busy = false,
 	className,
 	onClick,
 	...props
 }: EmachButtonProps) {
 	// aria-busy em vez de `disabled`: o botão segue focável (leitor de tela não
 	// perde o foco no meio da ação) e o rótulo mantém contraste cheio.
-	const busy = isLoading === true;
-
 	return (
 		<button
 			{...props}
