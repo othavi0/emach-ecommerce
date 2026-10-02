@@ -654,6 +654,7 @@ export function CheckoutContent({
 											label="Li e aceito os Termos de Uso"
 											onChange={(v) => field.handleChange(v)}
 											required
+											touched={field.state.meta.isTouched}
 										/>
 									)}
 								</form.Field>
@@ -666,6 +667,7 @@ export function CheckoutContent({
 											label="Li e aceito a Política de Privacidade"
 											onChange={(v) => field.handleChange(v)}
 											required
+											touched={field.state.meta.isTouched}
 										/>
 									)}
 								</form.Field>
@@ -677,6 +679,7 @@ export function CheckoutContent({
 											id="acceptMarketing"
 											label="Quero receber ofertas e novidades por e-mail"
 											onChange={(v) => field.handleChange(v)}
+											touched={field.state.meta.isTouched}
 										/>
 									)}
 								</form.Field>

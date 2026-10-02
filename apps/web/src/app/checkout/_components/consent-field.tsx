@@ -2,8 +2,6 @@
 
 import { Checkbox } from "@emach/ui/components/checkbox";
 import { CircleAlert } from "lucide-react";
-import { useState } from "react";
-
 import { errorMessages, type FieldErrors } from "@/components/field";
 
 interface ConsentFieldProps {
@@ -13,9 +11,11 @@ interface ConsentFieldProps {
 	label: string;
 	onChange: (v: boolean) => void;
 	required?: boolean;
+	/** `field.state.meta.isTouched`: o TanStack marca ao mudar a caixa e no envio. */
+	touched: boolean;
 }
 
-/** Caixa de consentimento. O erro só aparece depois que o cliente mexe nela. */
+/** Caixa de consentimento. O erro aparece depois que o cliente mexe nela ou envia. */
 export function ConsentField({
 	checked,
 	errors,
@@ -23,8 +23,8 @@ export function ConsentField({
 	label,
 	onChange,
 	required = false,
+	touched,
 }: ConsentFieldProps) {
-	const [touched, setTouched] = useState(false);
 	const messages = touched ? errorMessages(errors) : [];
 	return (
 		<div>
@@ -35,10 +35,7 @@ export function ConsentField({
 				<Checkbox
 					checked={checked}
 					id={id}
-					onCheckedChange={(v) => {
-						setTouched(true);
-						onChange(v === true);
-					}}
+					onCheckedChange={(v) => onChange(v === true)}
 				/>
 				<span>
 					{label}
