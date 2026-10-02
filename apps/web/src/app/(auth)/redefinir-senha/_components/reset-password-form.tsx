@@ -1,13 +1,13 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
-import { AuthHomeLogo } from "@/app/(auth)/login/_components/auth-home-logo";
 import { AuthSubmitButton } from "@/components/auth-submit-button";
+import { EmachLinkButton } from "@/components/emach-button";
 import { authClient } from "@/lib/auth-client";
+import { AuthColumn } from "../../_components/auth-column";
 
 export function ResetPasswordForm() {
 	const router = useRouter();
@@ -54,108 +54,92 @@ export function ResetPasswordForm() {
 
 	if (!token) {
 		return (
-			<main className="flex min-h-svh items-center justify-center bg-gray-10 px-6 py-20">
-				<div className="w-full max-w-[400px]">
-					<AuthHomeLogo className="mb-10 h-8" tone="red" />
-					<h1 className="font-display font-medium text-[32px] text-near-black leading-tight">
-						Link inválido
-					</h1>
-					<p className="mt-3 text-[14px] text-gray-60">
-						Este link está incompleto. Solicite um novo e-mail de redefinição.
-					</p>
-					<Link
-						className="mt-6 inline-block text-[13px] text-emach-red-hover hover:underline"
-						href={{ pathname: "/esqueci-senha" }}
-					>
-						Solicitar novo link
-					</Link>
-				</div>
-			</main>
+			<AuthColumn
+				lede="Este link está incompleto. Solicite um novo e-mail de redefinição."
+				title="Link inválido"
+			>
+				<EmachLinkButton href="/esqueci-senha" variant="dark">
+					Solicitar novo link
+				</EmachLinkButton>
+			</AuthColumn>
 		);
 	}
 
 	return (
-		<main className="flex min-h-svh items-center justify-center bg-gray-10 px-6 py-20">
-			<div className="w-full max-w-[400px]">
-				<AuthHomeLogo className="mb-10 h-8" tone="red" />
-				<h1 className="font-display font-medium text-[32px] text-near-black leading-tight">
-					Redefinir senha
-				</h1>
-				<p className="mt-3 text-[14px] text-gray-60">
-					Crie uma nova senha para sua conta.
-				</p>
-
-				<form
-					className="mt-8 flex flex-col gap-3.5"
-					onSubmit={(e) => {
-						e.preventDefault();
-						e.stopPropagation();
-						form.handleSubmit();
-					}}
-				>
-					<form.Field name="password">
-						{(field) => (
-							<label className="emach-field" htmlFor={field.name}>
-								<span className="emach-field__label">Nova senha</span>
-								<input
-									className="emach-input"
-									id={field.name}
-									name={field.name}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="••••••••"
-									type="password"
-									value={field.state.value}
-								/>
-								{field.state.meta.errors.map((error) => (
-									<span className="emach-field__error" key={error?.message}>
-										{error?.message}
-									</span>
-								))}
-							</label>
-						)}
-					</form.Field>
-
-					<form.Field name="confirm">
-						{(field) => (
-							<label className="emach-field" htmlFor={field.name}>
-								<span className="emach-field__label">Confirmar senha</span>
-								<input
-									className="emach-input"
-									id={field.name}
-									name={field.name}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="••••••••"
-									type="password"
-									value={field.state.value}
-								/>
-								{field.state.meta.errors.map((error) => (
-									<span className="emach-field__error" key={error?.message}>
-										{error?.message}
-									</span>
-								))}
-							</label>
-						)}
-					</form.Field>
-
-					<form.Subscribe
-						selector={(state) => ({
-							canSubmit: state.canSubmit,
-							isSubmitting: state.isSubmitting,
-						})}
-					>
-						{({ canSubmit, isSubmitting }) => (
-							<AuthSubmitButton
-								canSubmit={canSubmit}
-								isSubmitting={isSubmitting}
-								label="Redefinir senha"
-								pendingLabel="Redefinindo…"
+		<AuthColumn
+			lede="Crie uma nova senha para sua conta."
+			title="Redefinir senha"
+		>
+			<form
+				className="flex flex-col gap-3.5"
+				onSubmit={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					form.handleSubmit();
+				}}
+			>
+				<form.Field name="password">
+					{(field) => (
+						<label className="emach-field" htmlFor={field.name}>
+							<span className="emach-field__label">Nova senha</span>
+							<input
+								className="emach-input"
+								id={field.name}
+								name={field.name}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								placeholder="••••••••"
+								type="password"
+								value={field.state.value}
 							/>
-						)}
-					</form.Subscribe>
-				</form>
-			</div>
-		</main>
+							{field.state.meta.errors.map((error) => (
+								<span className="emach-field__error" key={error?.message}>
+									{error?.message}
+								</span>
+							))}
+						</label>
+					)}
+				</form.Field>
+
+				<form.Field name="confirm">
+					{(field) => (
+						<label className="emach-field" htmlFor={field.name}>
+							<span className="emach-field__label">Confirmar senha</span>
+							<input
+								className="emach-input"
+								id={field.name}
+								name={field.name}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								placeholder="••••••••"
+								type="password"
+								value={field.state.value}
+							/>
+							{field.state.meta.errors.map((error) => (
+								<span className="emach-field__error" key={error?.message}>
+									{error?.message}
+								</span>
+							))}
+						</label>
+					)}
+				</form.Field>
+
+				<form.Subscribe
+					selector={(state) => ({
+						canSubmit: state.canSubmit,
+						isSubmitting: state.isSubmitting,
+					})}
+				>
+					{({ canSubmit, isSubmitting }) => (
+						<AuthSubmitButton
+							canSubmit={canSubmit}
+							isSubmitting={isSubmitting}
+							label="Redefinir senha"
+							pendingLabel="Redefinindo…"
+						/>
+					)}
+				</form.Subscribe>
+			</form>
+		</AuthColumn>
 	);
 }
