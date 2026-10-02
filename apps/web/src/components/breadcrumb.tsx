@@ -2,23 +2,25 @@ import { ChevronRight } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 
-interface BreadcrumbProps {
-	category: { slug: string; name: string } | null;
-	productName: string;
+export interface Crumb {
+	href: Route;
+	label: string;
 }
+
+export const HOME_CRUMB: Crumb = { href: "/", label: "Início" };
+export const CATALOG_CRUMB: Crumb = { href: "/catalog", label: "Catálogo" };
 
 const linkClass =
 	"inline-flex min-h-8 items-center text-ink-2 underline underline-offset-[3px]";
 
-/** Trilha estrutural da página de produto. */
-export function Breadcrumb({ category, productName }: BreadcrumbProps) {
-	const trail: { href: Route; label: string }[] = [
-		{ href: "/", label: "Início" },
-		{ href: "/catalog", label: "Catálogo" },
-		...(category
-			? [{ href: `/catalog/${category.slug}` as Route, label: category.name }]
-			: []),
-	];
+/** Trilha estrutural: links antes da página atual, que fica sem link e com aria-current. */
+export function Breadcrumb({
+	current,
+	trail,
+}: {
+	current: string;
+	trail: readonly Crumb[];
+}) {
 	return (
 		<nav
 			aria-label="Você está em"
@@ -35,7 +37,7 @@ export function Breadcrumb({ category, productName }: BreadcrumbProps) {
 				))}
 				<li className="min-w-0">
 					<span aria-current="page" className="line-clamp-1">
-						{productName}
+						{current}
 					</span>
 				</li>
 			</ol>
