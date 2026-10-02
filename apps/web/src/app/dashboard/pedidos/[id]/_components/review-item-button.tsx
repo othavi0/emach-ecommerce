@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useState } from "react";
 
 import { EmachButton } from "@/components/emach-button";
@@ -19,8 +20,9 @@ export function ReviewItemButton({
 	const [open, setOpen] = useState(false);
 	if (reviewed) {
 		return (
-			<span className="font-semibold text-[12px] text-success-on-dark">
-				Avaliado ✓
+			<span className="inline-flex items-center gap-1 font-semibold text-[13.5px] text-ok">
+				<Check aria-hidden="true" className="size-4" />
+				Avaliado
 			</span>
 		);
 	}

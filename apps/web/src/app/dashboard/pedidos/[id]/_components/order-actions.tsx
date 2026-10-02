@@ -19,16 +19,20 @@ export function OrderActions({
 
 	const buttons: React.ReactNode[] = [];
 	if (isPending) {
-		buttons.push(<CancelOrderButton key="cancel" orderId={orderId} />);
 		buttons.push(
 			<Link
-				className={emachButtonVariants({ variant: "cta", size: "md" })}
+				className={emachButtonVariants({
+					variant: "cta",
+					size: "lg",
+					full: true,
+				})}
 				href={pagarHref}
 				key="pay"
 			>
 				Pagar agora
 			</Link>
 		);
+		buttons.push(<CancelOrderButton key="cancel" orderId={orderId} />);
 	} else if (canRebuy) {
 		buttons.push(<RebuyButton key="rebuy" orderId={orderId} variant="dark" />);
 	}
@@ -36,5 +40,5 @@ export function OrderActions({
 	if (buttons.length === 0) {
 		return null;
 	}
-	return <div className="mt-6 flex flex-wrap justify-end gap-2">{buttons}</div>;
+	return <div className="flex flex-col gap-2 [&>button]:w-full">{buttons}</div>;
 }

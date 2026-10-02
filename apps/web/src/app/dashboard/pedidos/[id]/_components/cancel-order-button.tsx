@@ -48,7 +48,7 @@ export function CancelOrderButton({
 				onBlur={() => setConfirming(false)}
 				onClick={onClick}
 				size="md"
-				variant={variant}
+				variant={confirming ? "danger" : variant}
 			>
 				{label()}
 			</EmachButton>
