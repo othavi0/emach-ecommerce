@@ -106,45 +106,83 @@
 
 /* ============================================================
    EMACH Component Styles
-   Ferrari editorial: 2px radii, hairline borders, red focus
    ============================================================ */
 
-/* ---------- Inputs ---------- */
-.emach-input {
+/* ---------- Controles de formulário (H3) ----------
+   48px, borda 1.5px line-strong, raio 3px. Fonte de 16px porque abaixo
+   disso o Safari do iOS dá zoom no foco. */
+.emach-input,
+.emach-select,
+.emach-textarea {
 	width: 100%;
-	height: 44px;
-	padding: 0 14px;
 	font-family: var(--font-sans);
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: 400;
-	color: var(--near-black);
+	color: var(--ink);
 	-webkit-appearance: none;
 	appearance: none;
 	outline: none;
-	background: #fff;
-	border: 1px solid var(--border);
-	border-radius: 2px;
+	background-color: var(--paper);
+	border: 1.5px solid var(--line-strong);
+	border-radius: 3px;
 	transition:
 		border-color 150ms ease,
 		box-shadow 150ms ease;
 }
-.emach-input::placeholder {
-	font-weight: 400;
-	/* gray-55 (#969696) reprovava em contraste (2.96:1); gray-60 (#666) = 5.74:1
-	   sobre #fff, ainda claramente "placeholder" vs texto digitado near-black. */
-	color: var(--gray-60);
+.emach-input,
+.emach-select {
+	height: 48px;
 }
-.emach-input:hover {
-	border-color: var(--gray-50);
+.emach-input {
+	padding: 0 14px;
 }
-.emach-input:focus {
-	border-color: var(--near-black);
-	box-shadow: inset 0 -2px 0 0 var(--emach-red);
+.emach-select {
+	padding: 0 40px 0 14px;
+	cursor: pointer;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%2316191d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='1,2 6,7 11,2'/></svg>");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
 }
-.emach-input:disabled {
-	color: var(--gray-55);
+.emach-textarea {
+	min-height: 120px;
+	padding: 12px 14px;
+	line-height: 1.5;
+	resize: vertical;
+}
+.emach-input::placeholder,
+.emach-textarea::placeholder {
+	color: var(--ink-muted);
+}
+.emach-input:hover,
+.emach-select:hover,
+.emach-textarea:hover {
+	border-color: var(--ink-muted);
+}
+/* :read-only fica só nos campos de texto: no <select> ele casa sempre. */
+.emach-input:read-only,
+.emach-textarea:read-only,
+.emach-input:disabled,
+.emach-select:disabled,
+.emach-textarea:disabled {
+	color: var(--ink-muted);
+	background-color: var(--canteiro);
+	border-color: var(--line);
+}
+.emach-input:disabled,
+.emach-select:disabled,
+.emach-textarea:disabled {
 	cursor: not-allowed;
-	background: var(--gray-10);
+}
+.emach-input:focus,
+.emach-select:focus,
+.emach-textarea:focus {
+	border-color: var(--ink);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 18%, transparent);
+}
+.emach-input[aria-invalid="true"],
+.emach-select[aria-invalid="true"],
+.emach-textarea[aria-invalid="true"] {
+	border-color: var(--error-text);
 }
 
 /* ---------- Field wrapper ---------- */
@@ -155,54 +193,45 @@
 }
 .emach-field__label {
 	font-family: var(--font-sans);
-	font-size: 11px;
-	font-weight: 700;
-	color: var(--gray-60);
-	text-transform: uppercase;
-	letter-spacing: 0.12em;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--ink);
 }
 .emach-field__hint {
-	font-size: 12px;
-	color: var(--gray-60);
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--ink-muted);
 }
 .emach-field__error {
-	font-size: 12px;
+	display: flex;
+	gap: 6px;
+	align-items: flex-start;
+	font-size: 13px;
 	font-weight: 500;
-	/* --warning (#F13A2C) reprova WCAG AA (3.3:1) em texto; mensagem de erro é o
-	   texto que MAIS precisa ser legível. --emach-red-hover (#B01E0A) = 6.29:1. */
-	color: var(--emach-red-hover);
+	line-height: 1.4;
+	color: var(--error-text);
+}
+/* Ícone de alerta (CircleAlert) por máscara: a cor do erro nunca vem
+   sozinha e os formulários existentes ganham o ícone sem mudar markup. */
+.emach-field__error::before {
+	flex: none;
+	width: 14px;
+	height: 14px;
+	margin-top: 2px;
+	content: "";
+	background-color: currentColor;
+	-webkit-mask:
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='12' x2='12' y1='8' y2='12'/><line x1='12' x2='12.01' y1='16' y2='16'/></svg>")
+		center / contain no-repeat;
+	mask:
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='12' x2='12' y1='8' y2='12'/><line x1='12' x2='12.01' y1='16' y2='16'/></svg>")
+		center / contain no-repeat;
+}
+.emach-field__error:empty {
+	display: none;
 }
 
-/* ---------- Select ---------- */
-.emach-select {
-	width: 100%;
-	height: 44px;
-	padding: 0 40px 0 14px;
-	font-family: var(--font-sans);
-	font-size: 14px;
-	color: var(--near-black);
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	appearance: none;
-	cursor: pointer;
-	outline: none;
-	background: #fff;
-	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23181818' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='1,2 6,7 11,2'/></svg>");
-	background-repeat: no-repeat;
-	background-position: right 14px center;
-	border: 1px solid var(--border);
-	border-radius: 2px;
-	transition:
-		border-color 150ms ease,
-		box-shadow 150ms ease;
-}
-.emach-select:hover {
-	border-color: var(--gray-50);
-}
-.emach-select:focus {
-	border-color: var(--near-black);
-	box-shadow: inset 0 -2px 0 0 var(--emach-red);
-}
 /* ---------- Button reset helper ---------- */
 .emach-ghost-btn {
 	padding: 0;
