@@ -64,13 +64,7 @@ export function PromoHighlight({
 						</div>
 					)}
 
-					{layout === "grid" && (
-						<ProductGrid
-							surface="elevated"
-							tools={promotion.tools}
-							voltagesByTool={voltagesByTool}
-						/>
-					)}
+					{layout === "grid" && <ProductGrid tools={promotion.tools} />}
 				</div>
 
 				<div className="mt-10 flex justify-center">

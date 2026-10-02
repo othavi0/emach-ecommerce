@@ -200,7 +200,6 @@ async function HomeContent() {
 							label="Novidades"
 							title="Recém-chegadas"
 							tools={recentTools}
-							voltagesByTool={voltagesByTool}
 						/>
 					</PageContainer>
 				</section>

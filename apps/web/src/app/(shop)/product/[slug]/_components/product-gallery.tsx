@@ -7,7 +7,7 @@ import InnerImageZoom from "react-inner-image-zoom";
 import { ProductImage } from "@/components/product-image";
 import "react-inner-image-zoom/es/styles.min.css";
 import "./product-gallery.css";
-import { buildSlots, type GallerySlot, slotKey } from "./gallery-slots";
+import { buildSlots, type GallerySlot, slotKey } from "@/lib/gallery-slots";
 
 interface ProductGalleryProps {
 	categorySlug: string;

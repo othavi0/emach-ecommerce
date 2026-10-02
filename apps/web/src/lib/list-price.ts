@@ -14,7 +14,9 @@ function toCents(amount: string | null): number | null {
  * tipada como `string` (CLAUDE.md, "Variante sem preço"): ali a promoção fixa
  * vira `GREATEST(NULL - x, 0) = 0`, então o preço base decide.
  */
-export function listPriceCents(tool: ToolListItem): number | null {
+export function listPriceCents(
+	tool: Pick<ToolListItem, "defaultVariant">
+): number | null {
 	const { discountedAmount, priceAmount } = tool.defaultVariant as {
 		discountedAmount: string | null;
 		priceAmount: string | null;

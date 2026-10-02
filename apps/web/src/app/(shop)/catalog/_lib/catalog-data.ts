@@ -5,9 +5,8 @@ import {
 	getCategoryTree,
 } from "@emach/db/queries/categories";
 import { getTools } from "@emach/db/queries/tools";
-import type { Voltage } from "@emach/db/schema/tools";
 import { cacheLife } from "next/cache";
-import { getVoltagesByTool } from "@/lib/variant-voltages";
+import { type CardExtrasByTool, getCardExtras } from "@/lib/card-data";
 import type { SortKey, VoltageKey } from "./catalog-filters";
 import { type FacetCounts, getFacetCounts } from "./facet-counts";
 
@@ -34,17 +33,17 @@ export interface CatalogCurrentCategory {
 type ToolsResult = Awaited<ReturnType<typeof getTools>>;
 
 export interface CatalogData {
+	cardExtras: CardExtrasByTool;
 	categoryTree: CategoryNode[];
 	currentCategory: CatalogCurrentCategory | null;
 	facetCounts: FacetCounts;
 	tools: ToolsResult["tools"];
 	total: number;
-	voltagesByTool: Map<string, Voltage[]>;
 }
 
 // Composição plana e testável (integração read-only em catalog-data.test.ts).
 // A árvore não depende da categoria ativa, então parte antes do lookup de slug;
-// getVoltagesByTool precisa dos ids retornados por getTools (serial inerente).
+// getCardExtras precisa dos ids retornados por getTools (serial inerente).
 export async function fetchCatalogData(
 	input: CatalogDataInput
 ): Promise<CatalogData> {
@@ -87,7 +86,7 @@ export async function fetchCatalogData(
 		}),
 	]);
 
-	const voltagesByTool = await getVoltagesByTool(tools.map((t) => t.id));
+	const cardExtras = await getCardExtras(tools.map((t) => t.id));
 
 	return {
 		categoryTree,
@@ -95,7 +94,7 @@ export async function fetchCatalogData(
 		facetCounts,
 		tools,
 		total,
-		voltagesByTool,
+		cardExtras,
 	};
 }
 

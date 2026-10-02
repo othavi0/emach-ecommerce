@@ -1,22 +1,14 @@
-"use client";
-
 import type { ToolListItem } from "@emach/db/queries/tools";
-import type { Voltage } from "@emach/db/schema/tools";
 import { ProductCard } from "@/components/product-card";
+import type { CardExtrasByTool } from "@/lib/card-data";
 
 interface ProductGridProps {
-	/** Repassado ao ProductCard: "elevated" sobre fundo escuro (promoções). */
-	surface?: "dark" | "elevated";
+	/** Voltagens e chips por toolId (ver `getCardExtras`). */
+	extrasByTool?: CardExtrasByTool;
 	tools: ToolListItem[];
-	/** Voltagens por toolId, para os selos do card. */
-	voltagesByTool?: Map<string, Voltage[]>;
 }
 
-export function ProductGrid({
-	surface,
-	tools,
-	voltagesByTool,
-}: ProductGridProps) {
+export function ProductGrid({ extrasByTool, tools }: ProductGridProps) {
 	return (
 		<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
 			{tools.map((tool, index) => (
@@ -25,11 +17,7 @@ export function ProductGrid({
 					key={tool.id}
 					style={{ "--i": index } as React.CSSProperties}
 				>
-					<ProductCard
-						surface={surface}
-						tool={tool}
-						voltages={voltagesByTool?.get(tool.id)}
-					/>
+					<ProductCard extras={extrasByTool?.[tool.id]} tool={tool} />
 				</div>
 			))}
 		</div>

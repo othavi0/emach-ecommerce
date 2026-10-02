@@ -2,7 +2,6 @@
 
 import type { CategoryNode } from "@emach/db/queries/categories";
 import type { ToolListItem } from "@emach/db/queries/tools";
-import type { Voltage } from "@emach/db/schema/tools";
 import { cn } from "@emach/ui/lib/utils";
 import { Grid3x3, List, SlidersHorizontal } from "lucide-react";
 import type { Route } from "next";
@@ -14,6 +13,7 @@ import { PageContainer } from "@/components/page-container";
 import { ProductCard } from "@/components/product-card";
 import { ProductImage } from "@/components/product-image";
 import { SectionLabel } from "@/components/section-label";
+import type { CardExtrasByTool } from "@/lib/card-data";
 import { fmtNumericBRL } from "@/lib/format";
 import {
 	buildHref,
@@ -30,6 +30,7 @@ import { FilterDrawer } from "./filter-drawer";
 import { FilterPanel } from "./filter-panel";
 
 interface CatalogContentProps {
+	cardExtras?: CardExtrasByTool;
 	categoryTree: CategoryNode[];
 	currentCategoryDescription: string | null;
 	currentCategoryName: string | null;
@@ -45,7 +46,6 @@ interface CatalogContentProps {
 	tools: ToolListItem[];
 	total: number;
 	voltages: VoltageKey[];
-	voltagesByTool?: Map<string, Voltage[]>;
 }
 
 const PAGE_LINK_CLASS = emachButtonVariants({ variant: "ghost", size: "sm" });
@@ -106,7 +106,7 @@ export function CatalogContent({
 	onlyPromo,
 	page,
 	pageSize,
-	voltagesByTool,
+	cardExtras,
 }: CatalogContentProps) {
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
@@ -348,9 +348,9 @@ export function CatalogContent({
 							<div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
 								{tools.map((t) => (
 									<ProductCard
+										extras={cardExtras?.[t.id]}
 										key={t.id}
 										tool={t}
-										voltages={voltagesByTool?.get(t.id)}
 									/>
 								))}
 							</div>

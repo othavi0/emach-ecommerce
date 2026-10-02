@@ -27,7 +27,7 @@ export async function CatalogResults({
 		facetCounts,
 		tools,
 		total,
-		voltagesByTool,
+		cardExtras,
 	} = await getCatalogData({
 		cat,
 		search: parsed.search,
@@ -41,6 +41,7 @@ export async function CatalogResults({
 
 	return (
 		<CatalogContent
+			cardExtras={cardExtras}
 			categoryTree={categoryTree}
 			currentCategoryDescription={currentCategory?.description ?? null}
 			currentCategoryName={currentCategory?.name ?? null}
@@ -56,7 +57,6 @@ export async function CatalogResults({
 			tools={tools}
 			total={total}
 			voltages={parsed.voltages}
-			voltagesByTool={voltagesByTool}
 		/>
 	);
 }

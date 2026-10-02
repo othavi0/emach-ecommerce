@@ -3,7 +3,7 @@ import type { ToolDetail } from "@emach/db/queries/tools";
 import { cn } from "@emach/ui/lib/utils";
 import type { ReactNode } from "react";
 import { SectionLabel } from "@/components/section-label";
-import { fmtSpecNumber, fmtSpecRange } from "@/lib/format";
+import { formatAttribute } from "@/lib/attribute-format";
 import { toDescriptionParagraphs } from "./description-paragraphs";
 import { buildPlateLayout, type PlateAnchorCell } from "./plate-layout";
 import { PlateMedia } from "./plate-media";
@@ -22,32 +22,6 @@ type Attr = ToolDetail["attributes"][number];
 // numérica ("até 2.800 RPM", "Sim") caem no else e renderizam inteiros.
 const HERO_VALUE = /^([\d.,]+)\s*(\S.*)$/;
 
-function fmtAttr(item: Attr): string {
-	const { definition, value } = item;
-	const unit = definition.unit ?? "";
-	switch (definition.inputType) {
-		case "boolean": {
-			if (value.valueBool == null) {
-				return "—";
-			}
-			return value.valueBool ? "Sim" : "Não";
-		}
-		case "numeric_range":
-			return fmtSpecRange(value.valueNumeric, value.valueNumericMax, unit);
-		case "number":
-			return fmtSpecNumber(value.valueNumeric, unit);
-		case "select": {
-			// Opções de select podem ter unidade ("Diâmetro do disco: 185" + mm).
-			if (!value.valueText) {
-				return "—";
-			}
-			return unit ? `${value.valueText} ${unit}` : value.valueText;
-		}
-		default:
-			return value.valueText ?? "—";
-	}
-}
-
 function SpecLabel({ children }: { children: ReactNode }) {
 	return (
 		<dt className="font-display font-semibold text-[10.5px] text-gray-60 uppercase tracking-[0.12em]">
@@ -57,7 +31,7 @@ function SpecLabel({ children }: { children: ReactNode }) {
 }
 
 function specValueNode(attr: Attr): ReactNode {
-	const formatted = fmtAttr(attr);
+	const formatted = formatAttribute(attr);
 	const numeric =
 		attr.definition.inputType === "number" ||
 		attr.definition.inputType === "numeric_range";
