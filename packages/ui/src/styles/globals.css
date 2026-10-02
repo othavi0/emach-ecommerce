@@ -232,47 +232,33 @@
 	display: none;
 }
 
-/* ---------- Button reset helper ---------- */
-.emach-ghost-btn {
-	padding: 0;
-	font: inherit;
-	color: inherit;
-	cursor: pointer;
-	background: transparent;
-	border: none;
-	transition: opacity 150ms ease;
-}
-/* O reset zera o fundo, então a pressão só pode falar por opacidade. */
-.emach-ghost-btn:active {
-	opacity: 0.6;
-	transition-duration: 75ms;
-}
-@media (prefers-reduced-motion: reduce) {
-	.emach-ghost-btn {
-		transition: none;
-	}
-}
-
 /* ---------- Toast (sonner) EMACH style ---------- */
 .emach-toast {
-	padding-left: 18px !important;
-	color: #fff !important;
-	background: var(--near-black) !important;
+	color: var(--on-dark) !important;
+	background: var(--grafite) !important;
 	border: none !important;
-	border-radius: 2px !important;
-	/* Barra vermelha via inset shadow, NÃO via ::before — o sonner reserva
-	   ::before/::after do toast para a mecânica de swipe/gap/saída. Usar
-	   pseudo-elemento aqui faz a barra "voar" para fora ao arrastar.
-	   Entrada/saída/empilhamento ficam por conta da animação nativa do sonner. */
-	box-shadow:
-		inset 4px 0 0 var(--emach-red),
-		0 12px 32px rgba(0, 0, 0, 0.25) !important;
+	border-radius: 3px !important;
+	box-shadow: var(--elev-pop) !important;
 }
 .emach-toast__title {
 	font-family: var(--font-sans);
 	font-size: 13px !important;
 	font-weight: 500 !important;
-	color: #fff !important;
+	color: var(--on-dark) !important;
+}
+.emach-toast [data-button] {
+	min-height: 44px !important;
+	padding: 0 14px !important;
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	color: var(--grafite) !important;
+	background: var(--on-dark) !important;
+	border-radius: 3px !important;
+}
+.emach-toast [data-button]:focus-visible {
+	outline: 2px solid var(--on-dark) !important;
+	outline-offset: 2px;
+	box-shadow: none !important;
 }
 
 /* ---------- Cart item transitions ---------- */
@@ -388,13 +374,6 @@
 }
 .emach-bg-placeholder-shadow {
 	background: radial-gradient(ellipse, rgba(0, 0, 0, 0.3), transparent 70%);
-}
-.emach-bg-login-vignette {
-	background: radial-gradient(
-		ellipse at 30% 60%,
-		transparent 0%,
-		rgba(0, 0, 0, 0.55) 80%
-	);
 }
 
 /* ---------- Cart badge bounce ---------- */
