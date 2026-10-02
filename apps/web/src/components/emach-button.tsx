@@ -45,7 +45,7 @@ export function emachButtonVariants({
 	className,
 	...style
 }: ButtonStyle & { className?: string }): string {
-	return buttonVariants({ ...style, className });
+	return cn(buttonVariants(style), className);
 }
 
 interface EmachButtonProps
