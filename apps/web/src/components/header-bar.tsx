@@ -74,7 +74,7 @@ export function HeaderBar({ nav }: { nav: StoreNav }) {
 						</Link>
 					</div>
 
-					<HeaderSearch className="col-span-full row-start-2 md:col-span-1 md:row-start-1" />
+					<HeaderSearch className="col-span-full row-start-2 md:col-span-1 md:col-start-2 md:row-start-1" />
 
 					<div className="flex items-center gap-1">
 						<div className="max-md:hidden">
@@ -91,7 +91,7 @@ export function HeaderBar({ nav }: { nav: StoreNav }) {
 							<ShoppingCart aria-hidden="true" className="size-6" />
 							<span
 								aria-hidden="true"
-								className={`emach-cart-badge absolute top-0 left-6 grid h-5 min-w-5 place-items-center rounded-[10px] px-1.5 font-extrabold text-[12px] text-white tabular-nums md:top-0.5 md:left-[34px] ${totalCount > 0 ? "bg-emach-red" : "bg-grafite-2"}`}
+								className={`emach-cart-badge absolute top-0 left-6 grid h-5 min-w-5 place-items-center rounded-[10px] px-1.5 font-extrabold text-[12px] text-white tabular-nums md:top-0.5 md:left-[26px] ${totalCount > 0 ? "bg-emach-red" : "bg-grafite-2"}`}
 								data-pulse={pulse ? "true" : undefined}
 							>
 								{totalCount}

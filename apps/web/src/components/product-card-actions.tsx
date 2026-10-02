@@ -66,7 +66,8 @@ export function CardActionButton({
 						aria-hidden="true"
 						className="size-[18px] max-sm:hidden"
 					/>
-					Adicionar ao carrinho
+					<span className="sm:hidden">Adicionar</span>
+					<span className="max-sm:hidden">Adicionar ao carrinho</span>
 					<span className="sr-only">: {name}</span>
 				</button>
 			);
@@ -85,7 +86,8 @@ export function CardActionButton({
 			return (
 				<Link className={lineButton} href={`/product/${slug}`}>
 					<Bell aria-hidden="true" className="size-[18px] max-sm:hidden" />
-					Avise-me quando chegar
+					<span className="sm:hidden">Avise-me</span>
+					<span className="max-sm:hidden">Avise-me quando chegar</span>
 					<span className="sr-only">: {name}</span>
 				</Link>
 			);

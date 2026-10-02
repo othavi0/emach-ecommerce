@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import { navShortLabel } from "@/lib/nav-label";
 import type { StoreNav } from "@/lib/store-nav";
 
 const linkClass =
@@ -69,9 +70,6 @@ export function DeptNav({ nav }: { nav: StoreNav }) {
 				<div className="flex min-w-0 items-center overflow-x-auto [scrollbar-width:none]">
 					{nav.services.length > 0 && (
 						<>
-							<span className="shrink-0 whitespace-nowrap pr-1.5 pl-1 font-semibold text-[13px] text-ink-muted max-xl:hidden">
-								Por serviço:
-							</span>
 							{nav.services.map((s) => (
 								<Link className={linkClass} href={s.href} key={s.slug}>
 									{s.name}
@@ -83,11 +81,13 @@ export function DeptNav({ nav }: { nav: StoreNav }) {
 							/>
 						</>
 					)}
-					{nav.categories.map((c) => (
-						<Link className={linkClass} href={c.href} key={c.slug}>
-							{c.name}
-						</Link>
-					))}
+					{nav.categories
+						.filter((c) => c.productCount > 0)
+						.map((c) => (
+							<Link className={linkClass} href={c.href} key={c.slug}>
+								{navShortLabel(c.name)}
+							</Link>
+						))}
 				</div>
 			</div>
 
