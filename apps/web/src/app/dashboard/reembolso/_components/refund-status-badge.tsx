@@ -8,32 +8,22 @@ import {
 	Search,
 } from "lucide-react";
 import { type ChipTone, StatusChip } from "@/components/status-chip";
-import {
-	REFUND_STATUS_BADGE,
-	type RefundBadgeTone,
-} from "@/lib/refunds/status";
+import { REFUND_STATUS_BADGE } from "@/lib/refunds/status";
 
-const TONE_TO_CHIP: Record<RefundBadgeTone, ChipTone> = {
-	info: "neutral",
-	warning: "neutral",
-	progress: "neutral",
-	success: "ok",
-	muted: "off",
-};
-
-const STATUS_ICON: Record<RefundStatus, LucideIcon> = {
-	requested: Clock,
-	under_review: Search,
-	approved: Check,
-	refunded: CircleCheck,
-	rejected: Ban,
-};
+const STATUS_CHIP: Record<RefundStatus, { tone: ChipTone; icon: LucideIcon }> =
+	{
+		requested: { tone: "neutral", icon: Clock },
+		under_review: { tone: "neutral", icon: Search },
+		approved: { tone: "neutral", icon: Check },
+		refunded: { tone: "ok", icon: CircleCheck },
+		rejected: { tone: "off", icon: Ban },
+	};
 
 export function RefundStatusBadge({ status }: { status: RefundStatus }) {
-	const { label, tone } = REFUND_STATUS_BADGE[status];
+	const { tone, icon } = STATUS_CHIP[status];
 	return (
-		<StatusChip icon={STATUS_ICON[status]} tone={TONE_TO_CHIP[tone]}>
-			{label}
+		<StatusChip icon={icon} tone={tone}>
+			{REFUND_STATUS_BADGE[status].label}
 		</StatusChip>
 	);
 }
