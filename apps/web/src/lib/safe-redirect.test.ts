@@ -34,6 +34,24 @@ describe("safeRedirect", () => {
 		expect(safeRedirect(raw, FALLBACK)).toBe(FALLBACK);
 	});
 
+	// Com o cabeçalho da loja no /login, "Entrar" geraria /login?redirect=/login
+	// e o login terminaria preso no fallback da própria tela.
+	it.each([
+		["/login"],
+		["/login?x=1"],
+		["/login/"],
+		["/esqueci-senha"],
+		["/redefinir-senha?token=abc"],
+		["/verificar-email"],
+	])("rota de auth não é destino e vira o fallback: %j", (raw) => {
+		expect(safeRedirect(raw, FALLBACK)).toBe(FALLBACK);
+	});
+
+	it("caminho que só começa igual a uma rota de auth continua aceito", () => {
+		expect(safeRedirect("/loginx", FALLBACK)).toBe("/loginx");
+		expect(safeRedirect("/login-ajuda?x=1", FALLBACK)).toBe("/login-ajuda?x=1");
+	});
+
 	it("devolve o fallback quando o parâmetro não veio", () => {
 		expect(safeRedirect(null, FALLBACK)).toBe(FALLBACK);
 		expect(safeRedirect(undefined, "/")).toBe("/");
