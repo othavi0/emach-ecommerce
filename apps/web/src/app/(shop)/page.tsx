@@ -131,7 +131,7 @@ async function loadHome() {
 function HomeSkeleton() {
 	return (
 		<main id="main-content">
-			<div className="h-[70svh] min-h-[30rem] w-full bg-black lg:h-svh lg:min-h-0" />
+			<div className="h-[70svh] min-h-[30rem] w-full bg-black lg:h-[calc(100svh-176px)] lg:min-h-[30rem]" />
 		</main>
 	);
 }
@@ -139,7 +139,7 @@ function HomeSkeleton() {
 export default function HomePage() {
 	return (
 		<>
-			<SiteHeader overlay />
+			<SiteHeader />
 			<Suspense fallback={<HomeSkeleton />}>
 				<HomeContent />
 			</Suspense>
