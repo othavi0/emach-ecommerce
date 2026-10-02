@@ -1,10 +1,13 @@
 import { Clock, Package, RotateCcw, UserRound } from "lucide-react";
+import { HOME_CRUMB } from "@/components/breadcrumb";
+import { PageHead } from "@/components/page-head";
 import { StatusChip } from "@/components/status-chip";
 import { listClientOrders } from "@/lib/orders/queries";
 import { requireCurrentClient } from "@/lib/session";
-import { AccountHero } from "./_components/account-hero";
 import { QuickActionCard } from "./_components/quick-action-card";
 import { OrderCard } from "./pedidos/_components/order-card";
+
+const BLOCK_TITLE_CLASS = "mb-3 font-extrabold text-[17px] text-ink";
 
 export default async function DashboardPage() {
 	const session = await requireCurrentClient();
@@ -16,27 +19,25 @@ export default async function DashboardPage() {
 
 	return (
 		<>
-			<AccountHero
-				subtitle="Acompanhe seus pedidos, devoluções e dados de cadastro num só lugar."
-				title="Visão geral"
-			/>
-			<div className="space-y-8 px-6 py-8 md:px-10">
+			{/* Na própria "Minha conta" a trilha para em Início: a página atual já é o título. */}
+			<PageHead title="Minha conta" trail={[HOME_CRUMB]}>
+				Acompanhe seus pedidos, devoluções e dados de cadastro num só lugar.
+			</PageHead>
+			<div className="space-y-10">
 				{highlight ? (
 					<section>
-						<div className="mb-2.5 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
+						<h2 className={BLOCK_TITLE_CLASS}>
 							{toPay.length > 0
 								? "Precisa da sua atenção"
 								: "Seu último pedido"}
-						</div>
+						</h2>
 						<OrderCard order={highlight} />
 					</section>
 				) : null}
 
 				<section>
-					<div className="mb-2.5 font-display font-semibold text-[12px] text-gray-50 uppercase tracking-[0.16em]">
-						Sua conta
-					</div>
-					<div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
+					<h2 className={BLOCK_TITLE_CLASS}>Sua conta</h2>
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
 						<QuickActionCard
 							description="Acompanhe e pague seus pedidos."
 							flag={
