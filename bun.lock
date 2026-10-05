@@ -19,6 +19,7 @@
       "dependencies": {
         "@emach/auth": "workspace:*",
         "@emach/db": "workspace:*",
+        "@emach/email": "workspace:*",
         "@emach/env": "workspace:*",
         "@emach/redis": "workspace:*",
         "@emach/ui": "workspace:*",

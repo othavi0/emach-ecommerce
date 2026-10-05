@@ -5,6 +5,7 @@
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { render } from "@react-email/render";
+import { OrderReceivedEmail } from "../src/templates/order-received";
 import { ResetPasswordEmail } from "../src/templates/reset-password";
 import { VerifyEmailEmail } from "../src/templates/verify-email";
 
@@ -22,6 +23,11 @@ const previews = [
 		name: "verify-email",
 		url: VerifyEmailEmail.PreviewProps.url,
 		element: <VerifyEmailEmail {...VerifyEmailEmail.PreviewProps} />,
+	},
+	{
+		name: "order-received",
+		url: OrderReceivedEmail.PreviewProps.orderUrl,
+		element: <OrderReceivedEmail {...OrderReceivedEmail.PreviewProps} />,
 	},
 	{
 		name: "reset-password",
