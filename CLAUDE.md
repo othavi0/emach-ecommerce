@@ -16,7 +16,7 @@ Duas instâncias **completamente isoladas** Better Auth no mesmo banco. Este app
 1. `apps/web` deste repo **nunca** importa `@emach/db/schema/auth` nem `@emach/auth/dashboard`. Dashboard **nunca** importa `@emach/db/schema/client` nem `@emach/auth/ecommerce`.
 2. `EcommerceSession` ≠ `DashboardSession` — não existe tipo "Session" genérico.
 3. **Nunca** setar `advanced.cookies.<name>.attributes.domain = ".emach.com.br"`. Subdomínios distintos isolam por host.
-4. CPF/CNPJ e telefone: o Zod do formulário é só UX. A validação que vale roda no servidor, nos `databaseHooks` de `packages/auth/src/ecommerce.ts` (`isValidCpfCnpj`, `isValidPhone`, `onlyDigits` de `@emach/validators`, arquivo `packages/validators/src/cpf-cnpj.ts`). O hook normaliza para só dígitos e grava `NULL` (nunca `""`) quando o campo chega vazio, senão o unique `client_document_unique` colide no segundo cliente.
+4. CPF/CNPJ e telefone: o Zod do formulário é só UX. A validação que vale roda no servidor: os `databaseHooks` de `packages/auth/src/ecommerce.ts` chamam `normalizeUserForWrite` (`packages/auth/src/normalize-user.ts`), que usa `isValidCpfCnpj`, `isValidPhone`, `normalizeDocument` e `onlyDigits` de `@emach/validators` (arquivo `packages/validators/src/cpf-cnpj.ts`). O documento é gravado sem pontuação: CPF só com dígitos, CNPJ alfanumérico em maiúsculas (#244). O telefone fica só com dígitos. Campo vazio vira `NULL` (nunca `""`), senão o unique `client_document_unique` colide no segundo cliente.
 
 ## Ownership e schema sync (ADR-0009, no `emach-dashboard`)
 
