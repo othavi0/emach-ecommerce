@@ -1,11 +1,9 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 
-// Testes que batem no Supabase compartilhado (precisam de DATABASE_URL). O
-// `vitest.workspace.ts` roda esta lista em série, num processo só, e o test:ci
-// (VITEST_UNIT_ONLY=1) a deixa de fora até haver um Postgres efêmero no CI.
-// A guarda `vitest.workspace.test.ts` não usa banco, mas fica aqui para o
-// test:ci não mudar.
+// Testes que batem no Supabase compartilhado: o `vitest.workspace.ts` roda a
+// lista em série e o test:ci a deixa de fora. A guarda `vitest.workspace.test.ts`
+// não usa banco; entra aqui só para o test:ci não mudar (#246).
 export const INTEGRATION = [
 	"**/lib/auto-promo.integration.test.ts",
 	"**/lib/tool-images.integration.test.ts",
