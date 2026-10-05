@@ -3,9 +3,6 @@ import { PRODUCT_GRID, PRODUCT_TITLE } from "./_lib/product-layout";
 
 const THUMBS = [0, 1, 2, 3] as const;
 
-// Mesma anatomia de page.tsx: trilha, grade 7/5, galeria com miniaturas ao
-// lado e coluna de compra. Alturas copiam as da página (Breadcrumb, h1,
-// preço, botões de 52px) para a troca não deslocar o layout.
 export default function Loading() {
 	return (
 		<>
