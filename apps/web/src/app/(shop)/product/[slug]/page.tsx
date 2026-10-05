@@ -23,6 +23,7 @@ import {
 	RelatedProductsSkeleton,
 } from "./_components/related-products";
 import { ServiceKit } from "./_components/service-kit";
+import { PRODUCT_GRID } from "./_lib/product-layout";
 
 const PRODUCT_SPEC_CHIPS = 4;
 
@@ -135,7 +136,7 @@ export default async function ProductPage({
 								: []),
 						]}
 					/>
-					<div className="grid items-start gap-5 pt-1.5 pb-9 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-x-8 md:pt-3.5 md:pb-12 lg:gap-x-12">
+					<div className={PRODUCT_GRID}>
 						<div className="max-md:-mx-4">
 							<PhotoGallery
 								name={detail.tool.name}
