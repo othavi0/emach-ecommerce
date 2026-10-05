@@ -113,7 +113,7 @@ Tokens em `packages/ui/src/styles/globals.css` (bloco H3: `--paper`, `--canteiro
 
 - `EmachButton` (`components/emach-button.tsx`) tem `variant` obrigatório: `cta` (vermelho, uma vez por tela), `dark`, `line`, `danger`, `link`. Sem default, para o vermelho nunca sair por omissão.
 - O hero não muda até o dono pedir: usa a cópia congelada do botão antigo em `components/hero/hero-cta-variants.ts`, que só `components/hero/*` importa.
-- Rota fora de `(shop)` usa a moldura `StoreFrame` (`components/store-frame.tsx`): o grupo `app/(auth)` (login, senha e verificação de e-mail), o layout da conta (`app/dashboard/layout.tsx`) e o `app/not-found.tsx`. A moldura já abre o único `<main id="main-content">`; nada dentro dela abre outro.
+- A moldura `StoreFrame` (`components/store-frame.tsx`) monta header, o único `<main id="main-content">` e rodapé. Quem a usa: `app/(shop)/layout.tsx`, o grupo `app/(auth)` (login, senha e verificação de e-mail), o layout da conta (`app/dashboard/layout.tsx`) e o `app/not-found.tsx`. Página e `loading.tsx` dentro dela não montam `SiteHeader` nem abrem outro `<main>`; `app/(shop)/layout.frame.test.ts` trava isso.
 - `safeRedirect` (`lib/safe-redirect.ts`) resolve `.`, `..` e barras repetidas e recusa rota de auth como destino, senão o cliente logado fica preso no `/login`. Link para o login usa `loginHref(pathname)`, que só leva `redirect` quando o login vai aceitá-lo.
 - Token visual antigo é travado por `apps/web/src/test/h3-legacy.global.test.ts`, que varre todo o `apps/web/src` com `scanForLegacyTokens` e compara com `LEGACY_EXCEPTIONS` (arquivo e motivo). A lista só encolhe: arquivo novo com token antigo falha, e exceção que ficou limpa também falha até a linha sair.
 
