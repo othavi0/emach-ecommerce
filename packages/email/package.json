@@ -10,6 +10,9 @@
     "./send": {
       "default": "./src/send.ts"
     },
+    "./templates/order-received": {
+      "default": "./src/templates/order-received.tsx"
+    },
     "./templates/reset-password": {
       "default": "./src/templates/reset-password.tsx"
     },

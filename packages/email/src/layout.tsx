@@ -15,7 +15,7 @@ import type { ReactNode } from "react";
 
 // Tokens do H3 (packages/ui/src/styles/globals.css) em hex, porque cliente de
 // e-mail não lê CSS custom property.
-const color = {
+export const color = {
 	paper: "#ffffff",
 	canteiro: "#f0f0ee",
 	ink: "#16191d",
