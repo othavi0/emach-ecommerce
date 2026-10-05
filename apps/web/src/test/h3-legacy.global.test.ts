@@ -2,18 +2,12 @@ import { describe, expect, it } from "vitest";
 import { filesUnder, scanForLegacyTokens } from "./h3-legacy-scan";
 
 const LEGACY_EXCEPTIONS: Readonly<Record<string, string>> = {
-	"app/(shop)/product/[slug]/_components/product-info.tsx":
-		"selo de oferta da PDP com tracking antigo; a PDP não foi migrada",
-	"app/(shop)/product/[slug]/loading.tsx":
-		"esqueleto da PDP em bg-gray-20, ainda não migrado",
 	"components/hero-carousel.tsx":
 		"hero congelado por decisão do dono: pontos e setas sobre a foto",
 	"components/hero/hero-cta-variants.ts":
 		"hero congelado por decisão do dono: cópia do botão antigo",
 	"components/hero/hero-element-renders.tsx":
 		"hero congelado por decisão do dono",
-	"components/product-image.tsx":
-		"poço de foto vazia (emach-bg-placeholder, cinema-2), usado no card e no carrinho",
 };
 
 const FILES = filesUnder(".").filter((file) => !file.startsWith("test/"));
