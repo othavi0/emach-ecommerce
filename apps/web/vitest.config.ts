@@ -1,11 +1,10 @@
 import { resolve } from "node:path";
-import { configDefaults, defineConfig } from "vitest/config";
+import { defineConfig } from "vitest/config";
 
-// Testes de integração que batem no Supabase compartilhado: precisam de
-// DATABASE_URL e são flaky sob concorrência (ver CLAUDE.md). Rodam localmente
-// via `bun run --filter=web test`; ficam fora do CI (VITEST_UNIT_ONLY=1) até
-// haver um Postgres efêmero no pipeline.
-const INTEGRATION = [
+// Testes que batem no Supabase compartilhado: o `vitest.workspace.ts` roda a
+// lista em série e o test:ci a deixa de fora. A guarda `vitest.workspace.test.ts`
+// não usa banco; entra aqui só para o test:ci não mudar (#246).
+export const INTEGRATION = [
 	"**/lib/auto-promo.integration.test.ts",
 	"**/lib/tool-images.integration.test.ts",
 	"**/checkout/_lib/place-order.test.ts",
@@ -13,9 +12,8 @@ const INTEGRATION = [
 	"**/lib/coupons/validate-coupon.test.ts",
 	"**/catalog/_lib/facet-counts.test.ts",
 	"**/catalog/_lib/catalog-data.test.ts",
+	"vitest.workspace.test.ts",
 ];
-
-const unitOnly = process.env.VITEST_UNIT_ONLY === "1";
 
 export default defineConfig({
 	resolve: {
@@ -29,8 +27,5 @@ export default defineConfig({
 	test: {
 		environment: "node",
 		setupFiles: ["./vitest.setup.ts"],
-		exclude: unitOnly
-			? [...configDefaults.exclude, ...INTEGRATION]
-			: configDefaults.exclude,
 	},
 });
