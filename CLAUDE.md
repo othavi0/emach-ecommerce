@@ -105,7 +105,7 @@ Schema TS aqui é **cópia versionada** do dashboard, sincronizada via **CI PR a
 
 ## Design — redesign H3 "Prateleira por ofício" (resumo)
 
-Tokens em `packages/ui/src/styles/globals.css` (bloco H3: `--paper`, `--canteiro`, `--ink*`, `--line*`, `--grafite*`, `--on-dark*`, `--ok`, `--off`). As telas de compra, conta, auth e apoio estão no H3. Ainda têm token antigo a PDP (`app/(shop)/product/[slug]/loading.tsx` e o selo de oferta em `product-info.tsx`), `components/product-image.tsx` (poço de foto vazia, usado no card e no carrinho), o hero congelado e os e-mails de `packages/email`. `DESIGN.md` está desatualizado e descreve o sistema antigo: o código vence. **Vermelho é verbo, não decoração**: `--emach-red` só no CTA de compra; estrutura em grafite. Cantos `--radius: 3px` (cards 5px). Tipografia: **Archivo** variável; `font-display` é a mesma família no eixo `wdth` 62 (títulos uppercase). Preços sempre `R$ 899,00`.
+Tokens em `packages/ui/src/styles/globals.css` (bloco H3: `--paper`, `--canteiro`, `--ink*`, `--line*`, `--grafite*`, `--on-dark*`, `--ok`, `--off`). As telas de compra, conta, auth e apoio estão no H3. Ainda têm token antigo o hero congelado e os e-mails de `packages/email`. `DESIGN.md` está desatualizado e descreve o sistema antigo: o código vence. **Vermelho é verbo, não decoração**: `--emach-red` só no CTA de compra; estrutura em grafite. Cantos `--radius: 3px` (cards 5px). Tipografia: **Archivo** variável; `font-display` é a mesma família no eixo `wdth` 62 (títulos uppercase). Preços sempre `R$ 899,00`.
 
 **Superfícies:** página e card em `--paper` (#fff), faixas alternadas em `--canteiro` (#f0f0ee), foto de produto em `--well`, rodapé e barra utilitária em grafite. Card se separa do fundo por borda `--line`, não por sombra.
 
