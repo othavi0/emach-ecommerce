@@ -63,7 +63,7 @@ Seção escura (cabeçalho utilitário, rodapé) declara `[color-scheme:dark]` l
 - `shop-wrap` (`apps/web/src/index.css`): largura máxima 1296 px e respiro lateral de 16, 24 e 32 px (base, `md`, `lg`). Toda tela do H3 abre o conteúdo com ele.
 - Breakpoints são os do Tailwind: `md` 768 px, `lg` 1024 px.
 - Alvo de toque mínimo de 44 px (`min-h-11`, `size-11`).
-- `StoreFrame` (`components/store-frame.tsx`) monta cabeçalho, o único `<main id="main-content">` e rodapé para rota fora de `(shop)`: o grupo `app/(auth)`, o layout da conta (`app/dashboard/layout.tsx`) e o `app/not-found.tsx`. Nada dentro dele abre outro `<main>`.
+- `StoreFrame` (`components/store-frame.tsx`) monta cabeçalho, o único `<main id="main-content">` e rodapé. Usam a moldura: `app/(shop)/layout.tsx`, o grupo `app/(auth)`, o layout da conta (`app/dashboard/layout.tsx`) e o `app/not-found.tsx`. Página e `loading.tsx` dentro dela não montam `SiteHeader` nem abrem outro `<main>`; `app/(shop)/layout.frame.test.ts` trava isso.
 
 ## 6. Primitivos
 
