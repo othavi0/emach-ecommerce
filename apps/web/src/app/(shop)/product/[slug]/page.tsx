@@ -6,7 +6,6 @@ import { Suspense } from "react";
 
 import { Breadcrumb, CATALOG_CRUMB, HOME_CRUMB } from "@/components/breadcrumb";
 import { PhotoGallery } from "@/components/buy/photo-gallery";
-import { SiteHeader } from "@/components/site-header";
 import { specChips } from "@/lib/attribute-format";
 import { buildSlots } from "@/lib/gallery-slots";
 import { getProductShell } from "@/lib/product-detail";
@@ -116,9 +115,7 @@ export default async function ProductPage({
 				productName={detail.tool.name}
 				slug={detail.tool.slug ?? detail.tool.id}
 			/>
-			<SiteHeader />
-
-			<main className="max-md:pb-[84px]" id="main-content">
+			<div className="max-md:pb-[84px]">
 				<div className="shop-wrap">
 					<Breadcrumb
 						current={detail.tool.name}
@@ -187,7 +184,7 @@ export default async function ProductPage({
 						toolId={detail.tool.id}
 					/>
 				</Suspense>
-			</main>
+			</div>
 		</>
 	);
 }
