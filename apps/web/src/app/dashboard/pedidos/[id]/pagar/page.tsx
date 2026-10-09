@@ -17,7 +17,13 @@ interface PageProps {
 
 export default function PagarPage({ params }: PageProps) {
 	return (
-		<Suspense fallback={<AccountSectionSkeleton />}>
+		<Suspense
+			fallback={
+				<div className="pt-6 md:pt-10">
+					<AccountSectionSkeleton />
+				</div>
+			}
+		>
 			<Payment params={params} />
 		</Suspense>
 	);

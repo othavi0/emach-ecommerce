@@ -31,7 +31,13 @@ interface PageProps {
 
 export default function OrderDetailPage({ params }: PageProps) {
 	return (
-		<Suspense fallback={<AccountSectionSkeleton />}>
+		<Suspense
+			fallback={
+				<div className="pt-6 md:pt-10">
+					<AccountSectionSkeleton />
+				</div>
+			}
+		>
 			<OrderDetail params={params} />
 		</Suspense>
 	);
