@@ -21,9 +21,7 @@ import {
 } from "@/components/breadcrumb";
 import { PAGE_TITLE_CLASS } from "@/components/page-head";
 import { ProductCard } from "@/components/product-card";
-import { Shelf as ShelfRow } from "@/components/shelf";
 import type { CardExtrasByTool } from "@/lib/card-data";
-import type { Shelves } from "@/lib/shelves";
 import type {
 	CatalogCurrentCategory,
 	CatalogService,
@@ -43,10 +41,6 @@ import { ActiveFilters } from "./active-filters";
 import { FilterDrawer } from "./filter-drawer";
 import { FilterPanel } from "./filter-panel";
 
-export interface CatalogShelves extends Shelves {
-	extras: CardExtrasByTool;
-}
-
 interface CatalogContentProps {
 	cardExtras: CardExtrasByTool;
 	categoryTree: CategoryNode[];
@@ -59,8 +53,6 @@ interface CatalogContentProps {
 	priceMin: number | null;
 	query: string;
 	services: CatalogService[];
-	/** Vitrine em prateleiras quando o catálogo abre sem recorte; senão `null`. */
-	shelves: CatalogShelves | null;
 	sort: SortKey;
 	tools: ToolListItem[];
 	total: number;
@@ -214,7 +206,6 @@ export function CatalogContent({
 	priceMin,
 	query,
 	services,
-	shelves,
 	sort,
 	tools,
 	total,
@@ -306,9 +297,7 @@ export function CatalogContent({
 		(searchTerm ? `Busca: “${searchTerm}”` : "Catálogo");
 
 	let countText = plural(total, "produto", "produtos");
-	if (shelves) {
-		countText += shelves.by === "service" ? ", organizados por serviço" : "";
-	} else if (total > pageSize) {
+	if (total > pageSize) {
 		countText += `, mostrando ${showFrom} a ${showTo}`;
 	}
 
@@ -413,85 +402,57 @@ export function CatalogContent({
 							isPending && "pointer-events-none opacity-60"
 						)}
 					>
-						{shelves && shelves.shelves.length > 0 ? (
-							<div className="grid gap-[34px] md:gap-11">
-								{shelves.shelves.map((shelf) => (
-									<ShelfRow
-										dense
+						{tools.length > 0 && (
+							<div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
+								{tools.map((t) => (
+									<ProductCard
+										extras={cardExtras[t.id]}
 										headingLevel={2}
-										href={shelf.href}
-										imageSrc={shelf.imageSrc}
-										inStockCount={shelf.inStockCount}
-										itemCount={shelf.items.length}
-										key={shelf.key}
-										productCount={shelf.productCount}
-										title={shelf.title}
-									>
-										{shelf.items.map((tool) => (
-											<ProductCard
-												extras={shelves.extras[tool.id]}
-												key={tool.id}
-												tool={tool}
-											/>
-										))}
-									</ShelfRow>
+										key={t.id}
+										size="compact"
+										tool={t}
+									/>
 								))}
 							</div>
-						) : (
-							<>
-								{tools.length > 0 && (
-									<div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-4 lg:grid-cols-2 xl:grid-cols-3">
-										{tools.map((t) => (
-											<ProductCard
-												extras={cardExtras[t.id]}
-												headingLevel={2}
-												key={t.id}
-												size="compact"
-												tool={t}
-											/>
-										))}
-									</div>
-								)}
+						)}
 
-								{tools.length === 0 && (
-									<CatalogEmpty
-										filters={activeFilters}
-										onClearAll={clearAll}
-										onRemove={navigate}
-										searchTerm={searchTerm}
-										services={services}
-									/>
-								)}
+						{tools.length === 0 && (
+							<CatalogEmpty
+								filters={activeFilters}
+								onClearAll={clearAll}
+								onRemove={navigate}
+								searchTerm={searchTerm}
+								services={services}
+							/>
+						)}
 
-								{totalPages > 1 && (
-									<nav
-										aria-label="Páginas"
-										className="mt-8 flex items-center justify-center gap-2"
-									>
-										<PageLink
-											disabled={page <= 1}
-											href={pageHrefFor(page - 1)}
-											onNavigate={() => navigatePage(page - 1)}
-											rel="prev"
-										>
-											<ChevronLeft aria-hidden="true" className="size-4" />
-											Anterior
-										</PageLink>
-										<span className="px-3 text-[14px] tabular-nums">
-											Página <strong>{page}</strong> de {totalPages}
-										</span>
-										<PageLink
-											disabled={page >= totalPages}
-											href={pageHrefFor(page + 1)}
-											onNavigate={() => navigatePage(page + 1)}
-											rel="next"
-										>
-											Próxima
-											<ChevronRight aria-hidden="true" className="size-4" />
-										</PageLink>
-									</nav>
-								)}
-							</>
+						{totalPages > 1 && (
+							<nav
+								aria-label="Páginas"
+								className="mt-8 flex items-center justify-center gap-2"
+							>
+								<PageLink
+									disabled={page <= 1}
+									href={pageHrefFor(page - 1)}
+									onNavigate={() => navigatePage(page - 1)}
+									rel="prev"
+								>
+									<ChevronLeft aria-hidden="true" className="size-4" />
+									Anterior
+								</PageLink>
+								<span className="px-3 text-[14px] tabular-nums">
+									Página <strong>{page}</strong> de {totalPages}
+								</span>
+								<PageLink
+									disabled={page >= totalPages}
+									href={pageHrefFor(page + 1)}
+									onNavigate={() => navigatePage(page + 1)}
+									rel="next"
+								>
+									Próxima
+									<ChevronRight aria-hidden="true" className="size-4" />
+								</PageLink>
+							</nav>
 						)}
 					</div>
 				</div>
