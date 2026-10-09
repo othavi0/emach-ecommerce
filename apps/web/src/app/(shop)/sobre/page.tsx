@@ -91,7 +91,7 @@ export default function AboutPage() {
 	return (
 		<div className="bg-paper pb-16 md:pb-24">
 			<div className="shop-wrap">
-				<PageHead title="Ferramenta profissional, e quem responde por ela">
+				<PageHead title="Ferramentas profissionais, com loja física">
 					<p className="max-w-[65ch] leading-relaxed">{ABOUT_DESCRIPTION}</p>
 				</PageHead>
 
@@ -165,7 +165,7 @@ async function Branches() {
 		<>
 			<div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
 				<h2 className={SECTION_TITLE_CLASS} id="filiais-titulo">
-					Onde a gente te atende
+					Nossas filiais
 				</h2>
 				<p className="text-[15px] text-ink-muted tabular-nums">
 					{branchCount} {pluralizeBranches(branchCount)}
