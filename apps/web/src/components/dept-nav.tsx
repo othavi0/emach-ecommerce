@@ -10,7 +10,7 @@ import { navShortLabel } from "@/lib/nav-label";
 import type { StoreNav } from "@/lib/store-nav";
 
 const linkClass =
-	"relative inline-flex min-h-[50px] shrink-0 items-center whitespace-nowrap px-2 font-semibold text-[14px] text-ink-2 no-underline hover:text-ink xl:px-[11px] xl:text-[15px] after:absolute after:inset-x-2 after:bottom-0 after:h-[3px] after:origin-left after:scale-x-0 after:bg-grafite after:transition-transform after:duration-200 after:ease-out-expo after:content-[''] hover:after:scale-x-100 xl:after:inset-x-[11px]";
+	"inline-flex min-h-9 shrink-0 items-center whitespace-nowrap rounded-[3px] px-2 font-semibold text-[14px] text-ink-2 no-underline transition-colors duration-150 ease-out hover:bg-grafite hover:text-on-dark xl:px-[11px] xl:text-[15px]";
 
 function plural(n: number, one: string, many: string) {
 	return `${n} ${n === 1 ? one : many}`;
