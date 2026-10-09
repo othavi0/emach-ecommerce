@@ -13,12 +13,6 @@ import type { Route } from "next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState, useTransition } from "react";
-import {
-	Breadcrumb,
-	CATALOG_CRUMB,
-	type Crumb,
-	HOME_CRUMB,
-} from "@/components/breadcrumb";
 import { PAGE_TITLE_CLASS } from "@/components/page-head";
 import { ProductCard } from "@/components/product-card";
 import type { CardExtrasByTool } from "@/lib/card-data";
@@ -107,26 +101,6 @@ function PageLink({
 
 function plural(n: number, one: string, many: string) {
 	return `${n} ${n === 1 ? one : many}`;
-}
-
-function catalogBreadcrumb(
-	currentCategory: CatalogCurrentCategory | null,
-	searchTerm: string
-): { current: string; trail: Crumb[] } {
-	if (currentCategory) {
-		const ancestors = currentCategory.ancestors.map((crumb) => ({
-			href: `/catalog/${crumb.slug}` as Route,
-			label: crumb.name,
-		}));
-		return {
-			current: currentCategory.name,
-			trail: [HOME_CRUMB, CATALOG_CRUMB, ...ancestors],
-		};
-	}
-	if (searchTerm) {
-		return { current: "Busca", trail: [HOME_CRUMB, CATALOG_CRUMB] };
-	}
-	return { current: "Catálogo", trail: [HOME_CRUMB] };
 }
 
 function CatalogEmpty({
@@ -325,9 +299,7 @@ export function CatalogContent({
 	return (
 		<div className="pb-16">
 			<div className="shop-wrap">
-				<Breadcrumb {...catalogBreadcrumb(currentCategory, searchTerm)} />
-
-				<div className="mt-0.5 mb-4 flex flex-wrap items-end justify-between gap-4 md:mt-2">
+				<div className="mb-4 flex flex-wrap items-end justify-between gap-4 pt-6 md:pt-10">
 					<div className="min-w-0">
 						<h1 className={PAGE_TITLE_CLASS}>{title}</h1>
 						<p
