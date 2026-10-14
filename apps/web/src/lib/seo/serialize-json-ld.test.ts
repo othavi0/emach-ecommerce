@@ -7,6 +7,7 @@ describe("serializeJsonLd", () => {
 			"@context": "https://schema.org",
 			name: "</script><b>",
 		} as const;
+
 		const out = serializeJsonLd(data);
 		expect(out).not.toContain("<");
 		expect(out).toContain("\\u003c/script>");
@@ -18,6 +19,7 @@ describe("serializeJsonLd", () => {
 			name: "Furadeira <b>X</b>",
 			price: "899.00",
 		} as const;
+
 		expect(JSON.parse(serializeJsonLd(data))).toEqual(data);
 	});
 });
