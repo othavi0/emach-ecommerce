@@ -37,6 +37,7 @@
     "check:env": "bun scripts/check-vercel-env.ts",
     "fix": "bun node_modules/.bin/oxlint --fix && ultracite fix",
     "lint:slop": "bun node_modules/.bin/oxlint",
+    "prepare": "lefthook install",
     "clean": "bash scripts/clean.sh",
     "clean-all": "bash scripts/clean.sh -y --cache",
     "clean-dry": "bash scripts/clean.sh --dry-run"
