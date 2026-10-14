@@ -46,7 +46,7 @@ const CHECKOUT_FORM_ID = "checkout-form";
 const formatUf = (raw: string): string =>
 	onlyLetters(raw).toUpperCase().slice(0, 2);
 
-const newAddressFormShape = z.object({
+const newAddressFormSchema = z.object({
 	zipCode: z.string(),
 	street: z.string(),
 	number: z.string(),
@@ -62,7 +62,7 @@ const checkoutSchema = z
 		phone: z.string().refine(isValidPhone, "Telefone inválido"),
 		document: z.string().refine(isValidCpfCnpj, "CPF ou CNPJ inválido"),
 		addressId: z.string().min(1, "Selecione ou cadastre um endereço"),
-		newAddress: newAddressFormShape,
+		newAddress: newAddressFormSchema,
 		acceptTos: z.literal(true, {
 			error: () => ({ message: "Aceite os termos para continuar" }),
 		}),
