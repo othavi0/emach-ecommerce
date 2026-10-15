@@ -78,7 +78,7 @@ if (import.meta.main) {
 	if (barrados.length > 0) {
 		for (const arquivo of barrados) {
 			console.error(
-				`::error file=${arquivo}::estes arquivos são cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`
+				`::error file=${arquivo}::${arquivo} é cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`
 			);
 		}
 

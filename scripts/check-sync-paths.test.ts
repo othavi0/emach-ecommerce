@@ -107,6 +107,6 @@ test("o script lê o diff do PR no git e sai com 1 citando o arquivo", () => {
 
 	expect(status).toBe(1);
 	expect(stderr).toContain(
-		`::error file=${SCHEMA_CLIENT}::estes arquivos são cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`
+		`::error file=${SCHEMA_CLIENT}::${SCHEMA_CLIENT} é cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`
 	);
 });
