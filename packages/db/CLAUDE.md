@@ -1,6 +1,6 @@
 # packages/db — Convenções
 
-> **O banco é único e compartilhado entre dev e produção.** `db:apply-triggers`, `db:seed-*`, `db:anonymize-client` e drop & recreate escrevem nele: só com autorização explícita da sessão.
+> **O banco é único e compartilhado entre dev e produção.** A regra de escrita é a do dashboard, seção [Banco compartilhado: regra de escrita dos dois apps](https://github.com/othavi0/emach-dashboard/blob/main/CLAUDE.md#banco-compartilhado-regra-de-escrita-dos-dois-apps). Em resumo, `db:apply-triggers`, `db:seed-*`, `db:anonymize-client` e drop e recreate pedem autorização do user na sessão, e write pontual de poucas linhas para smoke é liberado e revertido ao terminar.
 
 Drizzle 0.45 + node-postgres + Supabase Postgres. Schema TS aqui é **cópia versionada** do `emach-dashboard` — sync via CI PR automático (ADR-0009, no `emach-dashboard`). Regras gerais na raiz.
 

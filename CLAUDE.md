@@ -5,15 +5,15 @@
 
 ## ⛔ Guardrails duros (incidentes 2026-06/07)
 
-- **Banco único dev=prod compartilhado.** NUNCA `seed`/`truncate`/`drop`/INSERT/UPDATE em dado real sem autorização explícita NESTA sessão (writes de smoke em banner/promoção de produção já foram barrados pelo classifier 3×). Subagente que toca banco recebe esta restrição colada no prompt.
-- **NUNCA `cd`/Read/Edit/`gh issue` no `emach-dashboard` a partir daqui** (ADR-0009): mudança de schema/issue do dashboard abre-se LÁ; aqui só se consome o PR de sync automático.
+- **Banco único dev=prod compartilhado.** A regra de escrita é a do dashboard, seção [Banco compartilhado: regra de escrita dos dois apps](https://github.com/othavi0/emach-dashboard/blob/main/CLAUDE.md#banco-compartilhado-regra-de-escrita-dos-dois-apps). Em resumo, comando que muda schema, apaga em massa ou não tem volta (`db:apply-triggers`, `db:seed-*`, `db:anonymize-client`, drop e recreate) pede autorização do user na sessão, e write pontual de poucas linhas para smoke é liberado e revertido ao terminar. Subagente que toca banco recebe essa regra colada no prompt.
+- **Nunca editar, commitar, abrir issue ou PR no `emach-dashboard` a partir daqui** (ADR-0009 do dashboard): mudança de schema ou de contrato começa lá, e aqui só se consome o PR de sync automático. Ler o dashboard para consultar a fonte (workflow de sync, contrato, regra do banco) é permitido.
 - CWD é a RAIZ do monorepo (turbo/bun) — nunca `cd apps/web`; paths absolutos.
 
 ## Auth — invariantes P0 (qualquer violação é bug crítico)
 
 Duas instâncias **completamente isoladas** Better Auth no mesmo banco. Este app usa só a `ecommerce` (clientes BR via email/senha + Google OAuth).
 
-1. `apps/web` e `packages/auth` deste repo **nunca** importam `@emach/db/schema/auth` (Biome barra nos dois). `@emach/auth/dashboard` não existe neste repo: a sessão de staff é só do dashboard. Dashboard **nunca** importa `@emach/db/schema/client` nem `@emach/auth/ecommerce`.
+1. `apps/web` e `packages/auth` deste repo **nunca** importam `@emach/db/schema/auth` (Biome barra nos dois). `@emach/auth/dashboard` não existe neste repo: a sessão de staff é só do dashboard. Dashboard **nunca** importa `@emach/auth/ecommerce`.
 2. A sessão da loja é `EcommerceSession`; o tipo de sessão do staff só existe no dashboard. Não existe tipo "Session" genérico.
 3. **Nunca** setar `advanced.cookies.<name>.attributes.domain = ".emach.com.br"`. Subdomínios distintos isolam por host.
 4. CPF/CNPJ e telefone: o Zod do formulário é só UX. A validação que vale roda no servidor: os `databaseHooks` de `packages/auth/src/ecommerce.ts` chamam `normalizeUserForWrite` (`packages/auth/src/normalize-user.ts`), que usa `isValidCpfCnpj`, `isValidPhone`, `normalizeDocument` e `onlyDigits` de `@emach/validators` (arquivo `packages/validators/src/cpf-cnpj.ts`). O documento é gravado sem pontuação: CPF só com dígitos, CNPJ alfanumérico em maiúsculas (#244). O telefone fica só com dígitos. Campo vazio vira `NULL` (nunca `""`), senão o unique `client_document_unique` colide no segundo cliente.
