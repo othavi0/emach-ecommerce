@@ -67,7 +67,7 @@ if (import.meta.main) {
 
 	const arquivos = execFileSync(
 		"git",
-		["diff", "--name-only", `origin/${baseRef}...HEAD`],
+		["diff", "--name-only", "--no-renames", `origin/${baseRef}...HEAD`],
 		{ encoding: "utf8" }
 	)
 		.split("\n")

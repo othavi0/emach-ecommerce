@@ -60,41 +60,53 @@ test("a branch do sync vinda de fork é barrada", () => {
 });
 
 const script = resolve(import.meta.dir, "check-sync-paths.ts");
-const repoTemp = mkdtempSync(join(tmpdir(), "sync-guard-"));
+const reposTemp: string[] = [];
 
 afterAll(() => {
-	rmSync(repoTemp, { recursive: true, force: true });
+	for (const repo of reposTemp) {
+		rmSync(repo, { recursive: true, force: true });
+	}
 });
 
-function git(...args: string[]) {
+function git(repo: string, ...args: string[]) {
 	const { status, stderr } = spawnSync(
 		"git",
 		["-c", "user.name=t", "-c", "user.email=t@t", ...args],
-		{ cwd: repoTemp, encoding: "utf8" }
+		{ cwd: repo, encoding: "utf8" }
 	);
 
 	expect(stderr).not.toContain("fatal");
 	expect(status).toBe(0);
 }
 
-function commitar(caminho: string) {
-	const absoluto = join(repoTemp, caminho);
+function commitar(repo: string, caminho: string) {
+	const absoluto = join(repo, caminho);
 
 	mkdirSync(dirname(absoluto), { recursive: true });
 	writeFileSync(absoluto, `${caminho}\n`);
-	git("add", ".");
-	git("commit", "-q", "-m", caminho);
+	git(repo, "add", ".");
+	git(repo, "commit", "-q", "-m", caminho);
 }
 
-test("o script lê o diff do PR no git e sai com 1 citando o arquivo", () => {
-	git("init", "-q", "-b", "main");
-	commitar("README.md");
-	git("update-ref", "refs/remotes/origin/main", "HEAD");
-	git("switch", "-q", "-c", "feat/x");
-	commitar(SCHEMA_CLIENT);
+function prSobre(arquivosDaMain: readonly string[]) {
+	const repo = mkdtempSync(join(tmpdir(), "sync-guard-"));
 
-	const { status, stderr } = spawnSync("bun", [script], {
-		cwd: repoTemp,
+	reposTemp.push(repo);
+	git(repo, "init", "-q", "-b", "main");
+
+	for (const arquivo of ["README.md", ...arquivosDaMain]) {
+		commitar(repo, arquivo);
+	}
+
+	git(repo, "update-ref", "refs/remotes/origin/main", "HEAD");
+	git(repo, "switch", "-q", "-c", BRANCH_COMUM.headRef);
+
+	return repo;
+}
+
+function rodarScript(repo: string) {
+	return spawnSync("bun", [script], {
+		cwd: repo,
 		encoding: "utf8",
 		env: {
 			PATH: process.env.PATH ?? "",
@@ -104,9 +116,29 @@ test("o script lê o diff do PR no git e sai com 1 citando o arquivo", () => {
 			REPO,
 		},
 	});
+}
+
+const ERRO_SCHEMA_CLIENT = `::error file=${SCHEMA_CLIENT}::${SCHEMA_CLIENT} é cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`;
+
+test("o script lê o diff do PR no git e sai com 1 citando o arquivo", () => {
+	const repo = prSobre([]);
+
+	commitar(repo, SCHEMA_CLIENT);
+
+	const { status, stderr } = rodarScript(repo);
 
 	expect(status).toBe(1);
-	expect(stderr).toContain(
-		`::error file=${SCHEMA_CLIENT}::${SCHEMA_CLIENT} é cópia do emach-dashboard (sync-db-schema.yml); a mudança começa lá`
-	);
+	expect(stderr).toContain(ERRO_SCHEMA_CLIENT);
+});
+
+test("mover um arquivo espelhado para fora do caminho é barrado", () => {
+	const repo = prSobre([SCHEMA_CLIENT]);
+
+	git(repo, "mv", SCHEMA_CLIENT, "packages/db/src/client-local.ts");
+	git(repo, "commit", "-q", "-m", "mv");
+
+	const { status, stderr } = rodarScript(repo);
+
+	expect(status).toBe(1);
+	expect(stderr).toContain(ERRO_SCHEMA_CLIENT);
 });
