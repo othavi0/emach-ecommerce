@@ -28,7 +28,7 @@ emach-ecommerce/
     ├── config/              tsconfig base
     ├── env/                 env vars tipadas (T3 Env + Zod)
     ├── db/                  Drizzle schema espelhado do dashboard + queries + triggers/RLS SQL + seeds
-    ├── auth/                Better Auth (instâncias dashboard + ecommerce isoladas)
+    ├── auth/                Better Auth (instância ecommerce: clientes, tabelas `client*`)
     ├── email/               Resend client + templates React Email
     ├── redis/               client Upstash Redis (rate limit + cache de cotação de frete)
     ├── ui/                  shadcn `base-lyra` compartilhado
@@ -37,12 +37,11 @@ emach-ecommerce/
 
 ## Setup
 
-> O `.env.example` traz só um placeholder, mas o `DATABASE_URL` do `.env` real é o Supabase compartilhado com o dashboard (dev = prod). Os comandos de banco abaixo escrevem nele: rodar só com autorização explícita, ou apontar o `.env` para um Postgres local.
+> O `.env.example` traz só um placeholder, mas o `DATABASE_URL` do `.env` real é o Supabase compartilhado com o dashboard (dev = prod). Os comandos de banco abaixo escrevem nele: rodar só com autorização explícita, ou apontar o `.env` para um Postgres local. O schema não sobe deste repo: o `bun run db:push` sai com erro, porque só o dashboard empurra schema. Num Postgres local, crie as tabelas de dentro de `packages/db` com `bunx drizzle-kit push`, com o `DATABASE_URL` apontado para esse Postgres, como faz o job `build` do CI.
 
 ```bash
 bun install
 cp apps/web/.env.example apps/web/.env  # schema das envs em packages/env/src/schemas.ts
-bun run db:push                          # sync schema → DB (dev local)
 bun --cwd packages/db db:apply-triggers  # triggers PL/pgSQL (Drizzle Kit não gera)
 bun --cwd packages/db db:seed-categories
 bun --cwd packages/db db:seed-attributes
@@ -72,7 +71,6 @@ bun run check:env                  # env vars obrigatórias × Vercel
 
 ### Banco de dados
 ```bash
-bun run db:push           # dev: sync schema (sem migration)
 bun run db:studio         # Drizzle Studio
 bun --cwd packages/db db:apply-triggers       # DDL no banco do .env; idempotente
 bun --cwd packages/db db:seed-categories      # 5 raízes

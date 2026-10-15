@@ -29,7 +29,7 @@
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:web": "turbo -F web dev",
-    "db:push": "turbo -F @emach/db db:push",
+    "db:push": "bun --cwd packages/db db:push",
     "db:studio": "turbo -F @emach/db db:studio",
     "check": "ultracite check && bun run lint:slop",
     "check:env": "bun scripts/check-vercel-env.ts",
@@ -38,7 +38,7 @@
     "test:lint-rules": "node tools/oxlint/emach/rules/no-regexp-in-loop.test.ts && node tools/oxlint/emach/rules/require-log-in-action-catch.test.ts",
     "test:ci": "turbo run test:ci",
     "test:repo": "bun test ./.claude/hooks/ ./scripts/",
-    "prepare": "lefthook install",
+    "prepare": "if git rev-parse --git-dir > /dev/null 2>&1; then lefthook install; fi",
     "clean": "bash scripts/clean.sh",
     "clean-all": "bash scripts/clean.sh -y --cache",
     "clean-dry": "bash scripts/clean.sh --dry-run"
