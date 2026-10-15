@@ -1,3 +1,4 @@
+// prova do sync-guard (#278): este commit é revertido no seguinte
 import { relations } from "drizzle-orm";
 import {
 	boolean,
