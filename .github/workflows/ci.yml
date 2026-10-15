@@ -93,7 +93,7 @@ jobs:
   # só mudam pelo PR chore/sync-db-schema. A guarda de repositório é a de todo
   # job: o espelho de deploy recebe este arquivo e não tem os secrets.
   sync-guard:
-    if: github.repository == 'othavi0/emach-ecommerce' && github.event_name == 'pull_request'
+    if: github.repository == 'othavi0/emach-ecommerce' && (github.event_name == 'pull_request')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
