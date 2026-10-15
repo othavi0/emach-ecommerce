@@ -32,8 +32,11 @@ test("o job check-types roda bun run test:repo", () => {
 	expect(indiceDoRun("bun run test:repo")).toBeGreaterThanOrEqual(0);
 });
 
-test("o job check-types roda bun run check:docs", () => {
-	expect(indiceDoRun("bun run check:docs")).toBeGreaterThanOrEqual(0);
+test("o job check-types roda bun run check:docs logo depois de bun check", () => {
+	const check = indiceDoRun("bun check");
+
+	expect(check).toBeGreaterThanOrEqual(0);
+	expect(indiceDoRun("bun run check:docs")).toBe(check + 1);
 });
 
 test("o pre-commit roda bun run check:docs em commit que toca *.md", () => {
