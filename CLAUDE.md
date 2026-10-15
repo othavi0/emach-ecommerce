@@ -20,7 +20,7 @@ Duas instâncias **completamente isoladas** Better Auth no mesmo banco. Este app
 
 ## Ownership e schema sync (ADR-0009, no `emach-dashboard`)
 
-- Schema TS (`packages/db/src/{schema,queries,sql}`) é **cópia** do dashboard, sincronizada por PR automático. **Não editar aqui**: a mudança começa lá. O job `sync-guard` do CI (`scripts/check-sync-paths.ts`) barra PR fora da branch `chore/sync-db-schema` que toque `schema/`, `queries/`, `utils.ts`, `sql/triggers.sql` ou `sql/rls.sql` de `packages/db/src/`. Dono de cada tabela, escrita compartilhada, triggers e passos pós-sync: `packages/db/CLAUDE.md`.
+- Os caminhos de `packages/db/src` listados em `packages/db/CLAUDE.md` são **cópia** do dashboard, sincronizada por PR automático. **Não editar aqui**: a mudança começa lá. O job `sync-guard` do CI (`scripts/check-sync-paths.ts`) barra PR fora da branch `chore/sync-db-schema` que toque `schema/`, `queries/`, `utils.ts`, `sql/triggers.sql` ou `sql/rls.sql` de `packages/db/src/`. Dono de cada tabela: a tabela de ownership de `docs/integration/admin-ecommerce.md`, cópia sincronizada do contrato do dashboard. Triggers e passos pós-sync: `packages/db/CLAUDE.md`.
 - A loja é dona das linhas das tabelas `client*`: só ela escreve nelas. O arquivo de schema dessas tabelas nasce no dashboard, como todo o `packages/db/src/schema/`. Escrita da loja em tabela do dashboard (`stockMovement` e similares) usa `actorType='system'`, nunca `'user'` (que é staff).
 
 ## Anti-patterns banidos (P0/P1)
@@ -118,7 +118,8 @@ Multi-context: `CONTEXT-MAP.md` na raiz indexa os bounded contexts; cada `CONTEX
 
 | Tópico | Arquivo |
 |---|---|
-| Schema sync, triggers, ownership detalhado, gotchas DB | `packages/db/CLAUDE.md` |
+| Schema sync, triggers, gotchas DB | `packages/db/CLAUDE.md` |
+| Dono de cada tabela, contrato do banco compartilhado (cópia do dashboard) | `docs/integration/admin-ecommerce.md` |
 | Sistema visual H3 completo (tokens, primitivos, regras) | `DESIGN.md` |
 | Multi-context glossário de domínio | `CONTEXT-MAP.md` |
 | Frete Frenet (cache, anti-fraude, origem, pegadinhas da API) | `apps/web/src/lib/frenet/CLAUDE.md` |
