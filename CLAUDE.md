@@ -6,6 +6,7 @@
 ## ⛔ Guardrails duros (incidentes 2026-06/07)
 
 - **Banco único dev=prod compartilhado.** A regra de escrita é a do dashboard, seção [Banco compartilhado: regra de escrita dos dois apps](https://github.com/othavi0/emach-dashboard/blob/main/CLAUDE.md#banco-compartilhado-regra-de-escrita-dos-dois-apps). Em resumo, comando que muda schema, apaga em massa ou não tem volta (`db:apply-triggers`, `db:seed-*`, `db:anonymize-client`, drop e recreate) pede autorização do user na sessão, e write pontual de poucas linhas para smoke é liberado e revertido ao terminar. Subagente que toca banco recebe essa regra colada no prompt.
+- dev, smoke e produção usam o mesmo Postgres. Este repo não tem `db:fixtures` nem marcador `EM-TEST`: dado de smoke sai pelo `db:fixtures` do dashboard, que marca com `EM-TEST-FX`. Antes de escrita em massa, imprima host e nome do banco sem senha.
 - **Nunca editar, commitar, abrir issue ou PR no `emach-dashboard` a partir daqui** (ADR-0009 do dashboard): mudança de schema ou de contrato começa lá, e aqui só se consome o PR de sync automático. Ler o dashboard para consultar a fonte (workflow de sync, contrato, regra do banco) é permitido.
 - CWD é a RAIZ do monorepo (turbo/bun) — nunca `cd apps/web`; paths absolutos.
 
