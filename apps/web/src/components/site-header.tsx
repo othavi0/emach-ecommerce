@@ -1,21 +1,27 @@
-import { MapPin, Truck } from "lucide-react";
+import { Truck } from "lucide-react";
 import Link from "next/link";
 
 import { ContactLink } from "@/components/contact-link";
 import { DeptNav } from "@/components/dept-nav";
+import { BranchStrip } from "@/components/header/branch-strip";
 import { HeaderBar } from "@/components/header-bar";
-import { getStoreNav } from "@/lib/store-nav";
+import { getHeaderBranches } from "@/lib/branches";
+import { getNavPreviews, getStoreNav } from "@/lib/store-nav";
 
 const topLinkClass =
 	"inline-flex min-h-10 items-center gap-1.5 text-on-dark no-underline hover:underline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2";
 
 /**
  * Cabeçalho da loja: barra utilitária grafite, barra principal (logo, busca,
- * conta, carrinho) e a navegação por serviço e por categoria. A navegação vem
- * do banco em cache; o resto é estático.
+ * conta, carrinho) e a navegação por serviço e por categoria. Filiais,
+ * navegação e prévias dos painéis vêm do banco em cache; o resto é estático.
  */
 export async function SiteHeader() {
-	const nav = await getStoreNav();
+	const [nav, previews, branches] = await Promise.all([
+		getStoreNav(),
+		getNavPreviews(),
+		getHeaderBranches(),
+	]);
 
 	return (
 		<>
@@ -25,12 +31,9 @@ export async function SiteHeader() {
 			>
 				Pular para o conteúdo
 			</a>
-			<div className="bg-grafite text-[13.5px] text-on-dark [color-scheme:dark]">
+			<div className="bg-grafite text-[13px] text-on-dark [color-scheme:dark]">
 				<div className="shop-wrap flex min-h-9 items-center justify-between gap-4 md:min-h-10">
-					<Link className={topLinkClass} href="/sobre#filiais">
-						<MapPin aria-hidden="true" className="size-4 text-on-dark-muted" />
-						Nossas filiais
-					</Link>
+					<BranchStrip branches={branches} />
 					<div className="flex items-center gap-5">
 						<ContactLink
 							className={topLinkClass}
@@ -48,7 +51,7 @@ export async function SiteHeader() {
 				</div>
 			</div>
 			<HeaderBar nav={nav} />
-			<DeptNav nav={nav} />
+			<DeptNav nav={nav} previews={previews} />
 		</>
 	);
 }
