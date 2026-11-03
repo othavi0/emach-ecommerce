@@ -57,7 +57,7 @@ Seção escura (cabeçalho utilitário, rodapé) declara `[color-scheme:dark]` l
 - `--radius: 3px`. Os raios `--radius-sm` a `--radius-4xl` do `@theme inline`, usados pelos componentes shadcn, calculam a partir dele.
 - `--elev-pop` (`shadow-pop`): popover da busca, seletor de ofício e toast.
 - `--elev-bar` (`shadow-bar`): barra fixa de compra da página de produto (`sticky-buy-bar.tsx`).
-- `--ease-expo` (`ease-out-expo`): entrada de gaveta e zoom da foto do card.
+- `--ease-expo` (`ease-out-expo`): entrada de gaveta. A foto do card não dá zoom no hover; o hover do card muda só a borda para `border-line-strong`.
 - Toda animação tem saída em `prefers-reduced-motion`. O bloco final de `globals.css` desliga `animate-pulse`, `animate-spin`, `.emach-shimmer`, o pulo do badge e a saída do item do carrinho.
 
 ## 5. Layout
@@ -94,7 +94,7 @@ Formulário cru usa as classes de `globals.css`: `.emach-input`, `.emach-select`
 
 ## 7. Padrões de tela
 
-- **Card de produto.** Fundo `paper`, foto quadrada em `bg-well`, "Ver rápido" sempre visível, `StockLine`, nome (3 linhas reservadas), chips curtos (2 linhas reservadas, para cards de prateleiras diferentes terem a mesma altura), preço com parcelas (`installmentText` de `lib/installments.ts`: parcela mínima de R$ 10, até 12x) e um botão que muda conforme o produto (`cardAction` de `lib/card-action.ts`: adicionar, escolher voltagem no "Ver rápido", avisar quando chegar). Os chips e as voltagens vêm de `getCardExtras` (`lib/card-data.ts`).
+- **Card de produto.** Fundo `paper`, foto quadrada em `bg-well`, "Ver rápido" sempre visível, `StockLine`, nome (3 linhas reservadas), chips curtos (2 linhas reservadas, para cards de prateleiras diferentes terem a mesma altura), preço com parcelas (`installmentText` de `lib/installments.ts`: parcela mínima de R$ 10, até 12x) e um botão `line` que muda conforme o produto (`cardAction` de `lib/card-action.ts`: adicionar, escolher voltagem no "Ver rápido", avisar quando chegar). O card não usa botão `dark`: o grafite cheio em toda a grade competia com o CTA vermelho da página. A lista "Para esse serviço você também precisa" (`service-kit.tsx`) usa o mesmo botão. Os chips e as voltagens vêm de `getCardExtras` (`lib/card-data.ts`).
 - **Carrinho.** A gaveta (`cart-sheet.tsx`) é `bg-paper` com rodapé `bg-canteiro`. A página `/cart` fecha o resumo num `Panel` com `SummaryRow`. Divisória de item é `border-line`. O `QtyStepper` para em 1; só a variante `compact` do `CartItemRow` (gaveta) passa `min={0}`, e o `CartSheet` remove o item quando a quantidade cai abaixo de 1. Na `/cart` a remoção é o botão próprio. A gaveta é um overlay próprio (`useOverlay` de `lib/use-overlay.ts`: trava de rolagem, Esc, foco preso e devolvido), assim como `mobile-menu.tsx`, `quick-view.tsx` e o `filter-drawer.tsx` do catálogo.
 - **Cabeçalho e rodapé.** A barra utilitária do cabeçalho é `bg-grafite` e o rodapé é `bg-grafite-deep`, os dois com texto `on-dark`.
 - **Loading.** O skeleton espelha a anatomia da tela real e é o mesmo componente no `loading.tsx` e no fallback do `page.tsx`. Referências: `ProductCardSkeleton` e `catalog/_components/catalog-skeleton.tsx`. Linha de texto pulsa (`animate-pulse` em `bg-canteiro-2`) e tile de imagem varre (`.emach-shimmer`). A chegada de rota entra sem animação de opacidade na página inteira, porque o fade roda em toda navegação e pisca a tela.

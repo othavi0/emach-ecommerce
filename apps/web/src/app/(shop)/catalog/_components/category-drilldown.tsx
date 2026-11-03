@@ -7,6 +7,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { deriveDrilldownLevel } from "../_lib/drilldown-level";
 import { isModifiedClick } from "../_lib/is-modified-click";
+import { isOptionVisible, OptionContent, optionClass } from "./filter-option";
 
 interface CategoryDrilldownProps {
 	activeSlug: string | null;
@@ -35,14 +36,15 @@ export function CategoryDrilldown({
 }: CategoryDrilldownProps) {
 	const level = deriveDrilldownLevel(tree, activeSlug);
 
-	const rowClass =
-		"flex min-h-11 w-full cursor-pointer items-center gap-1.5 px-2 py-1 text-left text-[15px] text-ink-muted transition-colors hover:text-ink";
+	const rows = level.rows.filter((row) =>
+		isOptionVisible(counts[row.id] ?? 0, false)
+	);
 
 	return (
 		<nav aria-label="Categorias" className="flex flex-col">
 			{level.back && (
 				<Link
-					className="flex min-h-11 cursor-pointer items-center gap-1.5 px-2 py-1 text-left text-[13px] text-ink-muted transition-colors hover:text-ink"
+					className={cn(optionClass, "text-[14px] text-ink-2")}
 					// SAFETY: hrefFor é categoryHrefFor, que devolve buildHref (catalog/_lib/catalog-filters.ts): sempre `/catalog[/slug][?query]`.
 					href={hrefFor(level.back.slug) as Route}
 					onClick={(e) => {
@@ -55,42 +57,29 @@ export function CategoryDrilldown({
 						onSelect(level.back?.slug ?? null);
 					}}
 				>
-					<ArrowLeft aria-hidden="true" className="size-3 shrink-0" />
-					{level.back.name}
+					<span
+						aria-hidden="true"
+						className="grid size-5 shrink-0 place-items-center"
+					>
+						<ArrowLeft className="size-4" />
+					</span>
+					<span className="label flex-1">{level.back.name}</span>
 				</Link>
 			)}
 
-			{level.active ? (
-				<div
-					aria-current="page"
-					className="flex min-h-11 items-center rounded-[3px] bg-canteiro px-2 py-1 font-bold text-[15px] text-ink"
-				>
-					<span className="flex-1">{level.active.name}</span>
-					<span className="pl-2 text-[14px] text-ink-muted tabular-nums">
-						{counts[level.active.id] ?? 0}
-					</span>
-				</div>
-			) : (
-				<div
-					aria-current="page"
-					className="flex min-h-11 items-center rounded-[3px] bg-canteiro px-2 py-1 font-bold text-[15px] text-ink"
-				>
-					<span className="flex-1">Todas</span>
-					<span className="pl-2 text-[14px] text-ink-muted tabular-nums">
-						{totalCount}
-					</span>
-				</div>
-			)}
+			<div aria-current="page" className={cn(optionClass, "cursor-default")}>
+				<OptionContent
+					checked
+					count={level.active ? (counts[level.active.id] ?? 0) : totalCount}
+					label={level.active ? level.active.name : "Todas"}
+					mark="radio"
+				/>
+			</div>
 
-			<div
-				className={cn(
-					"flex flex-col",
-					level.rowsAreChildren && "ml-2.5 border-border border-l pl-1.5"
-				)}
-			>
-				{level.rows.map((row) => (
+			<div className={cn("flex flex-col", level.rowsAreChildren && "pl-4")}>
+				{rows.map((row) => (
 					<Link
-						className={rowClass}
+						className={optionClass}
 						// SAFETY: hrefFor é categoryHrefFor, que devolve buildHref (catalog/_lib/catalog-filters.ts): sempre `/catalog[/slug][?query]`.
 						href={hrefFor(row.slug) as Route}
 						key={row.id}
@@ -103,16 +92,22 @@ export function CategoryDrilldown({
 							onSelect(row.slug);
 						}}
 					>
-						<span className="flex-1">{row.name}</span>
-						{row.hasChildren && (
-							<ChevronDown
-								aria-hidden="true"
-								className="size-3 shrink-0 text-ink-muted"
-							/>
-						)}
-						<span className="pl-1 text-[14px] text-ink-muted tabular-nums">
-							{counts[row.id] ?? 0}
-						</span>
+						<OptionContent
+							checked={false}
+							count={counts[row.id] ?? 0}
+							label={
+								<>
+									{row.name}
+									{row.hasChildren && (
+										<ChevronDown
+											aria-hidden="true"
+											className="ml-1 inline size-3.5 text-ink-muted"
+										/>
+									)}
+								</>
+							}
+							mark="radio"
+						/>
 					</Link>
 				))}
 			</div>

@@ -2,9 +2,6 @@
 "use client";
 
 import type { CategoryNode } from "@emach/db/queries/categories";
-import { Switch } from "@emach/ui/components/switch";
-import { cn } from "@emach/ui/lib/utils";
-import { Check } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import type { CatalogService } from "../_lib/catalog-data";
@@ -13,6 +10,7 @@ import type { FacetCounts } from "../_lib/facet-counts";
 import { isModifiedClick } from "../_lib/is-modified-click";
 import { matchPriceRange, PRICE_RANGES } from "../_lib/price-ranges";
 import { CategoryDrilldown } from "./category-drilldown";
+import { isOptionVisible, OptionContent, optionClass } from "./filter-option";
 
 const VOLTAGE_OPTIONS: VoltageKey[] = ["127V", "220V", "Bivolt", "380V"];
 
@@ -21,8 +19,6 @@ interface FilterPanelProps {
 	/** Href de cada categoria do drilldown (link rastreável). */
 	categoryHrefFor: (slug: string | null) => string;
 	facetCounts: FacetCounts;
-	/** Prefixo de id p/ evitar colisão entre instâncias (desktop × drawer). */
-	idPrefix: string;
 	onApplyPrice: () => void;
 	onlyPromo: boolean;
 	onPmaxChange: (value: string) => void;
@@ -49,7 +45,7 @@ function Group({
 }) {
 	return (
 		<fieldset className="min-w-0 pb-[26px]">
-			<legend className="float-left mb-1 w-full p-0 font-extrabold text-[15px] text-ink">
+			<legend className="float-left mb-1 w-full p-0 font-semibold text-[15px] text-ink">
 				{title}
 			</legend>
 			<div className="clear-both">{children}</div>
@@ -57,31 +53,8 @@ function Group({
 	);
 }
 
-/** Caixa de marcação desenhada (o controle real é o link ou o botão em volta). */
-function Box({ checked }: { checked: boolean }) {
-	return (
-		<span
-			aria-hidden="true"
-			className={cn(
-				"grid size-5 shrink-0 place-items-center rounded-[2px] border-2 border-line-strong bg-paper text-white transition-colors duration-100",
-				checked && "border-grafite bg-grafite"
-			)}
-		>
-			{checked && <Check className="size-3.5" strokeWidth={3} />}
-		</span>
-	);
-}
-
-const optionClass =
-	"flex min-h-11 w-full cursor-pointer items-center gap-3 text-left text-[15px] text-ink leading-snug no-underline [&:hover_.label]:underline";
-
-/**
- * Corpo dos filtros do catálogo, compartilhado entre a coluna do desktop e a
- * gaveta do celular. `idPrefix` mantém os `htmlFor`/`id` únicos quando as duas
- * instâncias coexistem no DOM.
- */
+/** Corpo dos filtros do catálogo, compartilhado entre a coluna do desktop e a gaveta do celular. */
 export function FilterPanel({
-	idPrefix,
 	tree,
 	services,
 	activeSlug,
@@ -101,15 +74,26 @@ export function FilterPanel({
 	voltages,
 	onToggleVoltage,
 }: FilterPanelProps) {
-	const promoId = `${idPrefix}-filter-promo`;
 	const matchedRange = matchPriceRange(priceMin, priceMax);
 	const serviceActive = services.some((s) => s.slug === activeSlug);
 
+	const shownServices = services.filter((s) =>
+		isOptionVisible(s.productCount, s.slug === activeSlug)
+	);
+
+	const shownVoltages = VOLTAGE_OPTIONS.filter((v) =>
+		isOptionVisible(facetCounts.byVoltage[v], voltages.includes(v))
+	);
+
+	const shownRanges = PRICE_RANGES.filter((r) =>
+		isOptionVisible(facetCounts.byPriceRange[r.key], matchedRange === r.key)
+	);
+
 	return (
 		<div>
-			{services.length > 0 && (
+			{shownServices.length > 0 && (
 				<Group title="Serviço">
-					{services.map((service) => {
+					{shownServices.map((service) => {
 						const active = service.slug === activeSlug;
 
 						return (
@@ -128,11 +112,12 @@ export function FilterPanel({
 									onSelectCategory(active ? null : service.slug);
 								}}
 							>
-								<Box checked={active} />
-								<span className="label flex-1">{service.name}</span>
-								<span className="text-[14px] text-ink-muted tabular-nums">
-									{service.productCount}
-								</span>
+								<OptionContent
+									checked={active}
+									count={service.productCount}
+									label={service.name}
+									mark="radio"
+								/>
 							</Link>
 						);
 					})}
@@ -150,36 +135,33 @@ export function FilterPanel({
 				/>
 			</Group>
 
-			<Group title="Voltagem">
-				{VOLTAGE_OPTIONS.map((v) => {
-					const selected = voltages.includes(v);
-					const count = facetCounts.byVoltage[v];
-					const disabled = count === 0 && !selected;
+			{shownVoltages.length > 0 && (
+				<Group title="Voltagem">
+					{shownVoltages.map((v) => {
+						const selected = voltages.includes(v);
 
-					return (
-						<button
-							aria-pressed={selected}
-							className={cn(
-								optionClass,
-								disabled && "cursor-not-allowed opacity-45"
-							)}
-							disabled={disabled}
-							key={v}
-							onClick={() => onToggleVoltage(v)}
-							type="button"
-						>
-							<Box checked={selected} />
-							<span className="label flex-1">{v}</span>
-							<span className="text-[14px] text-ink-muted tabular-nums">
-								{count}
-							</span>
-						</button>
-					);
-				})}
-			</Group>
+						return (
+							<button
+								aria-pressed={selected}
+								className={optionClass}
+								key={v}
+								onClick={() => onToggleVoltage(v)}
+								type="button"
+							>
+								<OptionContent
+									checked={selected}
+									count={facetCounts.byVoltage[v]}
+									label={v}
+									mark="checkbox"
+								/>
+							</button>
+						);
+					})}
+				</Group>
+			)}
 
 			<Group title="Preço">
-				{PRICE_RANGES.map((r) => {
+				{shownRanges.map((r) => {
 					const selected = matchedRange === r.key;
 
 					return (
@@ -194,11 +176,12 @@ export function FilterPanel({
 							}
 							type="button"
 						>
-							<Box checked={selected} />
-							<span className="label flex-1">{r.label}</span>
-							<span className="text-[14px] text-ink-muted tabular-nums">
-								{facetCounts.byPriceRange[r.key]}
-							</span>
+							<OptionContent
+								checked={selected}
+								count={facetCounts.byPriceRange[r.key]}
+								label={r.label}
+								mark="radio"
+							/>
 						</button>
 					);
 				})}
@@ -232,7 +215,7 @@ export function FilterPanel({
 						value={pmaxValue}
 					/>
 					<button
-						className="h-11 shrink-0 cursor-pointer rounded-[3px] bg-grafite px-3.5 font-bold text-[14px] text-on-dark hover:bg-black"
+						className="h-11 shrink-0 cursor-pointer rounded-[3px] bg-grafite px-3.5 font-semibold text-[14px] text-on-dark hover:bg-black"
 						onClick={onApplyPrice}
 						type="button"
 					>
@@ -241,20 +224,23 @@ export function FilterPanel({
 				</div>
 			</Group>
 
-			<Group title="Ofertas">
-				<label className={optionClass} htmlFor={promoId}>
-					<Switch
-						checked={onlyPromo}
-						className="data-checked:bg-grafite"
-						id={promoId}
-						onCheckedChange={(v) => onTogglePromo(v === true)}
-					/>
-					<span className="label flex-1">Só em promoção</span>
-					<span className="text-[14px] text-ink-muted tabular-nums">
-						{facetCounts.promo}
-					</span>
-				</label>
-			</Group>
+			{isOptionVisible(facetCounts.promo, onlyPromo) && (
+				<Group title="Ofertas">
+					<button
+						aria-pressed={onlyPromo}
+						className={optionClass}
+						onClick={() => onTogglePromo(!onlyPromo)}
+						type="button"
+					>
+						<OptionContent
+							checked={onlyPromo}
+							count={facetCounts.promo}
+							label="Só em promoção"
+							mark="checkbox"
+						/>
+					</button>
+				</Group>
+			)}
 		</div>
 	);
 }

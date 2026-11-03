@@ -71,7 +71,7 @@ export function ProductCard({
 						<Image
 							alt=""
 							className={cn(
-								"object-contain mix-blend-multiply transition-transform duration-500 ease-out-expo group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100",
+								"object-contain mix-blend-multiply",
 								compact ? "p-3 sm:p-5" : "p-5",
 								!tool.inStock && "opacity-50 grayscale"
 							)}
@@ -105,7 +105,7 @@ export function ProductCard({
 				<Heading
 					className={cn(
 						"line-clamp-3 min-h-[calc(1.35em*3)] font-semibold leading-[1.35]",
-						compact ? "text-[14px] sm:text-[16px]" : "text-[16px]"
+						compact ? "text-[14px] sm:text-[15px]" : "text-[15px]"
 					)}
 				>
 					<Link className="text-ink no-underline hover:underline" href={href}>
@@ -113,18 +113,13 @@ export function ProductCard({
 					</Link>
 				</Heading>
 				{specs.length > 0 && (
-					<p
-						className={cn(
-							"min-h-[3em] text-ink-muted tabular-nums",
-							compact ? "text-[12.5px] sm:text-[13.5px]" : "text-[13.5px]"
-						)}
-					>
+					<p className="min-h-[3em] text-[13px] text-ink-muted tabular-nums">
 						{specs.join(" · ")}
 					</p>
 				)}
 				<div className="mt-auto pt-2">
 					{priceCents === null ? (
-						<p className="font-bold text-[15px] text-ink-muted">
+						<p className="font-semibold text-[15px] text-ink-muted">
 							Preço sob consulta
 						</p>
 					) : (
@@ -133,7 +128,7 @@ export function ProductCard({
 								<span
 									className={cn(
 										"font-extrabold text-ink tabular-nums leading-[1.05] tracking-[-0.01em]",
-										compact ? "text-[20px] sm:text-[27px]" : "text-[27px]"
+										compact ? "text-[20px] sm:text-[24px]" : "text-[24px]"
 									)}
 								>
 									{fmtBRL(priceCents)}
@@ -148,7 +143,7 @@ export function ProductCard({
 							<p
 								className={cn(
 									"mt-1 min-h-[1.4em] text-ink-2 tabular-nums",
-									compact ? "text-[12.5px] sm:text-[14px]" : "text-[14px]"
+									compact ? "text-[13px] sm:text-[14px]" : "text-[14px]"
 								)}
 							>
 								{installmentText(priceCents)}
