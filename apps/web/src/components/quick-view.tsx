@@ -219,7 +219,7 @@ function QuickViewBody({
 				{shown && (
 					<>
 						<p className="mt-3 flex flex-wrap items-baseline gap-x-3 md:mt-[18px]">
-							<span className="font-extrabold text-[24px] tabular-nums tracking-[-0.02em]">
+							<span className="font-extrabold text-[30px] tabular-nums tracking-[-0.02em] md:text-[34px]">
 								{fmtNumericBRL(shown.finalAmount)}
 							</span>
 							{shown.discountPct > 0 && (

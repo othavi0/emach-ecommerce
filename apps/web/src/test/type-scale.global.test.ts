@@ -30,7 +30,7 @@ const BANNED_WEIGHTS = [
 
 function nearestAllowed(px: number) {
 	if (px >= DISPLAY_MIN) {
-		return `${px}px só com font-display, senão 24px`;
+		return `${px}px só com font-display ou em número grande (font-extrabold e tabular-nums), senão 24px`;
 	}
 
 	const nearest = SCALE.reduce((best, step) =>
@@ -38,6 +38,14 @@ function nearestAllowed(px: number) {
 	);
 
 	return `${nearest}px`;
+}
+
+/** Título condensado ou número grande, como o preço da página de produto. */
+function isDisplayLine(text: string) {
+	return (
+		text.includes("font-display") ||
+		(text.includes("font-extrabold") && text.includes("tabular-nums"))
+	);
 }
 
 function scanTypeScale(source: string, file: string): string[] {
@@ -51,7 +59,7 @@ function scanTypeScale(source: string, file: string): string[] {
 
 			const allowed =
 				SCALE.some((step) => step === px) ||
-				(px >= DISPLAY_MIN && text.includes("font-display"));
+				(px >= DISPLAY_MIN && isDisplayLine(text));
 
 			if (!allowed) {
 				problems.push(
@@ -88,7 +96,7 @@ describe("escala de tipo e pesos em apps/web/src (DESIGN.md §3)", () => {
 			)
 		).toEqual([
 			"x.tsx:1: text-[13.5px] fora da escala; use 13px",
-			"x.tsx:1: text-[40px] fora da escala; use 40px só com font-display, senão 24px",
+			"x.tsx:1: text-[40px] fora da escala; use 40px só com font-display ou em número grande (font-extrabold e tabular-nums), senão 24px",
 			"x.tsx:1: font-bold fora dos pesos; use font-semibold",
 		]);
 		expect(
