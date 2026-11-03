@@ -86,7 +86,7 @@ export async function ServiceKit({ services, toolId }: ServiceKitProps) {
 					>
 						{PRODUCT_COPY.kitTitle}
 					</h2>
-					<p className="mt-2.5 max-w-[40ch] text-[15.5px] text-ink-2">
+					<p className="mt-2.5 max-w-[40ch] text-[15px] text-ink-2">
 						{PRODUCT_COPY.kitLead}
 					</p>
 					{photo?.imageSrc && (
@@ -131,7 +131,7 @@ export async function ServiceKit({ services, toolId }: ServiceKitProps) {
 									)}
 								</span>
 								<div className="min-w-0">
-									<h3 className="font-bold text-[15px] leading-snug">
+									<h3 className="font-semibold text-[15px] leading-snug">
 										<Link
 											className="text-ink no-underline hover:underline"
 											href={`/product/${tool.slug}`}
@@ -140,15 +140,15 @@ export async function ServiceKit({ services, toolId }: ServiceKitProps) {
 										</Link>
 									</h3>
 									{detail.length > 0 && (
-										<p className="mt-0.5 text-[13.5px] text-ink-muted tabular-nums">
+										<p className="mt-0.5 text-[13px] text-ink-muted tabular-nums">
 											{detail.join(" · ")}
 										</p>
 									)}
 								</div>
-								<p className="whitespace-nowrap font-extrabold text-[16.5px] tabular-nums md:text-right">
+								<p className="whitespace-nowrap font-extrabold text-[17px] tabular-nums md:text-right">
 									{tool.inStock && price !== null ? fmtBRL(price) : "Esgotado"}
 									{tool.inStock && price !== null && (
-										<small className="block font-semibold text-[12.5px] text-ink-muted">
+										<small className="block font-normal text-[13px] text-ink-muted">
 											{installmentText(price)}
 										</small>
 									)}

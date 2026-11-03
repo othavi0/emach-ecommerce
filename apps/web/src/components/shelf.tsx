@@ -265,13 +265,13 @@ export function Shelf({
 				{imageSrc && (
 					<Image
 						alt=""
-						className="object-cover opacity-55 transition-[transform,opacity] duration-500 ease-out-expo group-hover:scale-[1.04] group-hover:opacity-45 motion-reduce:transition-none"
+						className="object-cover opacity-55 transition-opacity duration-300 ease-out group-hover:opacity-45 motion-reduce:transition-none"
 						fill
 						sizes="(min-width: 1296px) 640px, 100vw"
 						src={imageSrc}
 					/>
 				)}
-				<span className="relative z-[1] inline-flex items-center gap-1.5 p-4 font-bold text-[14px] md:p-5 md:text-[15px]">
+				<span className="relative z-[1] inline-flex items-center gap-1.5 p-4 font-semibold text-[14px] md:p-5 md:text-[15px]">
 					{label}
 					<ChevronRight aria-hidden="true" className="size-5" />
 				</span>
@@ -301,7 +301,7 @@ export function Shelf({
 					{imageSrc && (
 						<Image
 							alt=""
-							className="object-cover opacity-55 transition-[transform,opacity] duration-500 ease-out-expo group-hover:scale-[1.04] group-hover:opacity-45 motion-reduce:transition-none"
+							className="object-cover opacity-55 transition-opacity duration-300 ease-out group-hover:opacity-45 motion-reduce:transition-none"
 							fill
 							sizes="(min-width: 1296px) 640px, 50vw"
 							src={imageSrc}
@@ -311,7 +311,7 @@ export function Shelf({
 						<b className="font-display font-extrabold @[420px]:text-[46px] text-[30px] uppercase leading-[0.95]">
 							{title}
 						</b>
-						<span className="inline-flex items-center gap-1.5 font-bold text-[15px]">
+						<span className="inline-flex items-center gap-1.5 font-semibold text-[15px]">
 							{label}
 							<ChevronRight aria-hidden="true" className="size-5" />
 						</span>

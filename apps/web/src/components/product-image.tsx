@@ -19,14 +19,9 @@ interface ProductImageProps {
 	priority?: boolean;
 	sizes?: string;
 	src?: string;
-	zoom?: boolean;
 }
 
-const WRAPPER_BASE =
-	"absolute inset-0 overflow-hidden transition-transform duration-[var(--card-dur-image)] ease-[var(--card-ease)] motion-reduce:transition-none";
-
-const ZOOM_ON_HOVER =
-	"group-hover:scale-[1.04] motion-reduce:group-hover:scale-100";
+const WRAPPER_BASE = "absolute inset-0 overflow-hidden";
 
 export function ProductImage({
 	alt,
@@ -34,7 +29,6 @@ export function ProductImage({
 	priority = false,
 	sizes = "25vw",
 	src,
-	zoom = false,
 }: ProductImageProps) {
 	const [loaded, setLoaded] = useState(false);
 	// Fade-in no onLoad mata o "pop" da foto sobre o tile claro. Imagem
@@ -44,7 +38,7 @@ export function ProductImage({
 
 	if (src) {
 		return (
-			<div className={cn(WRAPPER_BASE, zoom && ZOOM_ON_HOVER)}>
+			<div className={WRAPPER_BASE}>
 				<Image
 					alt={alt ?? ""}
 					className={cn(
@@ -69,8 +63,7 @@ export function ProductImage({
 		<div
 			className={cn(
 				"flex items-center justify-center bg-well text-ink-muted",
-				WRAPPER_BASE,
-				zoom && ZOOM_ON_HOVER
+				WRAPPER_BASE
 			)}
 		>
 			<Icon aria-hidden="true" className="size-[58%]" strokeWidth={1.2} />
