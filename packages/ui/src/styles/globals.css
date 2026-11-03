@@ -395,7 +395,7 @@
 	--destructive: oklch(0.569 0.2 24);
 	--border: var(--line);
 	--input: var(--line-strong);
-	--ring: oklch(0.529 0.194 26);
+	--ring: var(--ink);
 	--chart-1: oklch(0.529 0.194 26);
 	--chart-2: oklch(0.44 0.19 24);
 	--chart-3: oklch(0.4 0.18 23);
@@ -430,7 +430,7 @@
 	--destructive: oklch(0.627 0.179 22);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.529 0.194 26);
+	--ring: var(--ink);
 	--chart-1: oklch(0.529 0.194 26);
 	--chart-2: oklch(0.44 0.19 24);
 	--chart-3: oklch(0.4 0.18 23);
