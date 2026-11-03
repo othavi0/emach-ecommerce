@@ -33,7 +33,7 @@ const popupClass =
  * Hora da loja só depois de montar: no servidor (e no prerender do
  * `cacheComponents`) o status ficaria congelado e quebraria a hidratação.
  */
-function useStoreClock(): StoreClock | null {
+export function useStoreClock(): StoreClock | null {
 	const [clock, setClock] = useState<StoreClock | null>(null);
 
 	useEffect(() => {
@@ -56,7 +56,7 @@ function StatusDot({ open }: { open: boolean }) {
 	);
 }
 
-function StatusText({
+export function StatusText({
 	className,
 	status,
 }: {
@@ -210,6 +210,45 @@ function ManyBranches({
 	);
 }
 
+/** Nome curto do lugar: a cidade da filial única, ou "N filiais". */
+export function branchPlace(branches: HeaderBranch[]): string {
+	const [only] = branches;
+
+	if (!only) {
+		return "Nossas filiais";
+	}
+
+	return branches.length === 1 ? only.city : `${branches.length} filiais`;
+}
+
+/** Status da filial única, ou quantas das filiais estão abertas agora. */
+export function branchSummary(
+	branches: HeaderBranch[],
+	clock: StoreClock
+): BranchStatus | null {
+	const [only] = branches;
+
+	if (!only) {
+		return null;
+	}
+
+	if (branches.length === 1) {
+		return branchStatus(only.hours, clock);
+	}
+
+	const openNow = branches.filter(
+		(b) => branchStatus(b.hours, clock)?.open
+	).length;
+
+	return {
+		label:
+			openNow > 0
+				? plural(openNow, "aberta agora", "abertas agora")
+				: "Todas fechadas agora",
+		open: openNow > 0,
+	};
+}
+
 /** Lado esquerdo da faixa grafite: a filial (ou as filiais) e o status agora. */
 export function BranchStrip({ branches }: { branches: HeaderBranch[] }) {
 	const clock = useStoreClock();
@@ -227,27 +266,7 @@ export function BranchStrip({ branches }: { branches: HeaderBranch[] }) {
 	}
 
 	const single = branches.length === 1;
-	let summary: React.ReactNode = null;
-
-	if (clock && single) {
-		summary = <StatusText status={branchStatus(only.hours, clock)} />;
-	} else if (clock) {
-		const openNow = branches.filter(
-			(b) => branchStatus(b.hours, clock)?.open
-		).length;
-
-		summary = (
-			<StatusText
-				status={{
-					label:
-						openNow > 0
-							? plural(openNow, "aberta agora", "abertas agora")
-							: "Todas fechadas agora",
-					open: openNow > 0,
-				}}
-			/>
-		);
-	}
+	const summary = clock ? branchSummary(branches, clock) : null;
 
 	return (
 		<Popover onOpenChange={setOpen} open={open}>
@@ -258,11 +277,14 @@ export function BranchStrip({ branches }: { branches: HeaderBranch[] }) {
 						? [only.street, only.city].filter(Boolean).join(", ")
 						: `${branches.length} filiais`}
 				</span>
-				<span className="sm:hidden">{single ? only.city : "Filiais"}</span>
+				<span className="whitespace-nowrap sm:hidden">
+					{single ? only.city : "Filiais"}
+				</span>
 				{summary && (
-					<span className="ml-1.5 text-on-dark-muted max-md:hidden">
-						{summary}
-					</span>
+					<StatusText
+						className="ml-1.5 whitespace-nowrap text-on-dark-muted max-[419px]:hidden sm:max-md:hidden"
+						status={summary}
+					/>
 				)}
 				<ChevronDown aria-hidden="true" className="size-4 text-on-dark-muted" />
 			</PopoverTrigger>

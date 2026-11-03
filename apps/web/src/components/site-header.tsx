@@ -50,7 +50,7 @@ export async function SiteHeader() {
 					</div>
 				</div>
 			</div>
-			<HeaderBar nav={nav} />
+			<HeaderBar branches={branches} nav={nav} previews={previews} />
 			<DeptNav nav={nav} previews={previews} />
 		</>
 	);

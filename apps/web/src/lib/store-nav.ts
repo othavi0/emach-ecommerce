@@ -78,7 +78,7 @@ export async function getStoreNav(): Promise<StoreNav> {
 	};
 }
 
-/** Produtos do painel de cada ofício e categoria, por slug. Só o desktop usa. */
+/** Produtos do painel de cada ofício e categoria, por slug: painéis do desktop e sanfona do celular. */
 export async function getNavPreviews(): Promise<NavPreviews> {
 	"use cache";
 	cacheLife({ revalidate: 600 });

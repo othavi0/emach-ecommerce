@@ -9,11 +9,21 @@ import { AccountMenu } from "@/components/account-menu";
 import { CartSheet } from "@/components/cart-sheet";
 import { HeaderSearch } from "@/components/header-search";
 import { MobileMenu } from "@/components/mobile-menu";
+import type { HeaderBranch } from "@/lib/branches";
 import { useCart, useCartSheet } from "@/lib/cart-context";
 import { fmtBRL } from "@/lib/format";
+import type { NavPreviews } from "@/lib/nav-preview";
 import type { StoreNav } from "@/lib/store-nav";
 
-export function HeaderBar({ nav }: { nav: StoreNav }) {
+export function HeaderBar({
+	branches,
+	nav,
+	previews,
+}: {
+	branches: HeaderBranch[];
+	nav: StoreNav;
+	previews: NavPreviews;
+}) {
 	const { subtotalCents, totalCount } = useCart();
 	const { open: cartOpen, setOpen: setCartOpen } = useCartSheet();
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -108,9 +118,11 @@ export function HeaderBar({ nav }: { nav: StoreNav }) {
 			    rotas dinâmicas ([param] sem generateStaticParams). */}
 			<Suspense fallback={null}>
 				<MobileMenu
+					branches={branches}
 					nav={nav}
 					onClose={() => setMenuOpen(false)}
 					open={menuOpen}
+					previews={previews}
 				/>
 				<CartSheet onOpenChange={setCartOpen} open={cartOpen} />
 			</Suspense>
