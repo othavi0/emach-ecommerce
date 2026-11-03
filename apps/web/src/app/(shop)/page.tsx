@@ -16,7 +16,8 @@ import { Shelf } from "@/components/shelf";
 import { getCardExtras } from "@/lib/card-data";
 import { canonicalFor } from "@/lib/seo/canonical";
 import { getServices } from "@/lib/services";
-import { getShelves } from "@/lib/shelves";
+import { autoAdvanceMs, groupShelfRows } from "@/lib/shelf-rows";
+import { getShelves, type Shelf as ShelfData } from "@/lib/shelves";
 
 export const metadata: Metadata = {
 	alternates: canonicalFor("/"),
@@ -94,6 +95,32 @@ async function HomeContent() {
 
 	const byService = shelves.by === "service";
 	const counts = distinctCounts(services.map((s) => s.preview));
+	const position = new Map(shelves.shelves.map((s, i) => [s.key, i]));
+
+	function renderShelf(shelf: ShelfData, layout: "half" | "row") {
+		return (
+			<Shelf
+				autoAdvanceMs={autoAdvanceMs(position.get(shelf.key) ?? 0)}
+				href={shelf.href}
+				imageSrc={shelf.imageSrc}
+				inStockCount={shelf.inStockCount}
+				itemCount={shelf.items.length}
+				key={shelf.key}
+				layout={layout}
+				productCount={shelf.productCount}
+				title={shelf.title}
+			>
+				{shelf.items.map((tool) => (
+					<ProductCard
+						extras={extrasByTool[tool.id]}
+						headingLevel={4}
+						key={tool.id}
+						tool={tool}
+					/>
+				))}
+			</Shelf>
+		);
+	}
 
 	return (
 		<>
@@ -134,26 +161,18 @@ async function HomeContent() {
 							</Link>
 						</div>
 						<div className="grid gap-[34px] md:gap-11">
-							{shelves.shelves.map((shelf) => (
-								<Shelf
-									href={shelf.href}
-									imageSrc={shelf.imageSrc}
-									inStockCount={shelf.inStockCount}
-									itemCount={shelf.items.length}
-									key={shelf.key}
-									productCount={shelf.productCount}
-									title={shelf.title}
-								>
-									{shelf.items.map((tool) => (
-										<ProductCard
-											extras={extrasByTool[tool.id]}
-											headingLevel={4}
-											key={tool.id}
-											tool={tool}
-										/>
-									))}
-								</Shelf>
-							))}
+							{groupShelfRows(shelves.shelves).map((row) =>
+								row.kind === "row" ? (
+									renderShelf(row.shelf, "row")
+								) : (
+									<div
+										className="grid gap-[34px] md:gap-11 xl:grid-cols-2 xl:gap-x-4"
+										key={`${row.shelves[0].key}+${row.shelves[1].key}`}
+									>
+										{row.shelves.map((shelf) => renderShelf(shelf, "half"))}
+									</div>
+								)
+							)}
 						</div>
 					</div>
 				</section>
