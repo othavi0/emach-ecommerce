@@ -384,7 +384,7 @@ export function CatalogContent({
 
 				<div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-[250px_minmax(0,1fr)]">
 					<aside aria-label="Filtros" className="sticky top-4 max-lg:hidden">
-						<FilterPanel idPrefix="desktop" {...panelProps} />
+						<FilterPanel {...panelProps} />
 					</aside>
 
 					<div
@@ -457,7 +457,7 @@ export function CatalogContent({
 				open={filterOpen}
 				total={total}
 			>
-				<FilterPanel idPrefix="mobile" {...panelProps} />
+				<FilterPanel {...panelProps} />
 			</FilterDrawer>
 		</div>
 	);
