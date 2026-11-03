@@ -5,6 +5,7 @@ import type {
 } from "@emach/db/schema/inventory";
 import { branch as branchTable } from "@emach/db/schema/inventory";
 import { asc, eq } from "drizzle-orm";
+import { cacheLife } from "next/cache";
 
 export interface BranchRow {
 	businessHours: BranchBusinessHours | null;
@@ -138,4 +139,41 @@ export function branchMapsUrl(row: {
 		.join(", ");
 
 	return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+/** Filial como a faixa do cabeçalho mostra. Serializável para o cliente. */
+export interface HeaderBranch {
+	cep: string | null;
+	city: string;
+	hours: BranchBusinessHours | null;
+	id: string;
+	locality: string;
+	mapsUrl: string;
+	name: string;
+	street: string;
+}
+
+export function toHeaderBranch(row: BranchRow): HeaderBranch {
+	return {
+		cep: formatCep(row.cep),
+		city: row.city ?? row.name,
+		hours: row.businessHours,
+		id: row.id,
+		locality: [
+			row.neighborhood,
+			[row.city, row.state].filter(Boolean).join("/"),
+		]
+			.filter(Boolean)
+			.join(", "),
+		mapsUrl: branchMapsUrl(row),
+		name: row.name,
+		street: [row.street, row.streetNumber].filter(Boolean).join(", "),
+	};
+}
+
+export async function getHeaderBranches(): Promise<HeaderBranch[]> {
+	"use cache";
+	cacheLife({ revalidate: 600 });
+
+	return (await getActiveBranches()).map(toHeaderBranch);
 }

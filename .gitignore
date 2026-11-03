@@ -67,3 +67,5 @@ scripts/.mapdata/
 
 # O instalador de skills traz o zip junto da pasta já extraída
 .agents/skills/**/Archive.zip
+
+.claude/worktrees/
