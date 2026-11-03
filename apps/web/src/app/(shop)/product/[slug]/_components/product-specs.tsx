@@ -51,7 +51,7 @@ export function ProductSpecs({ attributes, sku, tool }: ProductSpecsProps) {
 					<h2 className={sectionTitle} id="sobre-produto">
 						{PRODUCT_COPY.about}
 					</h2>
-					<div className="mt-4 text-[16.5px] text-ink-2 leading-[1.65]">
+					<div className="mt-4 text-[17px] text-ink-2 leading-[1.65]">
 						{paragraphs.map((paragraph) => (
 							<p
 								className={cn(

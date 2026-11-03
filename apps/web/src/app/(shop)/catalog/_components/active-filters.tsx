@@ -23,7 +23,7 @@ export function ActiveFilters({
 			{filters.map((f) => (
 				<button
 					aria-label={`Remover filtro ${f.kind ? `${f.kind} ` : ""}${f.value}`}
-					className="inline-flex min-h-10 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-grafite bg-grafite py-0 pr-2 pl-3.5 font-semibold text-[14.5px] text-on-dark hover:bg-black"
+					className="inline-flex min-h-10 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-full border border-grafite bg-grafite py-0 pr-2 pl-3.5 font-semibold text-[14px] text-on-dark hover:bg-black"
 					key={f.id}
 					onClick={() => onRemove(f.remove)}
 					type="button"
@@ -35,7 +35,7 @@ export function ActiveFilters({
 			))}
 			{filters.length > 1 && (
 				<button
-					className="inline-flex min-h-10 cursor-pointer items-center px-1 font-bold text-[14.5px] text-ink underline underline-offset-[3px]"
+					className="inline-flex min-h-10 cursor-pointer items-center px-1 font-semibold text-[14px] text-ink underline underline-offset-[3px]"
 					onClick={onClearAll}
 					type="button"
 				>

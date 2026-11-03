@@ -32,7 +32,7 @@ export function LoginShell({ children }: { children: ReactNode }) {
 						/>
 					</div>
 					<div className="p-5 md:p-6">
-						<h2 className="font-extrabold text-[17px] text-ink">
+						<h2 className="font-semibold text-[17px] text-ink">
 							Com a conta você
 						</h2>
 						<ul className="mt-3 flex flex-col gap-2.5 text-[15px] text-ink-2">

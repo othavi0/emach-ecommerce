@@ -38,7 +38,7 @@ interface ProductInfoProps {
 }
 
 const bigButton =
-	"inline-flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-[3px] px-[22px] font-bold text-[16px] disabled:cursor-not-allowed disabled:opacity-45";
+	"inline-flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-[3px] px-[22px] font-semibold text-[15px] disabled:cursor-not-allowed disabled:opacity-45";
 
 export function ProductInfo({
 	activePromotion,
@@ -148,7 +148,7 @@ export function ProductInfo({
 				<div className={PRODUCT_CHIP_ROW}>
 					{services.map((service) => (
 						<Link
-							className="inline-flex min-h-8 items-center gap-1.5 rounded-[3px] bg-grafite px-2.5 font-bold text-[12.5px] text-on-dark uppercase no-underline [font-stretch:80%] hover:bg-black"
+							className="inline-flex min-h-8 items-center gap-1.5 rounded-[3px] bg-grafite px-2.5 font-semibold text-[13px] text-on-dark uppercase no-underline [font-stretch:80%] hover:bg-black"
 							href={service.href}
 							key={service.slug}
 						>
@@ -160,7 +160,7 @@ export function ProductInfo({
 			)}
 
 			<h1 className={PRODUCT_TITLE}>{tool.name}</h1>
-			<p className="mt-2.5 text-[13.5px] text-ink-muted [overflow-wrap:anywhere]">
+			<p className="mt-2.5 text-[13px] text-ink-muted [overflow-wrap:anywhere]">
 				{tool.manufacturerName &&
 					`${PRODUCT_COPY.brand} ${tool.manufacturerName} · `}
 				{PRODUCT_COPY.code}{" "}
@@ -173,7 +173,7 @@ export function ProductInfo({
 				<ul className="mt-3.5 flex flex-wrap gap-1.5">
 					{specChips.map((chip) => (
 						<li
-							className="inline-flex min-h-[30px] items-center rounded-[3px] border border-line bg-canteiro px-2.5 font-semibold text-[13.5px] tabular-nums"
+							className="inline-flex min-h-[30px] items-center rounded-[3px] border border-line bg-canteiro px-2.5 font-semibold text-[13px] tabular-nums"
 							key={chip}
 						>
 							{chip}
@@ -189,17 +189,17 @@ export function ProductInfo({
 					</span>
 					{price.hasDiscount && (
 						<>
-							<span className="text-[16px] text-ink-muted tabular-nums line-through">
+							<span className="text-[15px] text-ink-muted tabular-nums line-through">
 								<span className="sr-only">Antes </span>
 								{fmtNumericBRL(shown.priceAmount)}
 							</span>
-							<span className="rounded-[3px] bg-grafite px-2 py-0.5 font-bold text-[13px] text-on-dark">
+							<span className="rounded-[3px] bg-grafite px-2 py-0.5 font-semibold text-[13px] text-on-dark">
 								−{price.discountPct}%
 							</span>
 						</>
 					)}
 				</p>
-				<p className="mt-2 text-[16px] tabular-nums">
+				<p className="mt-2 text-[15px] tabular-nums">
 					{installments ? (
 						<>
 							{PRODUCT_COPY.installmentsLead}{" "}
@@ -239,10 +239,10 @@ export function ProductInfo({
 								/>
 							</div>
 						)}
-						<p className="mt-4 text-[14.5px]">
-							<StockLine className="text-[14.5px]" inStock />
+						<p className="mt-4 text-[14px]">
+							<StockLine className="text-[14px]" inStock />
 							{options.length > 1 && inStockVoltages.length > 0 && (
-								<span className="font-bold text-ok">
+								<span className="font-semibold text-ok">
 									{" "}
 									em {inStockVoltages.join(" e ")}
 								</span>
@@ -273,9 +273,9 @@ export function ProductInfo({
 				) : (
 					<>
 						<p className="mt-4">
-							<StockLine className="text-[14.5px]" inStock={false} />
+							<StockLine className="text-[14px]" inStock={false} />
 						</p>
-						<p className="mt-3.5 rounded-[5px] border border-line-strong border-dashed px-4 py-3.5 text-[14.5px] text-ink-2">
+						<p className="mt-3.5 rounded-[5px] border border-line-strong border-dashed px-4 py-3.5 text-[14px] text-ink-2">
 							{PRODUCT_COPY.outOfStock}
 						</p>
 					</>

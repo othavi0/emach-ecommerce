@@ -82,7 +82,7 @@ function FooterColumn({
 }) {
 	return (
 		<div>
-			<h2 className="mb-2.5 font-extrabold text-[15px] text-white">{title}</h2>
+			<h2 className="mb-2.5 font-semibold text-[15px] text-white">{title}</h2>
 			<ul>{children}</ul>
 		</div>
 	);
@@ -99,7 +99,7 @@ export async function SiteFooter() {
 
 	return (
 		<footer
-			className="bg-grafite-deep pt-10 pb-7 text-[14.5px] text-on-dark [color-scheme:dark] md:pt-14"
+			className="bg-grafite-deep pt-10 pb-7 text-[14px] text-on-dark [color-scheme:dark] md:pt-14"
 			role="contentinfo"
 		>
 			<div className="shop-wrap">
@@ -119,7 +119,7 @@ export async function SiteFooter() {
 							/>
 						</Link>
 						<p className="mt-4 max-w-[40ch] text-on-dark-muted leading-relaxed">
-							<strong className="font-bold text-on-dark">
+							<strong className="font-semibold text-on-dark">
 								EMACH Ferramentas
 							</strong>
 							<br />
@@ -188,7 +188,7 @@ export async function SiteFooter() {
 					</FooterColumn>
 				</div>
 
-				<div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-line-dark border-t pt-[22px] text-[13.5px] text-on-dark-muted">
+				<div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-line-dark border-t pt-[22px] text-[13px] text-on-dark-muted">
 					<div className="flex flex-wrap items-center gap-2">
 						<span>Formas de pagamento:</span>
 						{PAYMENT_METHODS.map((method) => (

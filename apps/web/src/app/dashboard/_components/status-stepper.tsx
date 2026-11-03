@@ -18,8 +18,8 @@ const NODE_CLASS: Record<StepState, string> = {
 };
 
 const LABEL_CLASS: Record<StepState, string> = {
-	ok: "font-bold text-ok",
-	current: "font-bold text-ink",
+	ok: "font-semibold text-ok",
+	current: "font-semibold text-ink",
 	done: "text-ink-2",
 	upcoming: "text-ink-muted",
 };

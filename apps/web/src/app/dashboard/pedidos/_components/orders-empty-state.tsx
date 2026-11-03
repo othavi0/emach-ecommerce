@@ -18,7 +18,7 @@ export function OrdersEmptyState({ statusLabel }: OrdersEmptyStateProps) {
 				className="mb-4 size-10 text-ink-muted"
 				strokeWidth={1.4}
 			/>
-			<p className="mb-6 text-[15.5px] text-ink-2">{text}</p>
+			<p className="mb-6 text-[15px] text-ink-2">{text}</p>
 			<EmachLinkButton href="/catalog" variant="dark">
 				Ir ao catálogo
 			</EmachLinkButton>

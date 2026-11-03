@@ -58,7 +58,7 @@ export function PromoHighlight({
 				</div>
 				<p className="mt-6">
 					<Link
-						className="inline-flex min-h-11 items-center gap-1 font-bold text-[15px] text-ink underline underline-offset-[3px]"
+						className="inline-flex min-h-11 items-center gap-1 font-semibold text-[15px] text-ink underline underline-offset-[3px]"
 						href="/catalog?promo=1"
 					>
 						Ver todas as ofertas

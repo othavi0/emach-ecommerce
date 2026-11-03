@@ -204,7 +204,7 @@
 	gap: 6px;
 	align-items: flex-start;
 	font-size: 13px;
-	font-weight: 500;
+	font-weight: 400;
 	line-height: 1.4;
 	color: var(--error-text);
 }
@@ -237,7 +237,7 @@
 .emach-toast__title {
 	font-family: var(--font-sans);
 	font-size: 13px !important;
-	font-weight: 500 !important;
+	font-weight: 400 !important;
 	color: var(--on-dark) !important;
 }
 .emach-toast [data-button] {
@@ -395,7 +395,7 @@
 	--destructive: oklch(0.569 0.2 24);
 	--border: var(--line);
 	--input: var(--line-strong);
-	--ring: oklch(0.529 0.194 26);
+	--ring: var(--ink);
 	--chart-1: oklch(0.529 0.194 26);
 	--chart-2: oklch(0.44 0.19 24);
 	--chart-3: oklch(0.4 0.18 23);
@@ -430,7 +430,7 @@
 	--destructive: oklch(0.627 0.179 22);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.529 0.194 26);
+	--ring: var(--ink);
 	--chart-1: oklch(0.529 0.194 26);
 	--chart-2: oklch(0.44 0.19 24);
 	--chart-3: oklch(0.4 0.18 23);

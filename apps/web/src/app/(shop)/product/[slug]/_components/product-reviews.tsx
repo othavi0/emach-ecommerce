@@ -54,12 +54,12 @@ interface SummaryRailProps {
 function SummaryRail({ avg, count, recommend }: SummaryRailProps) {
 	return (
 		<div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-line border-b px-4 py-3.5 sm:px-5 md:flex-col md:items-start md:justify-center md:gap-1.5 md:border-r md:border-b-0 md:py-6">
-			<div className="flex items-baseline gap-1.5 font-display font-medium text-[42px] tabular-nums leading-none">
+			<div className="flex items-baseline gap-1.5 font-display font-normal text-[42px] tabular-nums leading-none">
 				{avg.toFixed(1).replace(".", ",")}
 				<span className="text-[15px] text-ink-muted">/ 5</span>
 			</div>
 			<StarRating rating={avg} size={15} />
-			<div className="text-[12.5px] text-ink-muted">
+			<div className="text-[13px] text-ink-muted">
 				{count} {count === 1 ? "avaliação" : "avaliações"}
 				{recommend !== undefined && (
 					<>
@@ -99,7 +99,7 @@ function TestimonialCell({
 				<h3
 					className={cn(
 						"mb-1 font-semibold text-ink",
-						size === "lg" ? "text-[16px]" : "text-[14px]"
+						size === "lg" ? "text-[17px]" : "text-[14px]"
 					)}
 				>
 					{review.title}
@@ -109,7 +109,7 @@ function TestimonialCell({
 				className={cn(
 					"text-ink leading-relaxed",
 					size === "lg"
-						? "max-w-[52ch] font-medium text-[19px]"
+						? "max-w-[52ch] font-normal text-[20px]"
 						: "max-w-[60ch] text-[15px]"
 				)}
 			>
@@ -121,7 +121,7 @@ function TestimonialCell({
 				</span>
 				<VerifiedBadge />
 				<time
-					className="text-[12.5px] text-ink-muted"
+					className="text-[13px] text-ink-muted"
 					dateTime={review.createdAt.toISOString()}
 				>
 					{formatReviewDate(review.createdAt)}
@@ -151,7 +151,7 @@ function DistributionBars({
 			{bars.map((b) => (
 				<div
 					aria-label={`${b.star} estrelas: ${b.pct}%`}
-					className="flex items-center gap-3 text-[12.5px] text-ink"
+					className="flex items-center gap-3 text-[13px] text-ink"
 					key={b.star}
 					role="img"
 				>

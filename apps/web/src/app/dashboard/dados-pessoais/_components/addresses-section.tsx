@@ -164,13 +164,13 @@ function AddressCard({ address, onEdit }: AddressCardProps) {
 						{address.label ?? "Endereço"}
 					</span>
 					{address.isDefault && (
-						<span className="rounded-[3px] border border-line-strong px-1.5 py-px font-semibold text-[12.5px] text-ink-2">
+						<span className="rounded-[3px] border border-line-strong px-1.5 py-px font-semibold text-[13px] text-ink-2">
 							Padrão
 						</span>
 					)}
 				</div>
 				<div className="mt-1 text-[15px] text-ink">{lineMain}</div>
-				<div className="mt-0.5 text-[13.5px] text-ink-muted">{lineSub}</div>
+				<div className="mt-0.5 text-[13px] text-ink-muted">{lineSub}</div>
 			</div>
 			<div className="flex shrink-0 items-center gap-4">
 				{!address.isDefault && (

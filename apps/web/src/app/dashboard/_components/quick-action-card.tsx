@@ -21,7 +21,7 @@ export function QuickActionCard({
 			href={href}
 		>
 			<Icon aria-hidden="true" className="mb-1 size-6" strokeWidth={1.6} />
-			<span className="font-extrabold text-[17px]">{title}</span>
+			<span className="font-semibold text-[17px]">{title}</span>
 			<span className="text-[14px] text-ink-2">{description}</span>
 			{flag ? <span className="mt-1">{flag}</span> : null}
 		</Link>

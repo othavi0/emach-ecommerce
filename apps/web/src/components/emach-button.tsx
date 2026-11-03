@@ -5,7 +5,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 const buttonVariants = cva(
-	"inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[3px] border-[1.5px] font-bold no-underline transition-colors focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60 aria-busy:pointer-events-none",
+	"inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[3px] border-[1.5px] font-semibold no-underline transition-colors focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-60 aria-busy:pointer-events-none",
 	{
 		variants: {
 			variant: {
@@ -17,7 +17,7 @@ const buttonVariants = cva(
 			},
 			size: {
 				md: "min-h-11 px-5 text-[15px]",
-				lg: "min-h-[52px] px-7 text-[16px]",
+				lg: "min-h-[52px] px-7 text-[15px]",
 			},
 			full: {
 				true: "w-full",

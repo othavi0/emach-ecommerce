@@ -17,7 +17,9 @@ export function CartEmpty({
 				centered ? "justify-items-center text-center" : "justify-items-start"
 			)}
 		>
-			<p className="font-bold text-[18px] text-ink">Seu carrinho está vazio.</p>
+			<p className="font-semibold text-[17px] text-ink">
+				Seu carrinho está vazio.
+			</p>
 			<p className="text-ink-2">Comece pelo serviço da sua obra.</p>
 			<EmachLinkButton href="/catalog" onClick={onNavigate} variant="dark">
 				Ver o catálogo

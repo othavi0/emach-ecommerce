@@ -41,7 +41,7 @@ export function ReviewCard({
 					<VerifiedBadge />
 				</div>
 				<time
-					className="shrink-0 text-[12.5px] text-ink-muted"
+					className="shrink-0 text-[13px] text-ink-muted"
 					dateTime={review.createdAt.toISOString()}
 				>
 					{formatReviewDate(review.createdAt)}
@@ -52,7 +52,7 @@ export function ReviewCard({
 					{review.title}
 				</h3>
 			)}
-			<p className="text-[13.5px] text-ink-2 leading-relaxed">{review.body}</p>
+			<p className="text-[13px] text-ink-2 leading-relaxed">{review.body}</p>
 		</article>
 	);
 }

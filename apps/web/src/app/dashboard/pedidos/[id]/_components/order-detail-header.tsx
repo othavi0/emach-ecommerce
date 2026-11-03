@@ -73,9 +73,9 @@ function NegativeNotice({
 				<Ban aria-hidden="true" className="size-5" strokeWidth={1.8} />
 			</span>
 			<div>
-				<div className="font-bold text-[15px] text-off">{label}</div>
+				<div className="font-semibold text-[15px] text-off">{label}</div>
 				{at ? (
-					<div className="text-[13.5px] text-ink-muted tabular-nums">
+					<div className="text-[13px] text-ink-muted tabular-nums">
 						{DATETIME_FMT.format(at)}
 					</div>
 				) : null}

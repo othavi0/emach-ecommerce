@@ -145,7 +145,7 @@ async function HomeContent() {
 										: "A loja inteira, por categoria"}
 								</h2>
 								{byService && (
-									<p className="mt-2.5 max-w-[60ch] text-[16px] text-ink-2">
+									<p className="mt-2.5 max-w-[60ch] text-[15px] text-ink-2">
 										{counts.total} {counts.total === 1 ? "produto" : "produtos"}
 										, {counts.inStock} em estoque. O que serve em dois serviços
 										aparece nas duas prateleiras.
@@ -153,7 +153,7 @@ async function HomeContent() {
 								)}
 							</div>
 							<Link
-								className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-bold text-[15px] text-ink no-underline hover:border-ink max-md:w-full"
+								className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-semibold text-[15px] text-ink no-underline hover:border-ink max-md:w-full"
 								href="/catalog"
 							>
 								<SlidersHorizontal aria-hidden="true" className="size-5" />

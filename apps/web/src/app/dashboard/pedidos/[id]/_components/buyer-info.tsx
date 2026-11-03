@@ -29,7 +29,7 @@ interface Buyer {
 function Field({ label, value }: { label: string; value: string }) {
 	return (
 		<div>
-			<dt className="text-[13.5px] text-ink-muted">{label}</dt>
+			<dt className="text-[13px] text-ink-muted">{label}</dt>
 			<dd className="mt-0.5 break-words font-semibold text-[15px] text-ink">
 				{value}
 			</dd>

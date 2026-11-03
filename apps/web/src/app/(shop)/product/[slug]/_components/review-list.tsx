@@ -81,10 +81,10 @@ function buildHref(
 }
 
 const PAGE_BTN =
-	"inline-flex min-h-11 items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-5 font-bold text-[15px] text-ink transition-colors hover:border-ink";
+	"inline-flex min-h-11 items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-5 font-semibold text-[15px] text-ink transition-colors hover:border-ink";
 
 const PAGE_BTN_DISABLED =
-	"inline-flex min-h-11 items-center rounded-[3px] border-[1.5px] border-line bg-canteiro px-5 font-bold text-[15px] text-ink-muted";
+	"inline-flex min-h-11 items-center rounded-[3px] border-[1.5px] border-line bg-canteiro px-5 font-semibold text-[15px] text-ink-muted";
 
 export function ReviewList({
 	reviews,

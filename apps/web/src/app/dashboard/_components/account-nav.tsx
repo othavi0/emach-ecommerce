@@ -36,7 +36,7 @@ export function AccountNav({
 								"-mb-px inline-flex min-h-12 shrink-0 items-center whitespace-nowrap border-b-2 px-3 text-[15px]",
 								FOCUS_RING,
 								active
-									? "border-ink font-bold text-ink"
+									? "border-ink font-semibold text-ink"
 									: "border-transparent text-ink-2 hover:text-ink"
 							)}
 							href={item.href}
@@ -50,10 +50,10 @@ export function AccountNav({
 
 			<aside className="hidden md:sticky md:top-4 md:block md:self-start md:pt-10">
 				<div className="border-line border-b pb-4">
-					<div className="truncate font-bold text-[15px] text-ink">
+					<div className="truncate font-semibold text-[15px] text-ink">
 						{userName}
 					</div>
-					<div className="mt-0.5 truncate text-[13.5px] text-ink-muted">
+					<div className="mt-0.5 truncate text-[13px] text-ink-muted">
 						{userEmail}
 					</div>
 				</div>
@@ -68,7 +68,7 @@ export function AccountNav({
 									"flex min-h-12 items-center border-line border-b px-3 text-[15px]",
 									FOCUS_RING,
 									active
-										? "bg-canteiro font-bold text-ink"
+										? "bg-canteiro font-semibold text-ink"
 										: "text-ink-2 hover:bg-canteiro hover:text-ink"
 								)}
 								href={item.href}

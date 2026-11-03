@@ -29,7 +29,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
 	return (
 		<>
 			{text.slice(0, idx)}
-			<mark className="bg-transparent font-extrabold text-ink">
+			<mark className="bg-transparent font-semibold text-ink">
 				{text.slice(idx, idx + q.length)}
 			</mark>
 			{text.slice(idx + q.length)}
@@ -227,10 +227,10 @@ export function HeaderSearch({ className }: { className?: string }) {
 							: ""}
 					</p>
 					{showList && error && !loading && (
-						<p className="px-2.5 py-3 text-[14.5px] text-ink-muted">{error}</p>
+						<p className="px-2.5 py-3 text-[14px] text-ink-muted">{error}</p>
 					)}
 					{showList && !(error || loading) && results.length === 0 && (
-						<p className="px-2.5 py-3 text-[14.5px] text-ink-muted">
+						<p className="px-2.5 py-3 text-[14px] text-ink-muted">
 							Nenhum produto com esse nome. Aperte Enter para buscar no
 							catálogo.
 						</p>
@@ -259,10 +259,10 @@ export function HeaderSearch({ className }: { className?: string }) {
 												/>
 											)}
 										</span>
-										<span className="font-medium text-[14.5px] leading-snug">
+										<span className="font-normal text-[14px] leading-snug">
 											<Highlight query={term} text={r.name} />
 										</span>
-										<span className="whitespace-nowrap font-extrabold text-[14.5px] tabular-nums">
+										<span className="whitespace-nowrap font-extrabold text-[14px] tabular-nums">
 											{priceLabel(r)}
 										</span>
 									</Link>
@@ -272,7 +272,7 @@ export function HeaderSearch({ className }: { className?: string }) {
 								<Link
 									className={cn(
 										optionClass,
-										"flex min-h-12 items-center justify-between gap-3 font-bold text-[14.5px]"
+										"flex min-h-12 items-center justify-between gap-3 font-semibold text-[14px]"
 									)}
 									data-suggestion
 									href={catalogSearchHref(term)}

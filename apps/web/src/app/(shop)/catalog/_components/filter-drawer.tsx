@@ -69,7 +69,7 @@ export function FilterDrawer({
 
 				<div className="grid grid-cols-[auto_1fr] gap-2.5 border-line border-t bg-canteiro px-5 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
 					<button
-						className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-bold text-[15px] text-ink hover:border-ink disabled:cursor-not-allowed disabled:opacity-45"
+						className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-semibold text-[15px] text-ink hover:border-ink disabled:cursor-not-allowed disabled:opacity-45"
 						disabled={activeCount === 0}
 						onClick={onClearAll}
 						type="button"
@@ -77,7 +77,7 @@ export function FilterDrawer({
 						Limpar
 					</button>
 					<button
-						className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[3px] bg-grafite px-[18px] font-bold text-[15px] text-on-dark hover:bg-black"
+						className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-[3px] bg-grafite px-[18px] font-semibold text-[15px] text-on-dark hover:bg-black"
 						onClick={onClose}
 						type="button"
 					>

@@ -91,15 +91,15 @@ export function ShippingOptions({
 							value={opt.carrierId}
 						/>
 						<span>
-							<span className="font-bold text-ink">{opt.name}</span>
-							<span className="block text-[13.5px] text-ink-muted">
+							<span className="font-semibold text-ink">{opt.name}</span>
+							<span className="block text-[13px] text-ink-muted">
 								{opt.deliveryDays > 0
 									? `${opt.deliveryDays} dia(s)`
 									: "Prazo a confirmar"}
 							</span>
 						</span>
 					</span>
-					<span className="font-bold text-ink tabular-nums">
+					<span className="font-semibold text-ink tabular-nums">
 						{fmtBRL(opt.priceCents)}
 					</span>
 				</label>

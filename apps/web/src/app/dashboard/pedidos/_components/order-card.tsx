@@ -54,8 +54,8 @@ export function OrderCard({ order }: { order: OrderListItem }) {
 					{order.itemCount} {order.itemCount === 1 ? "item" : "itens"}
 				</span>
 				<div className="flex items-baseline gap-2">
-					<span className="font-bold text-[15px] text-ink">Total</span>
-					<span className="font-extrabold text-[21px] text-ink tabular-nums">
+					<span className="font-semibold text-[15px] text-ink">Total</span>
+					<span className="font-extrabold text-[20px] text-ink tabular-nums">
 						{fmtNumericBRL(order.totalAmount)}
 					</span>
 				</div>

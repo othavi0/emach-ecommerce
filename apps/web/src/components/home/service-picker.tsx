@@ -80,7 +80,7 @@ function ServiceCard({
 					aria-hidden="true"
 					className="absolute inset-0 bg-[linear-gradient(180deg,rgba(19,21,24,0)_38%,rgba(19,21,24,0.86)_100%)]"
 				/>
-				<h3 className="absolute inset-x-2.5 bottom-2.5 z-[1] font-display font-extrabold text-[22px] uppercase leading-[0.95] md:inset-x-4 md:bottom-3.5 md:text-[31px]">
+				<h3 className="absolute inset-x-2.5 bottom-2.5 z-[1] font-display font-extrabold text-[24px] uppercase leading-[0.95] md:inset-x-4 md:bottom-3.5 md:text-[31px]">
 					{service.name}
 				</h3>
 			</Link>

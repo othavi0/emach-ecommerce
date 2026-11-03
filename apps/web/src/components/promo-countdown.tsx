@@ -41,7 +41,9 @@ export function PromoCountdown({ endsAt }: PromoCountdownProps) {
 
 	return (
 		<div className="flex flex-col gap-1.5">
-			<span className="font-bold text-[13px] text-ink-muted">Termina em</span>
+			<span className="font-semibold text-[13px] text-ink-muted">
+				Termina em
+			</span>
 			<div
 				aria-label="Tempo restante da oferta"
 				aria-live="off"
@@ -51,7 +53,7 @@ export function PromoCountdown({ endsAt }: PromoCountdownProps) {
 				{UNITS.map((u, i) => (
 					<div className="flex items-start gap-3" key={u.key}>
 						<div className="flex flex-col items-center">
-							<span className="font-extrabold text-[28px] text-ink leading-none">
+							<span className="font-extrabold text-[28px] text-ink tabular-nums leading-none">
 								{pad(parts[u.key])}
 							</span>
 							<span className="mt-1 text-[12px] text-ink-muted">{u.label}</span>

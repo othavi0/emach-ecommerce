@@ -37,7 +37,7 @@ export function Panel({
 			id={id}
 		>
 			<div className="flex items-center justify-between gap-4 px-5 pt-5 md:px-6 md:pt-6">
-				<h2 className="font-extrabold text-[17px] text-ink">{title}</h2>
+				<h2 className="font-semibold text-[17px] text-ink">{title}</h2>
 				{actions}
 			</div>
 			<div className={flush ? "mt-4" : "px-5 pt-4 pb-5 md:px-6 md:pb-6"}>
@@ -70,14 +70,14 @@ export function SummaryRow({
 				total ? "mt-3 border-line border-t pt-3" : "py-1"
 			)}
 		>
-			<span className={total ? "font-bold text-ink" : "text-ink-2"}>
+			<span className={total ? "font-semibold text-ink" : "text-ink-2"}>
 				{label}
 			</span>
 			<span
 				className={cn(
 					"text-right tabular-nums",
 					tone ? VALUE_TONE_CLASS[tone] : "text-ink",
-					total && "font-extrabold text-[25px]"
+					total && "font-extrabold text-[24px]"
 				)}
 			>
 				{children}
