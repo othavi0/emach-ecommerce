@@ -12,7 +12,6 @@ import {
 	domAnimation,
 	LazyMotion,
 	useMotionValue,
-	useReducedMotion,
 	useSpring,
 } from "framer-motion";
 import { Pause, Play } from "lucide-react";
@@ -21,6 +20,7 @@ import { FALLBACK_BANNERS } from "@/components/hero/hero-fallbacks";
 import { HeroSlide } from "@/components/hero/hero-slide";
 import { resolveComposition } from "@/lib/composition/legacy-composition";
 import { useIsDesktop } from "@/lib/use-is-desktop";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 /**
  * Subconjunto de `banner` que o hero consome. Inclui badge e countdown
@@ -58,7 +58,7 @@ export function HeroCarousel({ banners }: { banners: HeroBanner[] }) {
 	const [api, setApi] = useState<CarouselApi>();
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [paused, setPaused] = useState(false);
-	const reduceMotion = useReducedMotion() ?? false;
+	const reduceMotion = usePrefersReducedMotion();
 	const isDesktop = useIsDesktop();
 
 	const mouseX = useMotionValue(0);

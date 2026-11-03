@@ -299,13 +299,17 @@ export function Shelf({
 					style={{ flexBasis: "var(--shelf-capa)", scrollSnapAlign: "none" }}
 				>
 					{imageSrc && (
-						<Image
-							alt=""
-							className="object-cover opacity-55 transition-opacity duration-300 ease-out group-hover:opacity-45 motion-reduce:transition-none"
-							fill
-							sizes="(min-width: 1296px) 640px, 50vw"
-							src={imageSrc}
-						/>
+						// O `fill` do next/image pede pai absolute, fixed ou relative; o
+						// link é sticky, então a foto ganha um pai absoluto do mesmo tamanho.
+						<span aria-hidden="true" className="absolute inset-0">
+							<Image
+								alt=""
+								className="object-cover opacity-55 transition-opacity duration-300 ease-out group-hover:opacity-45 motion-reduce:transition-none"
+								fill
+								sizes="(min-width: 1296px) 640px, 50vw"
+								src={imageSrc}
+							/>
+						</span>
 					)}
 					<span className="relative z-[1] grid gap-2.5 @[420px]:p-7 p-5">
 						<b className="font-display font-extrabold @[420px]:text-[46px] text-[30px] uppercase leading-[0.95]">
