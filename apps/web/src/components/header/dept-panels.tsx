@@ -85,16 +85,22 @@ function MiniCard({
 }) {
 	return (
 		<Link
-			className="flex h-full items-start gap-3 rounded-[5px] border border-line p-2.5 text-ink no-underline transition-colors hover:border-line-strong"
+			className="flex h-full flex-col gap-2 rounded-[5px] border border-line p-2.5 text-ink no-underline transition-colors hover:border-line-strong"
 			href={`/product/${product.slug}`}
 			onClick={onNavigate}
 		>
-			<span className="relative size-16 shrink-0 overflow-hidden rounded-[3px] bg-well">
-				<ProductImage
-					categorySlug={product.categorySlug}
-					sizes="64px"
-					src={product.imageSrc ?? undefined}
-				/>
+			<span className="relative min-h-16 flex-1 overflow-hidden rounded-[3px] bg-well">
+				{product.imageSrc ? (
+					<Image
+						alt=""
+						className="object-contain p-2 mix-blend-multiply"
+						fill
+						sizes="220px"
+						src={product.imageSrc}
+					/>
+				) : (
+					<ProductImage categorySlug={product.categorySlug} sizes="220px" />
+				)}
 			</span>
 			<span className="flex min-w-0 flex-col gap-1">
 				<span className="line-clamp-2 text-[14px] leading-snug">
@@ -138,7 +144,7 @@ export function ItemPanel({
 						{plural(item.productCount, "produto", "produtos")}
 					</CountChip>
 				</div>
-				<ul className="grid grid-cols-4 gap-3">
+				<ul className="grid min-h-[150px] flex-1 grid-cols-4 gap-3">
 					{products.map((p) => (
 						<li key={p.id}>
 							<MiniCard onNavigate={onNavigate} product={p} />
