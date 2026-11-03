@@ -72,7 +72,7 @@ export async function ProductReviewsSection({
 						</div>
 						<div
 							aria-hidden="true"
-							className="shrink-0 text-[18px] text-line-strong tracking-[4px]"
+							className="shrink-0 text-[17px] text-line-strong tracking-[4px]"
 						>
 							☆☆☆☆☆
 						</div>

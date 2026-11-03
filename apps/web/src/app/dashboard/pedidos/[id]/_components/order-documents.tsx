@@ -68,7 +68,7 @@ function DocRow({
 			<div className="min-w-0 flex-1">
 				<div className="font-semibold text-[15px] text-ink">{title}</div>
 				{subtitle ? (
-					<div className="text-[13.5px] text-ink-muted">{subtitle}</div>
+					<div className="text-[13px] text-ink-muted">{subtitle}</div>
 				) : null}
 			</div>
 			<div className="flex flex-wrap items-center gap-2">{children}</div>

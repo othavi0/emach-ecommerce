@@ -62,7 +62,7 @@ const SORT_KEYS: readonly SortKey[] = [
 ];
 
 const PAGE_LINK_CLASS =
-	"inline-flex min-h-11 items-center gap-1 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-4 font-bold text-[15px] text-ink no-underline hover:border-ink";
+	"inline-flex min-h-11 items-center gap-1 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-4 font-semibold text-[15px] text-ink no-underline hover:border-ink";
 
 // `<a>` real para o crawler seguir a paginação; o clique simples continua na
 // navegação client-side do `navigatePage` (transition + scroll ao topo).
@@ -142,7 +142,7 @@ function CatalogEmpty({
 				<div className="mt-[18px] flex flex-wrap gap-2.5">
 					{filters.map((f) => (
 						<button
-							className="inline-flex min-h-11 cursor-pointer items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-4 font-bold text-[15px] text-ink hover:border-ink"
+							className="inline-flex min-h-11 cursor-pointer items-center rounded-[3px] border-[1.5px] border-line-strong bg-paper px-4 font-semibold text-[15px] text-ink hover:border-ink"
 							key={f.id}
 							onClick={() => onRemove(f.remove)}
 							type="button"
@@ -153,7 +153,7 @@ function CatalogEmpty({
 					))}
 					{filters.length > 1 && (
 						<button
-							className="inline-flex min-h-11 cursor-pointer items-center rounded-[3px] bg-grafite px-4 font-bold text-[15px] text-on-dark hover:bg-black"
+							className="inline-flex min-h-11 cursor-pointer items-center rounded-[3px] bg-grafite px-4 font-semibold text-[15px] text-on-dark hover:bg-black"
 							onClick={onClearAll}
 							type="button"
 						>
@@ -322,12 +322,12 @@ export function CatalogContent({
 						<h1 className={PAGE_TITLE_CLASS}>{title}</h1>
 						<p
 							aria-live="polite"
-							className="mt-2 text-[15.5px] text-ink-2 tabular-nums"
+							className="mt-2 text-[15px] text-ink-2 tabular-nums"
 						>
 							{countText}
 						</p>
 						{currentCategory?.description && (
-							<p className="mt-2 max-w-[68ch] text-[15.5px] text-ink-2">
+							<p className="mt-2 max-w-[68ch] text-[15px] text-ink-2">
 								{currentCategory.description}
 							</p>
 						)}
@@ -337,7 +337,7 @@ export function CatalogContent({
 							aria-controls="filter-drawer"
 							aria-expanded={filterOpen}
 							aria-haspopup="dialog"
-							className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-bold text-[15px] text-ink hover:border-ink md:flex-none lg:hidden"
+							className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-[18px] font-semibold text-[15px] text-ink hover:border-ink md:flex-none lg:hidden"
 							onClick={() => setFilterOpen(true)}
 							type="button"
 						>
@@ -353,7 +353,7 @@ export function CatalogContent({
 							<span className="max-md:sr-only">Ordenar por</span>
 							<span className="relative flex-1 md:flex-none">
 								<select
-									className="h-11 w-full cursor-pointer appearance-none rounded-[3px] border-[1.5px] border-line-strong bg-paper pr-[38px] pl-3 font-bold text-[15px] text-ink hover:border-ink md:w-auto"
+									className="h-11 w-full cursor-pointer appearance-none rounded-[3px] border-[1.5px] border-line-strong bg-paper pr-[38px] pl-3 font-semibold text-[15px] text-ink hover:border-ink md:w-auto"
 									onChange={(e) =>
 										navigate({
 											sort: SORT_KEYS.find((key) => key === e.target.value),

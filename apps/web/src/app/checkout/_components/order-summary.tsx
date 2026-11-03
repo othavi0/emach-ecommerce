@@ -56,11 +56,11 @@ export function OrderSummary({
 								/>
 							) : null}
 						</div>
-						<div className="min-w-0 flex-1 text-[14.5px]">
+						<div className="min-w-0 flex-1 text-[14px]">
 							<p className="line-clamp-2 font-semibold text-ink">{item.name}</p>
 							<p className="mt-0.5 text-ink-muted">Qtd: {item.quantity}</p>
 						</div>
-						<span className="font-bold text-[14.5px] text-ink tabular-nums">
+						<span className="font-semibold text-[14px] text-ink tabular-nums">
 							{fmtBRL(numericToCents(item.priceAmount) * item.quantity)}
 						</span>
 					</li>

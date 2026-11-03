@@ -20,7 +20,7 @@ export function OrderReceived({
 			<CircleCheck aria-hidden="true" className="size-9 text-ok" />
 			<h1 className={cn(PAGE_TITLE_CLASS, "mt-4")}>{title}</h1>
 			{meta ? <div className="mt-3">{meta}</div> : null}
-			<p className="mt-4 max-w-[60ch] text-[16px] text-ink-2 leading-relaxed">
+			<p className="mt-4 max-w-[60ch] text-[15px] text-ink-2 leading-relaxed">
 				{children}
 			</p>
 			<div className="mt-6 flex flex-wrap gap-3">{actions}</div>
@@ -32,7 +32,7 @@ export function OrderNumber({ number }: { number: string }) {
 	return (
 		<p className="text-[15px] text-ink-2">
 			Pedido{" "}
-			<span className="font-extrabold text-[22px] text-ink tabular-nums">
+			<span className="font-semibold text-[24px] text-ink tabular-nums">
 				{number}
 			</span>
 		</p>

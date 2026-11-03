@@ -64,7 +64,7 @@ export function OrderItems({
 									{item.name}
 								</div>
 								{meta ? (
-									<div className="mt-1 text-[13.5px] text-ink-2">{meta}</div>
+									<div className="mt-1 text-[13px] text-ink-2">{meta}</div>
 								) : null}
 								<div className="mt-1 text-[13px] text-ink-muted">
 									{item.sku ? <span>{item.sku} · </span> : null}
@@ -73,7 +73,7 @@ export function OrderItems({
 								</div>
 							</div>
 							<div className="flex min-w-[100px] flex-col items-end gap-1.5">
-								<span className="font-bold text-[15px] text-ink tabular-nums">
+								<span className="font-semibold text-[15px] text-ink tabular-nums">
 									{fmtNumericBRL(item.lineTotal)}
 								</span>
 								{status === "delivered" ? (

@@ -178,7 +178,7 @@ export function PhotoGallery({
 						</button>
 						<span
 							aria-live="polite"
-							className="absolute right-3 bottom-3 z-[2] rounded-full border border-line bg-paper px-2.5 py-1 font-bold text-[13px] tabular-nums"
+							className="absolute right-3 bottom-3 z-[2] rounded-full border border-line bg-paper px-2.5 py-1 font-semibold text-[13px] tabular-nums"
 						>
 							{index + 1} / {count}
 						</span>

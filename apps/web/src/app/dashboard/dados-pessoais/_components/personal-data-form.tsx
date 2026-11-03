@@ -75,12 +75,12 @@ function CardShell({ children }: { children: React.ReactNode }) {
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-	return <div className="text-[13.5px] text-ink-muted">{children}</div>;
+	return <div className="text-[13px] text-ink-muted">{children}</div>;
 }
 
 function FieldValue({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="mt-0.5 truncate font-semibold text-[16px] text-ink">
+		<div className="mt-0.5 truncate font-semibold text-[15px] text-ink">
 			{children}
 		</div>
 	);
@@ -532,7 +532,7 @@ function AccountTypeSwitch({
 				<button
 					aria-pressed={value === type.value}
 					className={cn(
-						"min-h-10 cursor-pointer px-4 font-bold text-[14px] transition-colors focus-visible:outline-2 focus-visible:outline-ink focus-visible:-outline-offset-2",
+						"min-h-10 cursor-pointer px-4 font-semibold text-[14px] transition-colors focus-visible:outline-2 focus-visible:outline-ink focus-visible:-outline-offset-2",
 						value === type.value
 							? "bg-grafite text-on-dark"
 							: "bg-paper text-ink hover:bg-canteiro"

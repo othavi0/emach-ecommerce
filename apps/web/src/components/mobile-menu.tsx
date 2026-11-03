@@ -20,11 +20,11 @@ interface MobileMenuProps {
 }
 
 const rowClass =
-	"flex min-h-12 w-full items-center justify-between gap-3 border-line border-b px-4 text-left font-semibold text-[16px] text-ink no-underline hover:bg-canteiro";
+	"flex min-h-12 w-full items-center justify-between gap-3 border-line border-b px-4 text-left font-semibold text-[15px] text-ink no-underline hover:bg-canteiro";
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
 	return (
-		<h2 className="px-4 pt-[18px] pb-1.5 font-bold text-[13.5px] text-ink-muted">
+		<h2 className="px-4 pt-[18px] pb-1.5 font-semibold text-[13px] text-ink-muted">
 			{children}
 		</h2>
 	);
@@ -119,7 +119,7 @@ export function MobileMenu({ nav, open, onClose }: MobileMenuProps) {
 									onClick={onClose}
 								>
 									{s.name}
-									<span className="font-medium text-[14px] text-ink-muted tabular-nums">
+									<span className="font-normal text-[14px] text-ink-muted tabular-nums">
 										{s.productCount}
 									</span>
 								</Link>
@@ -138,7 +138,7 @@ export function MobileMenu({ nav, open, onClose }: MobileMenuProps) {
 									onClick={onClose}
 								>
 									{c.name}
-									<span className="font-medium text-[14px] text-ink-muted tabular-nums">
+									<span className="font-normal text-[14px] text-ink-muted tabular-nums">
 										{c.productCount}
 									</span>
 								</Link>
@@ -178,7 +178,7 @@ export function MobileMenu({ nav, open, onClose }: MobileMenuProps) {
 					</Link>
 					<div className="p-4">
 						<ContactLink
-							className="flex min-h-11 w-full items-center justify-center gap-2 rounded-[3px] bg-grafite px-4 font-bold text-[15px] text-on-dark no-underline hover:bg-black"
+							className="flex min-h-11 w-full items-center justify-center gap-2 rounded-[3px] bg-grafite px-4 font-semibold text-[15px] text-on-dark no-underline hover:bg-black"
 							iconClassName="size-5"
 						/>
 					</div>

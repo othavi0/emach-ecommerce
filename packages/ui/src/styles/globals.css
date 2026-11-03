@@ -204,7 +204,7 @@
 	gap: 6px;
 	align-items: flex-start;
 	font-size: 13px;
-	font-weight: 500;
+	font-weight: 400;
 	line-height: 1.4;
 	color: var(--error-text);
 }
@@ -237,7 +237,7 @@
 .emach-toast__title {
 	font-family: var(--font-sans);
 	font-size: 13px !important;
-	font-weight: 500 !important;
+	font-weight: 400 !important;
 	color: var(--on-dark) !important;
 }
 .emach-toast [data-button] {

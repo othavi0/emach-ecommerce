@@ -41,8 +41,10 @@ export function AccountMenu() {
 			>
 				<User aria-hidden="true" className="size-6" />
 				<span>
-					<b className="block font-bold text-[14.5px] leading-tight">Entrar</b>
-					<small className="block whitespace-nowrap text-[12.5px] text-ink-muted leading-tight max-lg:hidden">
+					<b className="block font-semibold text-[14px] leading-tight">
+						Entrar
+					</b>
+					<small className="block whitespace-nowrap text-[13px] text-ink-muted leading-tight max-lg:hidden">
 						Pedidos e conta
 					</small>
 				</span>
@@ -67,10 +69,10 @@ export function AccountMenu() {
 					</AvatarFallback>
 				</Avatar>
 				<span className="max-lg:hidden">
-					<b className="block font-bold text-[14.5px] leading-tight">
+					<b className="block font-semibold text-[14px] leading-tight">
 						{firstName || "Minha conta"}
 					</b>
-					<small className="block whitespace-nowrap text-[12.5px] text-ink-muted leading-tight">
+					<small className="block whitespace-nowrap text-[13px] text-ink-muted leading-tight">
 						Pedidos e conta
 					</small>
 				</span>
@@ -89,34 +91,34 @@ export function AccountMenu() {
 						</AvatarFallback>
 					</Avatar>
 					<div className="min-w-0">
-						<div className="font-bold text-[12px] text-on-dark-muted">
+						<div className="font-semibold text-[12px] text-on-dark-muted">
 							Minha conta
 						</div>
 						<div className="truncate font-semibold text-[14px] leading-tight">
 							{session.user.name}
 						</div>
-						<div className="truncate text-[11.5px] text-on-dark-muted">
+						<div className="truncate text-[12px] text-on-dark-muted">
 							{session.user.email}
 						</div>
 					</div>
 				</div>
 				<div>
 					<DropdownMenuItem
-						className="relative gap-3 px-3 py-2.5 text-[13.5px] focus:before:absolute focus:before:inset-y-0 focus:before:left-0 focus:before:w-[3px] focus:before:bg-grafite"
+						className="relative gap-3 px-3 py-2.5 text-[13px] focus:before:absolute focus:before:inset-y-0 focus:before:left-0 focus:before:w-[3px] focus:before:bg-grafite"
 						render={<Link href="/dashboard/pedidos" />}
 					>
 						<Package />
 						Meus pedidos
 					</DropdownMenuItem>
 					<DropdownMenuItem
-						className="relative gap-3 px-3 py-2.5 text-[13.5px] focus:before:absolute focus:before:inset-y-0 focus:before:left-0 focus:before:w-[3px] focus:before:bg-grafite"
+						className="relative gap-3 px-3 py-2.5 text-[13px] focus:before:absolute focus:before:inset-y-0 focus:before:left-0 focus:before:w-[3px] focus:before:bg-grafite"
 						render={<Link href="/dashboard/dados-pessoais" />}
 					>
 						<UserCog />
 						Meus dados
 					</DropdownMenuItem>
 					<DropdownMenuItem
-						className="gap-3 px-3 py-2.5 text-[13.5px]"
+						className="gap-3 px-3 py-2.5 text-[13px]"
 						onClick={handleSignOut}
 						variant="destructive"
 					>

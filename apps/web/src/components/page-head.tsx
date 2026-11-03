@@ -16,7 +16,7 @@ export function PageHead({ aside, children, title }: PageHeadProps) {
 				<div className="min-w-0">
 					<h1 className={PAGE_TITLE_CLASS}>{title}</h1>
 					{children ? (
-						<div className="mt-2 text-[15.5px] text-ink-2">{children}</div>
+						<div className="mt-2 text-[15px] text-ink-2">{children}</div>
 					) : null}
 				</div>
 				{aside ? <div className="shrink-0">{aside}</div> : null}

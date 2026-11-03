@@ -102,14 +102,14 @@ export default function AboutPage() {
 							className="grid gap-2 border-line border-b py-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 md:py-8"
 							key={pillar.id}
 						>
-							<h2 className="font-extrabold text-[17px] text-ink">
+							<h2 className="font-semibold text-[17px] text-ink">
 								{pillar.label}
 							</h2>
 							<div className="max-w-[65ch]">
-								<p className="font-bold text-[20px] text-ink leading-snug">
+								<p className="font-semibold text-[20px] text-ink leading-snug">
 									{pillar.title}
 								</p>
-								<p className="mt-2 text-[16px] text-ink-2 leading-relaxed">
+								<p className="mt-2 text-[15px] text-ink-2 leading-relaxed">
 									{pillar.description}
 								</p>
 							</div>
@@ -120,10 +120,10 @@ export default function AboutPage() {
 							className="grid gap-2 border-line border-b py-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 md:py-8"
 							key={note.id}
 						>
-							<h2 className="font-extrabold text-[17px] text-ink">
+							<h2 className="font-semibold text-[17px] text-ink">
 								{note.label}
 							</h2>
-							<p className="max-w-[65ch] font-bold text-[20px] text-ink leading-snug">
+							<p className="max-w-[65ch] font-semibold text-[20px] text-ink leading-snug">
 								{note.text}
 							</p>
 						</li>
@@ -200,11 +200,11 @@ function BranchCard({ branch }: { branch: BranchCardData }) {
 
 			<div className="grid gap-5 p-5 sm:grid-cols-[1fr_auto] sm:items-end md:p-6">
 				<div className="min-w-0">
-					<h3 className="font-extrabold text-[17px] text-ink">{branch.name}</h3>
+					<h3 className="font-semibold text-[17px] text-ink">{branch.name}</h3>
 					{branch.locality && (
 						<p className="text-[14px] text-ink-muted">{branch.locality}</p>
 					)}
-					<dl className="mt-4 grid gap-2 text-[14.5px] text-ink-2 leading-relaxed">
+					<dl className="mt-4 grid gap-2 text-[14px] text-ink-2 leading-relaxed">
 						<div>
 							<dt className="font-semibold text-ink">Endereço</dt>
 							<dd>{branch.address}</dd>
@@ -240,7 +240,7 @@ function BranchCard({ branch }: { branch: BranchCardData }) {
 				</div>
 
 				{branch.mapsUrl && (
-					<span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-5 font-bold text-[15px] text-ink transition-colors group-hover:border-ink">
+					<span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-line-strong bg-paper px-5 font-semibold text-[15px] text-ink transition-colors group-hover:border-ink">
 						Ver rota
 						<ExternalLink aria-hidden="true" className="size-4" />
 					</span>

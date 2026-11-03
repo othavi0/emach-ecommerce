@@ -11,7 +11,7 @@ export function CountChip({
 	return (
 		<p
 			className={cn(
-				"inline-flex min-h-[26px] items-center rounded-[3px] border border-line bg-paper px-2.5 font-semibold text-[13.5px] text-ink-2 tabular-nums",
+				"inline-flex min-h-[26px] items-center rounded-[3px] border border-line bg-paper px-2.5 font-semibold text-[13px] text-ink-2 tabular-nums",
 				className
 			)}
 		>

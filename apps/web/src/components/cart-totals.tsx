@@ -31,7 +31,7 @@ export function CartTotals({ context, onNavigate }: CartTotalsProps) {
 		<div className="grid gap-2.5">
 			<div className="flex items-baseline justify-between gap-3 font-semibold text-[15px] text-ink">
 				<span>Subtotal ({itemCountLabel(totalCount)})</span>
-				<strong className="font-extrabold text-[25px] tabular-nums">
+				<strong className="font-extrabold text-[24px] tabular-nums">
 					{fmtBRL(subtotalCents)}
 				</strong>
 			</div>

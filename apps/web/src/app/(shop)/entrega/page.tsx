@@ -66,19 +66,19 @@ async function PickupBranchList() {
 						className="rounded-[5px] border border-line bg-paper p-5"
 						key={b.id}
 					>
-						<strong className="block font-extrabold text-[17px] text-ink">
+						<strong className="block font-semibold text-[17px] text-ink">
 							{b.name}
 						</strong>
-						<p className="mt-2 text-[14.5px] text-ink-2 leading-relaxed">
+						<p className="mt-2 text-[14px] text-ink-2 leading-relaxed">
 							{b.address}
 						</p>
 						{b.phone && (
-							<p className="mt-1 text-[14.5px] text-ink-2 tabular-nums">
+							<p className="mt-1 text-[14px] text-ink-2 tabular-nums">
 								{b.phone}
 							</p>
 						)}
 						{b.hoursRows && (
-							<dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13.5px]">
+							<dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]">
 								{b.hoursRows.map((row) => (
 									<div className="contents" key={row.label}>
 										<dt className="text-ink-muted">{row.label}</dt>

@@ -59,7 +59,7 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 			<PreviewItems items={refund.preview} />
 
 			<p className="border-line border-t px-5 py-4 text-[15px] text-ink-2 leading-relaxed">
-				<span className="mr-2 font-bold text-ink">Motivo</span>
+				<span className="mr-2 font-semibold text-ink">Motivo</span>
 				{reasonText}
 			</p>
 
@@ -77,10 +77,10 @@ export function RefundCard({ refund }: { refund: RefundListItem }) {
 			)}
 
 			<div className="flex items-baseline justify-between gap-4 border-line border-t px-5 py-4">
-				<span className="font-bold text-[15px] text-ink">{totalLabel}</span>
+				<span className="font-semibold text-[15px] text-ink">{totalLabel}</span>
 				<span
 					className={cn(
-						"font-extrabold text-[21px] tabular-nums",
+						"font-extrabold text-[20px] tabular-nums",
 						isRefunded && "text-ok",
 						isRejected && "text-ink-muted line-through",
 						!(isRefunded || isRejected) && "text-ink"

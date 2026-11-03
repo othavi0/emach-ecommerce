@@ -49,7 +49,7 @@ export function InstitutionalPage({
 			<div className="shop-wrap">
 				<PageHead title={title}>
 					<p className="max-w-[65ch] leading-relaxed">{lede}</p>
-					<p className="mt-3 text-[13.5px] text-ink-muted">
+					<p className="mt-3 text-[13px] text-ink-muted">
 						Atualizado em{" "}
 						<time dateTime={updatedAt}>{formatDateBR(updatedAt)}</time>
 					</p>
@@ -58,7 +58,10 @@ export function InstitutionalPage({
 				<div className="grid grid-cols-1 gap-10 border-line border-t pt-8 md:pt-10 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-14">
 					<nav aria-labelledby="sumario" className="hidden lg:block">
 						<div className="sticky top-6">
-							<h2 className="pb-3 font-bold text-[15px] text-ink" id="sumario">
+							<h2
+								className="pb-3 font-semibold text-[15px] text-ink"
+								id="sumario"
+							>
 								Nesta página
 							</h2>
 							<ol className="flex flex-col gap-2.5 border-line border-l pl-4">
@@ -86,14 +89,14 @@ export function InstitutionalPage({
 								<h2 className={INSTITUTIONAL_H2_CLASS}>{s.title}</h2>
 								{s.paragraphs.map((p) => (
 									<p
-										className="mt-4 text-[16.5px] text-ink-2 leading-[1.65]"
+										className="mt-4 text-[17px] text-ink-2 leading-[1.65]"
 										key={p}
 									>
 										{p}
 									</p>
 								))}
 								{s.bullets && s.bullets.length > 0 && (
-									<ul className="mt-4 list-disc space-y-2 pl-5 text-[16.5px] text-ink-2 leading-[1.6] marker:text-ink-muted">
+									<ul className="mt-4 list-disc space-y-2 pl-5 text-[17px] text-ink-2 leading-[1.6] marker:text-ink-muted">
 										{s.bullets.map((b) => (
 											<li key={b}>{b}</li>
 										))}

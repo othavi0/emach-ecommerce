@@ -38,7 +38,7 @@ export function ShippingAddress({ address }: { address: unknown }) {
 					</div>
 				) : null}
 				{zipLine ? (
-					<div className="text-[13.5px] text-ink-muted">{zipLine}</div>
+					<div className="text-[13px] text-ink-muted">{zipLine}</div>
 				) : null}
 			</address>
 		</Panel>

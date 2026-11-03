@@ -216,7 +216,7 @@ async function OrderConfirmationContent({
 									<p className="font-semibold text-[15px] text-ink">
 										{it.name}
 									</p>
-									<p className="mt-0.5 text-[13.5px] text-ink-muted">
+									<p className="mt-0.5 text-[13px] text-ink-muted">
 										SKU {it.sku}
 										{it.voltage && ` · ${it.voltage}`}
 									</p>
@@ -224,7 +224,7 @@ async function OrderConfirmationContent({
 										Qtd {it.quantity} × {fmtNumericBRL(it.unitPrice)}
 									</p>
 								</div>
-								<p className="font-bold text-ink tabular-nums">
+								<p className="font-semibold text-ink tabular-nums">
 									{fmtNumericBRL(it.lineTotal)}
 								</p>
 							</li>

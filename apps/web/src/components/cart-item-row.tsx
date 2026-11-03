@@ -60,7 +60,7 @@ export function CartItemRow({
 
 			<div className="min-w-0">
 				<Link
-					className="font-bold text-[15px] text-ink leading-[1.3] no-underline hover:underline"
+					className="font-semibold text-[15px] text-ink leading-[1.3] no-underline hover:underline"
 					href={href}
 					onClick={onLinkClick}
 				>
@@ -70,7 +70,7 @@ export function CartItemRow({
 					{item.voltage ? (
 						<>
 							Voltagem{" "}
-							<b className="font-bold text-ink">
+							<b className="font-semibold text-ink">
 								{voltageLabel(item.voltage).name}
 							</b>{" "}
 							·{" "}
@@ -91,14 +91,14 @@ export function CartItemRow({
 				/>
 				<button
 					aria-label={`Remover ${item.name} do carrinho`}
-					className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-[3px] px-2 font-semibold text-[13.5px] text-ink-muted underline-offset-[3px] hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2"
+					className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-[3px] px-2 font-semibold text-[13px] text-ink-muted underline-offset-[3px] hover:text-ink hover:underline focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2"
 					onClick={onRemove}
 					type="button"
 				>
 					<Trash2 aria-hidden="true" className="size-[17px]" />
 					Remover
 				</button>
-				<span className="ml-auto font-extrabold text-[16.5px] text-ink tabular-nums">
+				<span className="ml-auto font-extrabold text-[17px] text-ink tabular-nums">
 					{fmtBRL(unitCents * item.quantity)}
 				</span>
 			</div>

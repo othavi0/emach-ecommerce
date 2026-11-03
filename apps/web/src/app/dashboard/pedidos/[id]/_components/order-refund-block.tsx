@@ -85,7 +85,7 @@ function Row({
 		>
 			<span
 				className={cn(
-					"inline-flex items-center gap-1.5 font-bold",
+					"inline-flex items-center gap-1.5 font-semibold",
 					danger ? "text-error-text" : "text-ink"
 				)}
 			>

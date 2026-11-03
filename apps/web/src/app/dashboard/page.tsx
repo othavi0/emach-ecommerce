@@ -8,7 +8,7 @@ import { requireCurrentClient } from "@/lib/session";
 import { QuickActionCard } from "./_components/quick-action-card";
 import { OrderCard } from "./pedidos/_components/order-card";
 
-const BLOCK_TITLE_CLASS = "mb-3 font-extrabold text-[17px] text-ink";
+const BLOCK_TITLE_CLASS = "mb-3 font-semibold text-[17px] text-ink";
 
 export default function DashboardPage() {
 	return (

@@ -48,8 +48,23 @@ Seção escura (cabeçalho utilitário, rodapé) declara `[color-scheme:dark]` l
 - `font-sans` é o corpo. `font-display` é a mesma Archivo com `font-variation-settings: "wdth" 62`, para títulos condensados em caixa alta.
 - Título de página: `PAGE_TITLE_CLASS` (`page-head.tsx`): `font-display`, `font-extrabold`, `uppercase`, tamanho `clamp(2.4rem,1.6rem+2.2vw,3.6rem)` e entrelinha 0.92.
 - Título de seção institucional: `INSTITUTIONAL_H2_CLASS`, `font-display` de 28 px.
-- Título de painel: `font-extrabold text-[17px]` em `font-sans`, sem caixa alta.
-- Corpo entre 14 e 16,5 px. Campo de formulário usa 16 px, porque abaixo disso o Safari do iOS dá zoom no foco.
+- Título de painel: `font-semibold text-[17px]` em `font-sans`, sem caixa alta.
+- Escala de tamanho, só estes valores em `text-[Npx]`:
+
+| Tamanho | Uso |
+|---|---|
+| 12 px | etiqueta mínima |
+| 13 px | meta, dica, contagem |
+| 14 px | texto de controle, menu |
+| 15 px | corpo |
+| 16 px | só campo de formulário, porque abaixo disso o Safari do iOS dá zoom no foco |
+| 17 px | título de painel, preço de card |
+| 20 px | subtítulo |
+| 24 px | preço da página de produto, número de destaque |
+| 26 px ou mais | só com `font-display` |
+
+- Pesos: `font-normal` no corpo, `font-semibold` em ênfase e título de `font-sans`, `font-extrabold` só em `font-display` e em preço. `font-medium`, `font-bold` e `font-black` estão fora.
+- `apps/web/src/test/type-scale.global.test.ts` reprova tamanho ou peso fora da escala e aponta o valor permitido mais próximo. O hero congelado fica de fora.
 - Caixa alta com tracking largo está fora do sistema: o scanner reprova `tracking-[0.`.
 
 ## 4. Cantos, elevação e movimento

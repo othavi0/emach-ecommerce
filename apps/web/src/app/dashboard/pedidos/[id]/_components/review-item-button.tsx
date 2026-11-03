@@ -21,7 +21,7 @@ export function ReviewItemButton({
 
 	if (reviewed) {
 		return (
-			<span className="inline-flex items-center gap-1 font-semibold text-[13.5px] text-ok">
+			<span className="inline-flex items-center gap-1 font-semibold text-[13px] text-ok">
 				<Check aria-hidden="true" className="size-4" />
 				Avaliado
 			</span>

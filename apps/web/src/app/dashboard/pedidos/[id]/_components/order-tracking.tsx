@@ -39,9 +39,9 @@ function TrackingCode({
 		<div className="grid grid-cols-1 gap-4 rounded-[3px] border border-line bg-canteiro px-4 py-4 sm:grid-cols-[1fr_auto] sm:items-center">
 			<div>
 				{method ? (
-					<div className="mb-1 text-[13.5px] text-ink-2">{method}</div>
+					<div className="mb-1 text-[13px] text-ink-2">{method}</div>
 				) : null}
-				<div className="break-all font-mono font-semibold text-[18px] text-ink">
+				<div className="break-all font-mono font-semibold text-[17px] text-ink">
 					{code}
 				</div>
 			</div>

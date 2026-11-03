@@ -85,16 +85,16 @@ export function HeaderBar({ nav }: { nav: StoreNav }) {
 							<ShoppingCart aria-hidden="true" className="size-6" />
 							<span
 								aria-hidden="true"
-								className={`emach-cart-badge absolute top-0 left-6 grid h-5 min-w-5 place-items-center rounded-[10px] px-1.5 font-extrabold text-[12px] text-white tabular-nums md:top-0.5 md:left-[26px] ${totalCount > 0 ? "bg-emach-red" : "bg-grafite-2"}`}
+								className={`emach-cart-badge absolute top-0 left-6 grid h-5 min-w-5 place-items-center rounded-[10px] px-1.5 font-semibold text-[12px] text-white tabular-nums md:top-0.5 md:left-[26px] ${totalCount > 0 ? "bg-emach-red" : "bg-grafite-2"}`}
 								data-pulse={pulse ? "true" : undefined}
 							>
 								{totalCount}
 							</span>
 							<span className="max-md:hidden">
-								<b className="block font-bold text-[14.5px] leading-tight">
+								<b className="block font-semibold text-[14px] leading-tight">
 									Carrinho
 								</b>
-								<small className="block whitespace-nowrap text-[12.5px] text-ink-muted tabular-nums leading-tight max-lg:hidden">
+								<small className="block whitespace-nowrap text-[13px] text-ink-muted tabular-nums leading-tight max-lg:hidden">
 									{totalCount > 0 ? fmtBRL(subtotalCents) : "Vazio"}
 								</small>
 							</span>

@@ -7,7 +7,7 @@ export function MetaPair({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="flex flex-col">
 			<span className="text-[13px] text-ink-muted">{label}</span>
-			<span className="font-bold text-[15px] text-ink tabular-nums">
+			<span className="font-semibold text-[15px] text-ink tabular-nums">
 				{value}
 			</span>
 		</div>
@@ -28,13 +28,13 @@ export function PreviewItems({
 						<div className="line-clamp-2 font-semibold text-[15px] text-ink leading-snug">
 							{item.name}
 						</div>
-						<div className="mt-1 text-[13.5px] text-ink-muted">
+						<div className="mt-1 text-[13px] text-ink-muted">
 							{[item.voltage, `Qtd: ${item.quantity}`]
 								.filter(Boolean)
 								.join(" · ")}
 						</div>
 					</div>
-					<div className="shrink-0 text-right font-bold text-[15px] text-ink tabular-nums">
+					<div className="shrink-0 text-right font-semibold text-[15px] text-ink tabular-nums">
 						{fmtNumericBRL(item.unitPrice)}
 					</div>
 				</li>

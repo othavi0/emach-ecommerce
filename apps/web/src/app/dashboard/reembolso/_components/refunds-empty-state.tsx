@@ -14,7 +14,7 @@ export function RefundsEmptyState({ tabLabel }: RefundsEmptyStateProps) {
 				className="mb-4 size-10 text-ink-muted"
 				strokeWidth={1.4}
 			/>
-			<p className="mb-2 text-[15.5px] text-ink">{text}</p>
+			<p className="mb-2 text-[15px] text-ink">{text}</p>
 			<p className="max-w-[46ch] text-[14px] text-ink-2">
 				Para solicitar, abra o pedido em "Pedidos" e clique em "Solicitar
 				devolução".

@@ -58,7 +58,7 @@ export function QtyStepper({
 			</button>
 			<output
 				aria-live="polite"
-				className="min-w-[34px] text-center font-extrabold tabular-nums"
+				className="min-w-[34px] text-center font-semibold tabular-nums"
 			>
 				{value}
 			</output>

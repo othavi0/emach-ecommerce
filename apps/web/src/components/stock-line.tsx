@@ -11,7 +11,7 @@ export function StockLine({
 	return (
 		<span
 			className={cn(
-				"inline-flex items-center gap-1.5 font-bold text-[13px]",
+				"inline-flex items-center gap-1.5 font-semibold text-[13px]",
 				inStock ? "text-ok" : "text-off",
 				className
 			)}

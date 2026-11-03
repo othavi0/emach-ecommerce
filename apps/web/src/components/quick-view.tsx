@@ -206,7 +206,7 @@ function QuickViewBody({
 			<div className="flex flex-col px-4 pt-4 pb-[calc(20px+env(safe-area-inset-bottom))] md:px-7 md:pt-7 md:pb-6">
 				<StockLine inStock={anyInStock} />
 				<h2
-					className="mt-2.5 pr-0 font-display font-extrabold text-[25px] uppercase leading-[0.98] md:pr-10 md:text-[30px]"
+					className="mt-2.5 pr-0 font-display font-extrabold text-[24px] uppercase leading-[0.98] md:pr-10 md:text-[30px]"
 					id={titleId}
 				>
 					{product.name}
@@ -219,7 +219,7 @@ function QuickViewBody({
 				{shown && (
 					<>
 						<p className="mt-3 flex flex-wrap items-baseline gap-x-3 md:mt-[18px]">
-							<span className="font-extrabold text-[30px] tabular-nums tracking-[-0.02em] md:text-[34px]">
+							<span className="font-extrabold text-[24px] tabular-nums tracking-[-0.02em]">
 								{fmtNumericBRL(shown.finalAmount)}
 							</span>
 							{shown.discountPct > 0 && (
@@ -228,7 +228,7 @@ function QuickViewBody({
 								</span>
 							)}
 						</p>
-						<p className="mt-2 text-[16px] tabular-nums">
+						<p className="mt-2 text-[15px] tabular-nums">
 							{installments ? (
 								<>
 									ou <b className="font-extrabold">{installments}</b> sem juros
@@ -264,7 +264,7 @@ function QuickViewBody({
 						<div className="mt-3.5 flex gap-2.5">
 							<QtyStepper onChange={setQty} value={qty} />
 							<button
-								className="inline-flex min-h-[52px] flex-1 cursor-pointer items-center justify-center rounded-[3px] bg-emach-red px-4 font-bold text-[15px] text-white hover:bg-emach-red-hover md:text-[16px]"
+								className="inline-flex min-h-[52px] flex-1 cursor-pointer items-center justify-center rounded-[3px] bg-emach-red px-4 font-semibold text-[15px] text-white hover:bg-emach-red-hover"
 								onClick={handleAdd}
 								type="button"
 							>
@@ -273,14 +273,14 @@ function QuickViewBody({
 						</div>
 					</>
 				) : (
-					<p className="mt-3.5 rounded-[5px] border border-line-strong border-dashed px-4 py-3.5 text-[14.5px] text-ink-2">
+					<p className="mt-3.5 rounded-[5px] border border-line-strong border-dashed px-4 py-3.5 text-[14px] text-ink-2">
 						Esgotado no momento.
 					</p>
 				)}
 
 				<p className="mt-auto pt-[18px]">
 					<Link
-						className="inline-flex min-h-11 items-center gap-1 font-bold text-[15px] text-ink underline underline-offset-[3px]"
+						className="inline-flex min-h-11 items-center gap-1 font-semibold text-[15px] text-ink underline underline-offset-[3px]"
 						href={`/product/${product.slug}`}
 						onClick={onDone}
 					>
