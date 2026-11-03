@@ -1,8 +1,9 @@
 import { cn } from "@emach/ui/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { EmachLinkButton } from "@/components/emach-button";
 import { fmtBRL } from "@/lib/format";
 import { listPriceCents } from "@/lib/list-price";
 import type { ServiceSummary } from "@/lib/services";
@@ -14,11 +15,54 @@ function plural(n: number, one: string, many: string) {
 	return `${n} ${n === 1 ? one : many}`;
 }
 
-function ServiceCard({ service }: { service: ServiceSummary }) {
+/** Colunas da grade: 2 do `md` ao `lg`, 4 no `xl`. */
+const GRID_COLUMNS = { narrow: 2, wide: 4 } as const;
+
+/**
+ * Se o card fica com vaga vazia em cada layout: as vagas da linha são o maior
+ * número de itens listados entre os cards dela.
+ */
+interface ShortIn {
+	narrow: boolean;
+	wide: boolean;
+}
+
+function listedCount(service: ServiceSummary) {
+	return Math.min(service.preview.length, LIST_LIMIT);
+}
+
+export function shortIn(services: ServiceSummary[], index: number): ShortIn {
+	const own = listedCount(services[index]);
+
+	const rowMax = (cols: number) => {
+		const start = index - (index % cols);
+
+		return Math.max(...services.slice(start, start + cols).map(listedCount));
+	};
+
+	return {
+		narrow: own < rowMax(GRID_COLUMNS.narrow),
+		wide: own < rowMax(GRID_COLUMNS.wide),
+	};
+}
+
+function seeAllLabel(service: ServiceSummary) {
+	return service.productCount === 1
+		? "Ver o produto"
+		: `Ver os ${service.productCount} produtos`;
+}
+
+function ServiceCard({
+	service,
+	short,
+}: {
+	service: ServiceSummary;
+	short: ShortIn;
+}) {
 	const listed = service.preview.slice(0, LIST_LIMIT);
 
 	return (
-		<article className="group flex flex-col overflow-hidden rounded-[5px] border border-line bg-paper transition-[border-color,box-shadow] duration-200 ease-out hover:border-line-strong hover:shadow-pop">
+		<article className="group flex flex-col overflow-hidden rounded-[5px] border border-line bg-paper transition-colors duration-150 ease-out hover:border-line-strong">
 			<Link
 				className="relative block aspect-square overflow-hidden bg-grafite text-white no-underline sm:aspect-video lg:aspect-[4/3]"
 				href={service.href}
@@ -26,7 +70,7 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 				{service.imageSrc && (
 					<Image
 						alt=""
-						className="object-cover transition-transform duration-[600ms] ease-out-expo group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+						className="object-cover"
 						fill
 						sizes="(min-width: 1296px) 300px, (min-width: 1024px) 25vw, 50vw"
 						src={service.imageSrc}
@@ -40,17 +84,17 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 					{service.name}
 				</h3>
 			</Link>
-			<p className="flex flex-col gap-px px-2.5 pt-2.5 pb-1.5 text-[12.5px] text-ink-muted md:border-line md:border-b md:px-4 md:py-3 md:text-[13.5px]">
+			<p className="flex flex-col gap-px px-2.5 pt-2.5 pb-1.5 text-[13px] text-ink-muted md:border-line md:border-b md:px-4 md:py-3">
 				<span>
 					{plural(service.productCount, "produto", "produtos")},{" "}
 					{service.inStockCount} em estoque
 				</span>
-				<strong className="whitespace-nowrap font-extrabold text-[14.5px] text-ink tabular-nums md:text-[18px]">
+				<strong className="whitespace-nowrap font-extrabold text-[15px] text-ink tabular-nums md:text-[17px]">
 					{service.fromPriceCents === null ? (
 						"Esgotado"
 					) : (
 						<>
-							<small className="font-semibold text-[12.5px] text-ink-muted">
+							<small className="font-normal text-[13px] text-ink-muted">
 								a partir de{" "}
 							</small>
 							{fmtBRL(service.fromPriceCents)}
@@ -59,7 +103,7 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 				</strong>
 			</p>
 
-			<ul className="flex-1 max-md:hidden">
+			<ul className="flex flex-1 flex-col max-md:hidden">
 				{listed.map((tool) => {
 					const price = listPriceCents(tool);
 
@@ -93,8 +137,8 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 									className={cn(
 										"self-start whitespace-nowrap tabular-nums",
 										tool.inStock && price !== null
-											? "font-extrabold text-[14.5px]"
-											: "font-bold text-[12.5px] text-off"
+											? "font-extrabold text-[15px]"
+											: "font-semibold text-[13px] text-off"
 									)}
 								>
 									{tool.inStock && price !== null ? fmtBRL(price) : "Esgotado"}
@@ -103,6 +147,24 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 						</li>
 					);
 				})}
+				<li
+					className={cn(
+						"min-h-[60px] flex-1 p-3",
+						short.narrow ? "md:flex" : "md:hidden",
+						short.wide ? "xl:flex" : "xl:hidden"
+					)}
+				>
+					<Link
+						className="group/fill flex w-full flex-col justify-center gap-1 rounded-[5px] bg-canteiro px-4 py-3 text-ink no-underline"
+						href={service.href}
+					>
+						<span className="inline-flex items-center gap-2 font-semibold text-[15px] group-hover/fill:underline">
+							{seeAllLabel(service)}
+							<ArrowRight aria-hidden="true" className="size-4" />
+						</span>
+						<span className="text-[13px] text-ink-2">de {service.name}</span>
+					</Link>
+				</li>
 			</ul>
 
 			<div aria-hidden="true" className="flex gap-1 px-2.5 pb-2.5 md:hidden">
@@ -127,16 +189,17 @@ function ServiceCard({ service }: { service: ServiceSummary }) {
 				))}
 			</div>
 
-			<div className="px-4 pt-3 pb-4 max-md:hidden">
-				<Link
-					className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[3px] bg-grafite px-4 font-bold text-[15px] text-on-dark no-underline hover:bg-black"
-					href={service.href}
-				>
-					{service.productCount === 1
-						? "Ver o produto"
-						: `Ver os ${service.productCount} produtos`}
+			<div
+				className={cn(
+					"px-4 pt-3 pb-4 max-md:hidden",
+					short.narrow ? "md:hidden" : "md:block",
+					short.wide ? "xl:hidden" : "xl:block"
+				)}
+			>
+				<EmachLinkButton full href={service.href} variant="line">
+					{seeAllLabel(service)}
 					<ChevronRight aria-hidden="true" className="size-5" />
-				</Link>
+				</EmachLinkButton>
 			</div>
 		</article>
 	);
@@ -157,14 +220,18 @@ export function ServicePicker({ services }: { services: ServiceSummary[] }) {
 					>
 						Qual é a sua obra hoje?
 					</h2>
-					<p className="text-[15.5px] text-ink-2 leading-normal md:pb-1.5 md:text-[17px]">
+					<p className="text-[15px] text-ink-2 leading-normal md:pb-1.5 md:text-[17px]">
 						Escolha o serviço e veja só as ferramentas e os acessórios da loja
 						que servem para ele, com preço e estoque de hoje.
 					</p>
 				</div>
 				<div className="grid grid-cols-2 gap-2.5 md:gap-4 xl:grid-cols-4">
-					{services.map((service) => (
-						<ServiceCard key={service.slug} service={service} />
+					{services.map((service, index) => (
+						<ServiceCard
+							key={service.slug}
+							service={service}
+							short={shortIn(services, index)}
+						/>
 					))}
 				</div>
 			</div>
